@@ -1,0 +1,60 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+$route['default_controller'] = 'modul';
+$route['404_override'] = '';
+$route['translate_uri_dashes'] = FALSE;
+$route['po'] = "modul/get_grid/po";
+$route['stok'] = "modul/stok";
+$route['ver-po'] = "modul/get_grid/ver_po";
+$route['histori-po'] = "modul/get_grid/histori_po";
+$route['pengajuan-po'] = "modul/get_grid/pengajuan_po";
+$route['pengajuan-anggran'] = "modul/get_grid/pengajuan_anggaran";
+$route['histori-pengajuan'] = "modul/get_grid/histori_pengajuan";
+$route['histori-pengajuan-po'] = "modul/get_grid/histori_pengajuan_po";
+$route['pemasukan-anggran'] = "modul/get_grid/pemasukan_anggaran";
+$route['dashboard'] = "modul/get_konten/dashboard";
+$route['ttd'] = "modul/get_konten/ttd";
+$route['m-project'] = "modul/get_grid/project";
+$route['m-lokasi'] = "modul/get_grid/lokasi";
+$route['m-barang'] = "modul/get_grid/barang";
+$route['so'] = "modul/get_grid/so";
+$route['so_his'] = "modul/get_grid/so_his";
+$route['report_sales'] = "modul/get_grid/report_sales";
+$route['invoice_po'] = "modul/get_grid/invoice_po";
+$route['barang_masuk'] = "modul/get_grid/barang_masuk";
+$route['barang_keluar'] = "modul/get_grid/barang_keluar";
+$route['his_barang_keluar'] = "modul/get_grid/his_barang_keluar";
+$route['penjualan'] = "modul/get_grid/penjualan";
+$route['his_penjualan'] = "modul/get_grid/his_penjualan";
+$route['barang_masuk_sales'] = "modul/get_grid/barang_masuk_sales";
+$route['m-prov'] = "modul/get_grid/prov";
+$route['m-kab_kota'] = "modul/get_grid/kab_kota";
+$route['profil'] = "modul/get_grid/profil";
+$route['m-kec'] = "modul/get_grid/kec";
+$route['m-desa'] = "modul/get_grid/desa";
+$route['m-jabatan'] = "modul/get_grid/jabatan";
+$route['m-customer'] = "modul/get_grid/customer";
+$route['m-katalog'] = "modul/get_grid/cl_vendor";
+$route['m-departemen'] = "modul/get_grid/departemen";
+$route['m-user'] = "modul/get_grid/user";
+$route['m-user-group'] = "modul/get_grid/user_group";
+$route['pengguna'] = "modul/get_grid/pengguna";
+$route['set-server'] = "modul/get_grid/set_server";
+$route['laporan-stok'] = "modul/laporan/laporan_stok";
+$route['laporan-stokopname'] = "modul/laporan/laporan_stokopname";
+$route['laporan-sales'] = "modul/laporan/laporan_sales";
+$route['laporan-barangmasuk'] = "modul/laporan/laporan_barangmasuk";
+$route['laporan-barangkeluar'] = "modul/laporan/laporan_barangkeluar";
+$route['laporan-pembayaran'] = "modul/laporan/laporan_pembayaran";
+$route['laporan-pengajuan'] = "modul/laporan/pengajuan";
+$route['laporan-laba-rugi'] = "modul/laporan/laba_rugi";
+
+// FRONT
+$route['pengumuman'] = "front/get_konten/pengumuman";
+$route['berita'] = "front/get_konten/berita";
+$route['product'] = "front/get_konten/product";
+$route['tanya'] = "front/get_konten/tanya";
+$route['kontak'] = "front/get_konten/kontak";
+$route['detil/(:any)'] = "front/get_konten/detil_product/1";
+
+

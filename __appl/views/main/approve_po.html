@@ -1,0 +1,181 @@
+<fieldset>
+	<legend>Approval Purchase Order</legend>
+<div class="span10">
+<form class="form-horizontal" id="form_{$acak}" url="{$host}modul/cruddata/appr_po" method="post" enctype="multipart/form-data">
+<input type="hidden" name="id" value="{$data.id|default:''}">
+<input type="hidden" name="tbl_h_po_id" value="{$data.h.id|default:''}">
+<input type="hidden" name="cl_jabatan_id" value="{$auth.cl_jabatan_id|default:''}">
+<input type="hidden" name="cl_departemen_id" value="{$auth.cl_departemen_id|default:''}">
+<input type="hidden" name="nama_user" value="{$auth.nama_user|default:''}">
+<input type="hidden" name="sts_crud" value="{$sts_crud|default:'add'}">
+<input type="hidden" name="flag" value="F" id="flag_{$acak}">
+<table class="table">
+	<tr>
+		<td>
+			<table class="table">
+				{include file="template/input_form.html" type='text' label="No PO *" id="no_po" name="no_po" style_type="width:80%" class="validasi" value="{$data.h.no_po|default:''}" readonly="readonly"}
+				{include file="template/input_form.html" type='text' label="Kode Project *" id="kode_project" name="kode_project" style_type="width:80%" class="validasi" value="{$data.h.kode_project|default:''}" readonly="readonly"}
+				{include file="template/input_form.html" type='text' label="Tgl. PO *" id="tgl" name="tgl" style_type="width:80%" class="validasi" value="{$data.h.tgl|default:''}" readonly="readonly"}
+			</table>
+		</td>
+		<td>
+			<table class="table">
+				{include file="template/input_form.html" type='text' label="Vendor *" id="nama_vendor" name="nama_vendor" style_type="width:80%" class="validasi" value="{$data.h.nama_vendor|default:''}" readonly="readonly"}
+				{include file="template/input_form.html" type='text' label="Nama Project *" id="nama_project" name="nama_project" style_type="width:80%" class="validasi" value="{$data.h.nama_project|default:''}" readonly="readonly"}
+				<tr>
+					<td>&nbsp;</td><td>File</td><td>:</td>
+					<td style="font-weight:bold;">
+						{foreach from=$file_po item=i}
+						<a href="{$host}__repo/file_po/{$i.file|default:''}" target="__balnk">{$i.file|default:''}</a>&nbsp;&nbsp;
+						{/foreach}
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<table class="table table-bordered table-hovered">
+				<thead style="background:#3C8DBC;color:#fff;">
+					<tr>
+						<th style="text-align:left;;vertical-align:middle;width:20%" >Nama Barang</th>
+						<th style="text-align:left;;vertical-align:middle;width:30%" >Spesifikasi</th>
+						<th style="text-align:left;;vertical-align:middle;width:10%">Qty</th>
+						<th style="text-align:left;;vertical-align:middle;">Harga Satuan</th>
+						<th style="text-align:left;;vertical-align:middle;">Total</th>
+						<!--th style="text-align:left;;vertical-align:middle;">Approve</th>
+						<th style="text-align:left;;vertical-align:middle;">Catatan</th-->
+					</tr>
+				</thead>
+				
+				<tbody style="background:#D4E8F4;" class="bd_email">
+					{assign var=total_qty value=0}
+					{assign var=total value=0}
+					{foreach from=$data.d item=i key=x}
+					{assign var=total_qty value=$i.nilai+$total_qty}
+					{assign var=total value=$i.total+$total}
+					<tr class="tr_em" id="tm_1" idx=1 style="{if $i.appr|default:1 eq 0}background:red;color:navy{/if}">
+						<td style="text-align:left;vertical-align:middle;">{$i.nama_barang|default:''}</td>
+						<td style="text-align:left;vertical-align:middle;">{$i.spek|default:''}</td>
+						<td style="text-align:right;vertical-align:middle;">{$i.nilai|number_format:0:',':','|default:''}({$i.satuan|default:''})</td>
+						<td style="text-align:right;vertical-align:middle;">{$i.harga|number_format:0:',':','|default:''}</td>
+						<td style="text-align:right;vertical-align:middle;">{$i.total|number_format:0:',':','|default:''}</td>
+						<!--td style="text-align:center;vertical-align:middle;">
+							<input type="hidden" name="cl_produk_id[]" value="{$i.cl_produk_id|default:''}">
+							<select class="" name="appr[]">
+								<option value="1" {if $i.appr|default:1 eq 1}selected{/if}>YA</option>
+								<option value="0" {if $i.appr|default:1 eq 0}selected{/if}>Tidak</option>
+							</select>
+						</td>
+						<td style="text-align:left;vertical-align:middle;">
+							<input type="text" name="catatan[]" class="" style="width:100%" value="{$i.catatan|default:''}">
+						</td-->
+					</tr>
+					{/foreach}
+				</tbody>
+				<tfoot>
+					<tr style="background:#3C8DBC;color:#fff;">
+						<td style="text-align:left;;vertical-align:middle;" colspan="2">Total</td>
+						<td style="text-align:right;;vertical-align:middle;">{$total_qty|number_format:0:',':','}</td>
+						<td style="text-align:left;;vertical-align:middle;">&nbsp;</td>
+						<td style="text-align:right;;vertical-align:middle;">Rp. {$data.h.grand_total|number_format:0:',':','}</td>
+						<!--td style="text-align:left;;vertical-align:middle;">&nbsp;</td>
+						<td style="text-align:left;;vertical-align:middle;">&nbsp;</td>
+						<td style="text-align:left;;vertical-align:middle;">&nbsp;</td-->
+					</tr>
+					<tr style="background:#3C8DBC;color:#fff;">
+						<td style="text-align:left;;vertical-align:middle;" colspan="4">PPN</td>
+						<td style="text-align:right;;vertical-align:middle;">Rp. {$data.h.ppn|number_format:0:',':','}</td>
+						<!--td style="text-align:left;;vertical-align:middle;">&nbsp;</td>
+						<td style="text-align:left;;vertical-align:middle;">&nbsp;</td>
+						<td style="text-align:left;;vertical-align:middle;">&nbsp;</td-->
+					</tr>
+					<tr style="background:#3C8DBC;color:#fff;">
+						<td style="text-align:left;;vertical-align:middle;" colspan="4">Grand Total</td>
+						<td style="text-align:right;;vertical-align:middle;">Rp. {$data.h.grand_total_ppn|number_format:0:',':','}</td>
+						<!--td style="text-align:left;;vertical-align:middle;">&nbsp;</td>
+						<td style="text-align:left;;vertical-align:middle;">&nbsp;</td>
+						<td style="text-align:left;;vertical-align:middle;">&nbsp;</td-->
+					</tr>
+				</tfoot>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<table class="table">
+			{include file="template/input_form.html" type='textarea' label="Note *" id="catatan" name="catatan" style_type="width:100%" class="" value="{$data.h.catatan|default:''}"}
+			</table>
+		</td>
+	</tr>
+</table>
+</form>
+<div class="control-group">
+	<center>
+	<label class="control-label" for="form-field-1"></label>
+	<div class="controls">
+		{include file="template/button_save.html" id_na="simpan_{$mod}"  btn_goyz="true" text="Disetujui" style_btn="btn-danger"}
+		{include file="template/button_save.html" id_na="n_appr_{$mod}"  btn_goyz="true" text="Tidak Disetujui/Pending" style_btn="btn-warning"}
+		{include file="template/button_save.html" id_na="cancel_{$mod}"  btn_goyz="true" text="Kembali Ke List"}
+	</div>
+	</center>
+</div>		
+</div>
+</fieldset>
+
+<script>
+	var idx_row={$jml_row|default:1};
+	//$(".validasi").validatebox({ required:true }); 
+	/*$('.tgl').datepicker({
+		 format: 'yyyy-mm-dd',
+		 autoclose: true
+	});
+	*/
+	$('#cancel_{$mod}_{$acak}').click(function(){
+		$('#grid_nya_po').show();
+		$('#detil_nya_po').html('').hide();
+	});
+	$('#n_appr_{$mod}_{$acak}').click(function(){
+		$(".validasi").validatebox({ required:true }); 
+		if ($('#form_{$acak}').form('validate')){
+			$('#flag_{$acak}').val('R');
+			submit_form('form_{$acak}',function(r){
+				if(r==1){
+					winLoadingClose();
+					$.messager.alert('BSR',"Data Tersimpan",'info');
+					$('#grid_nya_po').show();
+					$('#detil_nya_po').html('').hide();
+					$('#grid_po').datagrid('reload');
+				}else{
+					winLoadingClose();
+					$.messager.alert('BSR',"Data Gagal Tersimpan",'error');
+					console.log(r);
+				}
+			});
+		}else{
+			$.messager.alert('BSR',"Isi Form Yang Kosong",'error');
+		}
+	});
+	$('#simpan_{$mod}_{$acak}').click(function(){
+		$(".validasi").validatebox({ required:true }); 
+		if ($('#form_{$acak}').form('validate')){
+			$('#flag_{$acak}').val('F');
+			submit_form('form_{$acak}',function(r){
+				if(r==1){
+					winLoadingClose();
+					$.messager.alert('BSR',"Data Tersimpan",'info');
+					$('#grid_nya_po').show();
+					$('#detil_nya_po').html('').hide();
+					$('#grid_po').datagrid('reload');
+				}else{
+					winLoadingClose();
+					$.messager.alert('BSR',"Data Gagal Tersimpan",'error');
+					console.log(r);
+				}
+			});
+		}else{
+			$.messager.alert('BSR',"Isi Form Yang Kosong",'error');
+		}
+
+	});
+</script>

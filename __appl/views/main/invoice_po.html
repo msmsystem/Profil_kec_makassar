@@ -1,0 +1,337 @@
+<style>
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+}
+.fileUpload input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+</style>
+<fieldset>
+	<legend>Form Termin PO</legend>
+<div class="span10">
+<form class="form-horizontal" id="form_{$acak}" url="{$host}modul/cruddata/{$mod}" method="post" enctype="multipart/form-data">
+<input type="hidden" name="id" value="{$data.h.id|default:''}">
+<input type="hidden" name="sts_crud" value="{$sts_crud|default:'add'}">
+<input type="hidden" name="flag" value="{$data.h.flag|default:''}">
+<table class="table">
+	<tr>
+		<td>
+			<table class="table">
+				
+				<tr>
+					<td>&nbsp;</td><td>Supplier</td><td>:</td>
+					<td style="font-weight:bold;">
+						<div class="input-group input-group-sm">
+							<input type="text" class="form-control nm_supplier_na" readonly name="supplier" id="supplier{$acak}" value="{$data.h.supplier|default:''}" readonly>
+							
+						</div>
+					</td>
+				</tr>
+				
+				{include file="template/input_form.html" type='text' label="Tgl. PO" id="tgl" name="tgl" style_type="width:80%" class="validasi" value="{$data.h.tgl|default:$smarty.now|date_format:"%Y-%m-%d"}" readonly="readonly"}
+				
+				{include file="template/input_form.html" type='text' label="No. Tlp" id="tlp_perusahaan" name="tlp_perusahaan" style_type="width:80%" class="telp_na" value="{$data.h.telp|default:''}" readonly="readonly"}
+				
+			</table>
+		</td>
+		<td>
+			<table class="table">
+				
+				{include file="template/input_form.html" type='text' label="Email Supplier" id="email" name="email" style_type="width:80%;height:30px;" class="email_na" value="{$data.h.email|default:''}" readonly="readonly"}
+				
+				{include file="template/input_form.html" type='text' label="Almt.Supplier" id="alamat_perusahaan" name="alamat_perusahaan" style_type="width:80%" class="alamat_na" value="{$data.h.alamat_perusahaan|default:''}" readonly="readonly"}
+				{include file="template/input_form.html" type='text' label="Tgl. Pengiriman" id="tgl_pengiriman" name="tgl_pengiriman" style_type="width:80%" class="validasi tgl" value="{$data.h.tgl_pengiriman|default:''}" readonly="readonly"}
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<table class="table table-bordered table-hovered">
+				<thead style="background:#3C8DBC;color:#fff;">
+					<tr>
+						<th style="text-align:left;;vertical-align:middle;width:20%;" >SKU</th>
+						<th style="text-align:left;;vertical-align:middle;width:30%;" >Nama Barang</th>
+						<th style="text-align:right;;vertical-align:middle;width:5%;" >Qty</th>
+						<th style="text-align:right;;vertical-align:middle;width:15%;" >HPP</th>
+						<th style="text-align:right;;vertical-align:middle;width:15%;" >Total</th>
+					</tr>
+				</thead>
+				
+				<tbody style="background:#D4E8F4;" class="bd_po">
+					
+					{assign var=total value=0}
+					{assign var=x value=0}
+					{foreach from=$data.d item=z key=y}
+					{assign var=total value=$total+$z.tot_qty}
+					{assign var=x value=$x+1}
+					<tr class="tr_em" id="tm_1" idx={$x}>
+						<td>
+							{$y|default:''}
+						</td>
+						<td>
+							{$z.nama_produk|default:''}
+						</td>
+						
+						<td style="text-align:right;;vertical-align:top;">
+							<span id="t_tot_{$x}_{$acak}">{$z.tot_qty|default:0}</span>
+							<input type="hidden" name="total[]" id="tot_{$x}_{$acak}" class="h_tot" style="width:100%" value="{$z.tot_qty|default:0}">
+							<input type="hidden" name="total_harga[]" id="tot_harga_{$x}_{$acak}" class="h_tot_harga" style="width:100%" value="{$z.tot_harga|default:0}">
+						</td>
+						<td style="text-align:right;;vertical-align:top;">
+							Rp. {$z.harga|number_format:0:',':'.'|default:0}
+						</td>
+						<td style="text-align:right;;vertical-align:top;">
+							Rp. {$z.tot_harga|number_format:0:',':'.'|default:0}
+						</td>
+						
+					</tr>
+					{/foreach}
+					
+				</tbody>
+				<tfoot>
+					<tr style="background:#3C8DBC;color:#fff;">
+						<td style="text-align:left;;vertical-align:middle;width:20%" colspan="2" >GrandTotal</td>
+						<td style="text-align:right;;vertical-align:middle;"><span id="h_tot_qty">{$total|default:0}</span>
+							
+						</td>
+						<td style="text-align:right;;vertical-align:middle;">&nbsp;</td>
+						<td style="text-align:right;;vertical-align:middle;">
+							Rp. {$data.h.grand_total|number_format:0:',':'.'|default:0}
+							<input type="hidden" name="grand_total_po" id="grand_total_po_{$acak}" class="grand_total_po" style="width:150px;height:26px;" value="{$data.h.grand_total|default:0}">
+						</td>
+					</tr>
+					
+				</tfoot>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<h5>Pembayaran/Termin</h5>
+			<table class="table table-bordered table-hovered">
+				<thead style="background:#3C8DBC;color:#fff;">
+					<tr>
+						<th style="text-align:left;;vertical-align:middle;width:80%;" >Keterangan Pembayaran</th>
+						<th style="text-align:left;;vertical-align:middle;width:5%;">Total</th>
+						<th style="text-align:center;;vertical-align:middle;width:10%;"><a href="javascript:void(0);" class="btn btn-sm btn-warning" onclick="tambah_row('bd_termin','{$acak}')">+</a></th>
+					</tr>
+				</thead>
+				<tbody style="background:#D4E8F4;" class="bd_termin">
+					{if $sts_termin|default:'add' eq 'add'}
+					<tr class="tr_em" id="tm_1" idx=1>
+						<td>
+							<input type="text" name="termin_ket[]" onKeyup="this.value = this.value.toUpperCase()"  class="validasi" style="width:100%">
+							<input type="hidden" name="sts_dt[]"  class="validasi" style="width:100%" value="add">
+						</td>
+						<td style="text-align:center;;vertical-align:top;">
+							<input type="text" name="termin_total[]" id="termin_tot_1_{$acak}" idx="1" class="angka3" style="width:150px;height:26px;">
+							<input type="hidden" name="t_termin_total[]" id="t_termin_total_1_{$acak}" idx="1" class="termin_total" style="width:150px;height:26px;">
+						</td>
+						<td>&nbsp;</td>
+					</tr>
+					{else}
+					{foreach from=$data_termin item=i key=x}
+					<tr class="tr_em" id="tm_{$x}" idx={$x}>
+						<td>
+							<input type="text" name="termin_ket[]" onKeyup="this.value = this.value.toUpperCase()"  class="validasi" style="width:100%" value="{$i.ket|default:''}">
+							<input type="hidden" name="sts_dt[]"  class="validasi" style="width:100%" value="edit">
+							<input type="hidden" name="id_termin[]"  class="validasi" style="width:100%" value="{$i.id|default:''}">
+						</td>
+						<td style="text-align:center;;vertical-align:top;">
+							<input type="text" name="termin_total[]" id="termin_tot_{$x}_{$acak}" idx="{$x}" class="angka3" style="width:150px;height:26px;" value="{$i.total|default:''}">
+							<input type="hidden" name="t_termin_total[]" id="t_termin_total_{$x}_{$acak}" idx="{$x}" class="termin_total" style="width:150px;height:26px;" value="{$i.total|default:''}">
+						</td>
+						
+						<td>&nbsp;</td>
+					</tr>
+					{/foreach}
+					{/if}
+				</tbody>
+				<tfoot>
+					<tr style="background:#3C8DBC;color:#fff;">
+						<td style="text-align:left;;vertical-align:middle;width:20%"  >GrandTotal</td>
+						<td style="text-align:right;;vertical-align:middle;" id="row_total">
+							Rp. <span id="h_tot_termin">{$total_termin|default:0}</span>
+							<input type="hidden" name="total" id="total_termin"  style="width:150px;height:26px;">
+							
+						</td>
+						<td>&nbsp;</td>
+					</tr>
+					
+				</tfoot>
+			</table>
+		</td>
+	</tr>
+</table>
+</form>
+<div class="control-group">
+	<center>
+	<label class="control-label" for="form-field-1"></label>
+	<div class="controls">
+		{include file="template/button_save.html" id_na="simpan_{$mod}"  btn_goyz="true" text="Simpan / Update"}
+		{include file="template/button_save.html" id_na="cancel_{$mod}"  btn_goyz="true" text="Kembali Ke List"}
+	</div>
+	</center>
+</div>		
+</div>
+</fieldset>
+
+<script>
+	var idx_row={$jml_row|default:1};
+	var idx_row_termin={$jml_row_termin|default:1};
+	var tmp_row;
+	//$( document ).ready(function() {
+		function template_row(){
+			idx_row++;
+			tmp_row='';
+			{foreach from=$size item=i key=a}
+				tmp_row +='<td style="text-align:center;;vertical-align:middle;width:5%;">';
+				tmp_row +='<input type="text" name="qty_{$i.id}[]" id="qty_{$i.id}_'+idx_row+'_{$acak}" idx="'+idx_row+'" id_size="{$i.id}" class="angka t_qty_'+idx_row+'" style="width:50px;height:26px;" value="0">';
+				tmp_row +='<input type="hidden" name="t_qty_{$i.id}[]" id="t_qty_{$i.id}_'+idx_row+'_{$acak}" id_size="{$i.id}" class="h_tot_qty_'+idx_row+'" style="width:100%">';
+				tmp_row +='</td>';
+			{/foreach}
+			tambah_row('bd_po','{$acak}');
+			//return tmp_row;
+		}
+	//});
+	
+	//$(".validasi").validatebox({ required:true }); 
+	$('#flag_ppn_{$acak}').on('click',function(){
+		get_ppn('{$acak}');
+	});
+	$('.angka3').numberbox({
+		required:true,min:0,precision:0,groupSeparator:'.',decimalSeparator:',',
+		onChange:function(x,y){
+			var bayar=parseFloat(x);
+			var idx=($(this).attr('idx'));
+			$('#t_termin_total_'+idx+'_{$acak}').val(bayar);
+			hitung_total_termin();
+		}
+	});
+	$('.angka').numberbox({
+		required:true,min:0,precision:0,groupSeparator:'.',decimalSeparator:',',
+		onChange:function(x,y){
+			//console.log();
+			var idx=($(this).attr('idx'));
+			var id_size=($(this).attr('id_size'));
+			var harga=parseFloat($('#harga_'+idx).val());
+			//var harga=parseFloat($('#'+$(this).attr('id')).val());
+			var qty=parseFloat(x);
+			var t_tot=qty*harga;
+			//console.log(qty+'->'+harga);
+			//$('#t_tot_'+idx+'_{$acak}').html(NumberFormat(t_tot));
+			//$('#tot_'+idx+'_{$acak}').val(t_tot);
+			$('#t_qty_'+id_size+'_'+idx+'_{$acak}').val(qty);
+			hitung_total(idx,'{$acak}');
+			//get_ppn('{$acak}');
+			//$('#flag_ppn_{$acak}').trigger('click');
+			//get_total('qty','harga_beli','total',idx_row);
+		}
+	});
+	{if $sts_crud|default:'add' eq 'edit'}
+		{if $data.h.flag_ppn eq 1}
+			$('#flag_ppn_{$acak}').prop('checked', true);
+		{/if}
+		
+		hitung_total();
+		
+		//$('#flag_ppn_{$acak}').trigger('click');
+		
+	{/if}
+	hitung_total_termin();
+	
+	$('.angka2').numberbox({
+		required:true,min:0,precision:0,groupSeparator:',',decimalSeparator:'.',
+		onChange:function(){
+			//console.log();
+			var idx=($(this).attr('idx'));
+			var qty=parseFloat($('#qty_'+idx+'_{$acak}').val());
+			var harga=parseFloat($('#'+$(this).attr('id')).val());
+			var t_tot=qty*harga;
+			$('#t_tot_'+idx+'_{$acak}').html(NumberFormat(t_tot));
+			$('#tot_'+idx+'_{$acak}').val(t_tot);
+			$('#t_qty_'+idx+'_{$acak}').val(qty);
+			hitung_total();
+			get_ppn('{$acak}');
+			//$('#flag_ppn_{$acak}').trigger('click');
+			//get_total('qty','harga_beli','total',idx_row);
+		}
+	});
+	$('.tgl').datepicker({
+		 format: 'yyyy-mm-dd',
+		 autoclose: true
+	});
+	
+	$('.autoo').autoComplete({
+		minChars: 2,
+		source: function(term, response){
+			$.getJSON(host+'modul/getdata/auto_katalog',{ q: term,supplier:$('#kode_supplier_{$acak}').val() },function(data){ response(data); });
+		},
+		renderItem: function (item, search){
+			{literal}search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');{/literal}
+			var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
+			return '<div class="autocomplete-suggestion" data-nama="'+item[1]+'" data-val="' + item[0] + '" data-hpp="' + item[2] + '">'
+				+ item[0].replace(re, "<b>$1</b>") + '</div>';
+		},
+		onSelect: function(e, term, item){
+			//alert('Item "'+item.data('val')+' ('+item.data('id')+')" selected by '+(e.type == 'keydown' ? 'pressing enter' : 'mouse click')+'.');
+			$('#nama_produk_1').val(item.data('nama'));
+			$('#harga_1').val(item.data('hpp'));
+			//$('#satuan_1').val(item.data('satuan'));
+			//$('#harga_1_{$acak}').numberbox('setValue',item.data('harga'));
+		}
+	});
+	$('#b_vendor_{$acak}').click(function(){
+		loadingna();
+		$.post(host+"modul/get_konten/dt_supplier",function(r){
+			winLoadingClose();
+			windowForm(r,'Data Project',800,getClientHeight()-100);
+		})
+		
+	});
+	$('#b_project_{$acak}').click(function(){
+		loadingna();
+		$.post(host+"modul/get_konten/dt_project",function(r){
+			winLoadingClose();
+			windowForm(r,'Data Project',800,getClientHeight()-100);
+		})
+		
+	});
+	$('#cancel_{$mod}_{$acak}').click(function(){
+		$('#grid_nya_{$mod}').show();
+		$('#detil_nya_{$mod}').html('').hide();
+	});
+	$('#simpan_{$mod}_{$acak}').click(function(){
+		if(parseFloat($("#total_termin").val()) > parseFloat($('.grand_total_po').val())){
+			$.messager.alert('FORDZA',"Total Pembayaran Melebihi Total PO",'warning');
+		}else{
+			$(".validasi").validatebox({ required:true }); 
+			if ($('#form_{$acak}').form('validate')){
+				submit_form('form_{$acak}',function(r){
+					if(r==1){
+						winLoadingClose();
+						$.messager.alert('FORDZA',"Data Tersimpan",'info');
+						$('#grid_nya_{$mod}').show();
+						$('#detil_nya_{$mod}').html('').hide();
+						$('#grid_{$mod}').datagrid('reload');
+					}else{
+						winLoadingClose();
+						$.messager.alert('FORDZA',"Data Gagal Tersimpan",'error');
+						console.log(r);
+					}
+				});
+			}else{
+				$.messager.alert('BSR',"Isi Form Yang Kosong",'error');
+			}
+		}
+	});
+</script>

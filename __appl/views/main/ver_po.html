@@ -1,0 +1,181 @@
+<style>
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+}
+.fileUpload input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+</style>
+<fieldset>
+	<legend>Verifikasi PO & Barang Masuk</legend>
+<div class="span10">
+<form class="form-horizontal" id="form_{$acak}" url="{$host}modul/cruddata/{$mod}" method="post" enctype="multipart/form-data">
+<input type="hidden" name="id" value="{$data.h.id|default:''}">
+<input type="hidden" name="sts_crud" value="{$sts_crud|default:'add'}">
+<input type="hidden" name="flag" value="{$data.h.flag|default:''}">
+<table class="table">
+	<tr>
+		<td>
+			<table class="table">
+				
+				<tr>
+					<td>&nbsp;</td><td>NO PO</td><td>:</td>
+					<td style="font-weight:bold;">
+						<div class="input-group input-group-sm">
+							<input type="text" class="form-control no_po_na" readonly name="no_po" id="no_po_{$acak}" value="{$data.h.no_po|default:''}">
+							<input type="hidden" class="form-control id_po_na" readonly name="id_po" id="id_po_na_{$acak}" value="{$data.h.kode_supplier|default:''}">
+								<span class="input-group-btn">
+								  <a class="btn btn-info btn-flat" type="button" id="b_vendor_{$acak}">...</a>
+								</span>
+						</div>
+					</td>
+				</tr>
+				{include file="template/input_form.html" type='text' label="Tgl. Masuk" id="tgl" name="tgl" style_type="width:80%" class="validasi" value="{$data.h.tgl|default:$smarty.now|date_format:"%Y-%m-%d"}" readonly="readonly"}
+				{include file="template/input_form.html" type='text' label="No. Tlp" id="tlp_perusahaan" name="tlp_perusahaan" style_type="width:80%" class="telp_na" value="{$data.h.telp|default:''}"}
+			</table>
+		</td>
+		<td>
+			<table class="table">
+				{include file="template/input_form.html" type='text' label="Supplier" id="email" name="email" style_type="width:80%;height:30px;" class="nm_supplier_na" value="{$data.h.supplier|default:''}" readonly="readonly"}
+				{include file="template/input_form.html" type='text' label="Almt.Supplier" id="alamat_perusahaan" name="alamat_perusahaan" style_type="width:80%" class="alamat_na" value="{$data.h.alamat|default:''}"}
+				
+				{include file="template/input_form.html" type='text' label="Tgl. Pengiriman" id="tgl_pengiriman" name="tgl_pengiriman" style_type="width:80%" class="validasi tgl_kirim_na" value="{$data.h.tgl_kirim_po|default:''}"}
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<table class="table table-bordered table-hovered">
+				<thead style="background:#3C8DBC;color:#fff;">
+					<tr>
+						<th style="text-align:left;;vertical-align:middle;width:20%;" rowspan="2">SKU</th>
+						<th style="text-align:left;;vertical-align:middle;width:20%;" rowspan="2">Nama Barang</th>
+						<th style="text-align:center;;vertical-align:middle;" colspan="{count($size)}">Qty</th>
+						<th style="text-align:left;;vertical-align:middle;width:5%;" rowspan="2">Total</th>
+						
+					</tr>
+					<tr>
+						{foreach from=$size item=i}
+						<th style="text-align:center;;vertical-align:middle;">{$i.ukuran|default:''}</th>
+						{/foreach}
+					</tr>
+				</thead>
+				
+				<tbody style="background:#D4E8F4;" class="bd_po">
+					
+					{assign var=total value=0}
+					{assign var=total_po value=0}
+					{assign var=x value=0}
+					{foreach from=$data.d item=z key=y}
+					{assign var=total value=$total+$z.tot_qty}
+					{assign var=total_po value=$total_po+$z.tot_qty_po}
+					{assign var=x value=$x+1}
+					<tr class="tr_em" id="tm_1" idx={$x}>
+						<td>
+							{$y|default:''}
+						</td>
+						<td>
+							{$z.nama_produk|default:''}
+						</td>
+						{foreach from=$size item=i key=a}
+						<td style="text-align:left;;vertical-align:top;">
+							P: {$z.{$i.id}.qty_po|default:0} <br><span style="{if $z.{$i.id}.qty_po|default:0 != $z.{$i.id}.qty|default:0}color:red;{/if}">M: {$z.{$i.id}.qty|default:0}</span>
+							<input type="hidden" name="t_qty_{$i.id}[]" id="t_qty_{$i.id}_{$x}_{$acak}" id_size="{$i.id}" class="h_tot_qty_{$x}" style="width:100%" value="{$z.{$i.id}.qty|default:0}">
+						</td>
+						{/foreach}
+						<td style="text-align:left;;vertical-align:top;">
+							<span id="t_tot_{$x}_{$acak}">P:{$z.tot_qty_po|default:0}<br><span style="{if $z.tot_qty_po|default:0 != $z.tot_qty|default:0}color:red;{/if}">M:{$z.tot_qty|default:0}</span></span>
+							<input type="hidden" name="total[]" id="tot_{$x}_{$acak}" class="h_tot" style="width:100%" value="{$z.tot_qty|default:0}">
+						</td>
+						
+					</tr>
+					{/foreach}
+					
+				</tbody>
+				<tfoot>
+					<tr style="background:#3C8DBC;color:#fff;">
+						<td style="text-align:left;;vertical-align:middle;width:20%" colspan="{count($size)+2}" >GrandTotal</td>
+						<td style="text-align:right;;vertical-align:middle;"><span id="h_tot_qty">P:{$total_po|default:0}<br><span style="{if $total_po|default:0 != $total|default:0}color:red;{/if}">M:{$total|default:0}</span></span>
+							<input type="hidden" name="tot_qty" id="tot_qty" value="{$total|default:0}">
+						</td>
+						
+					</tr>
+					
+				</tfoot>
+			</table>
+
+		</td>
+	</tr>
+	
+</table>
+</form>
+<div class="control-group">
+	<center>
+	<label class="control-label" for="form-field-1"></label>
+	<div class="controls">
+		{include file="template/button_save.html" id_na="simpan_{$mod}"  btn_goyz="true" text="Closing (Transfer Stok)"}
+		{include file="template/button_save.html" id_na="pending_{$mod}"  btn_goyz="true" text="Pending (Transfer Stok)"}
+		{include file="template/button_save.html" id_na="cancel_{$mod}"  btn_goyz="true" text="Kembali Ke List"}
+	</div>
+	</center>
+</div>		
+</div>
+</fieldset>
+
+<script>
+	
+	$('#cancel_{$mod}_{$acak}').click(function(){
+		$('#grid_nya_{$mod}').show();
+		$('#detil_nya_{$mod}').html('').hide();
+	});
+	$('#simpan_{$mod}_{$acak}').click(function(){
+		$.messager.confirm('FORDZA','Anda Yakin Closing Data Ini dan Transfer Ke Stok ?',function(re){
+			if(re){
+				loadingna();
+				$.post('{$host}modul/cruddata/ver_po',{ flag:'F',id:{$data.h.id|default:''} },function(r){
+					if(r==1){
+						winLoadingClose();
+						$.messager.alert('FORDZA',"Data Tersimpan",'info');
+						$('#grid_nya_{$mod}').show();
+						$('#detil_nya_{$mod}').html('').hide();
+						$('#grid_{$mod}').datagrid('reload');
+					}else{
+						winLoadingClose();
+						$.messager.alert('FORDZA',"Data Gagal Tersimpan",'error');
+						console.log(r);
+					}
+				});
+			}
+		});
+	});
+	$('#pending_{$mod}_{$acak}').click(function(){
+		$.messager.confirm('FORDZA','Anda Yakin Pending Data PO Ini dan Transfer Ke Stok ?',function(re){
+			if(re){
+				loadingna();
+				$.post('{$host}modul/cruddata/ver_po',{ flag:'PD',id:{$data.h.id|default:''} },function(r){
+					if(r==1){
+						winLoadingClose();
+						$.messager.alert('FORDZA',"Data Tersimpan",'info');
+						$('#grid_nya_{$mod}').show();
+						$('#detil_nya_{$mod}').html('').hide();
+						$('#grid_{$mod}').datagrid('reload');
+					}else{
+						winLoadingClose();
+						$.messager.alert('FORDZA',"Data Gagal Tersimpan",'error');
+						console.log(r);
+					}
+				});
+			}
+		});
+	});
+	
+</script>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>CAMAT-DROID</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.7 -->
+  <link rel="stylesheet" href="{$host}__assets/template/bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{$host}__assets/template/bower_components/font-awesome/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="{$host}__assets/template/bower_components/Ionicons/css/ionicons.min.css">
+  <link rel="stylesheet" href="{$host}__assets/template/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{$host}__assets/template/dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="{$host}__assets/template/dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+  
+  <link rel="stylesheet" href="{$host}__assets/template/easyui/themes/metro-gray/easyui.css">
+  <link rel="stylesheet" href="{$host}__assets/template/easyui/themes/icon.css">
+  <link rel="stylesheet" href="{$host}__assets/template/easyui/themes/color.css">
+  <link rel="stylesheet" href="{$host}__assets/css/jquery.auto-complete.css">
+  <link rel="stylesheet" href="{$host}__assets/css/main_style.css">
+  
+  <!-- jQuery 3 -->
+<script src="{$host}__assets/template/bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="{$host}__assets/template/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- SlimScroll -->
+<script src="{$host}__assets/template/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="{$host}__assets/template/bower_components/fastclick/lib/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="{$host}__assets/template/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="{$host}__assets/template/dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script>
+	var host="{$host}";
+	var cl_jabatan_id=1;
+	var cl_departemen=1;
+	var nama_user='{$auth.nama_user}';
+</script>
+
+<script src="{$host}__assets/template/dist/js/demo.js"></script>
+<script src="{$host}__assets/template/easyui/jquery.easyui.min.js"></script>
+<script src="{$host}__assets/js/jquery.auto-complete.js"></script>
+<script src="{$host}__assets/js/highcharts.js"></script>
+<script src="{$host}__assets/js/fungsi.js"></script>
+<script src="{$host}__assets/js/jquery.maskMoney.js"></script>
+</head>
+<!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+<body class="hold-transition skin-red layout-top-nav">
+<div class="wrapper">
+
+  <header class="main-header">
+    <nav class="navbar navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a href="javascript:void(0);" class="navbar-brand" >
+			<div style="margin-top:14px;"><b>CAMAT</b> DROID</div>
+		  </a>
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+            <i class="fa fa-bars"></i>
+          </button>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        {include file="menu.html"}
+        <!-- /.navbar-collapse -->
+        <!-- Navbar Right Menu -->
+        <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+			<li class="dropdown notifications-menu">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+				  <i class="fa fa-bell-o"></i>
+				  <span class="label label-warning jml_notif"></span>
+				</a>
+				<ul class="dropdown-menu isi_notif">
+				  <li class="header h_jml_notif">Anda Memiliki 0 Notifikasi</li>
+				  
+				</ul>
+			</li>
+            <!-- User Account Menu -->
+            <li class="dropdown user user-menu">
+              <!-- Menu Toggle Button -->
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <!-- The user image in the navbar-->
+                <img src="{$host}__assets/img/avatar.png" class="img-circle" alt="User Image" style="width:20px">
+                <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                <!--span class="hidden-xs">{$auth.nama_lengkap|default:'-'}</span-->
+              </a>
+              <ul class="dropdown-menu">
+                <!-- The user image in the menu -->
+                <li class="user-header">
+                  <img src="{$host}__assets/img/avatar.png" class="img-circle" alt="User Image">
+                  <p>
+                    {$auth.nama_lengkap|default:'-'} - {$auth.email|default:'-'}
+					
+                    <!--small>Member since Nov. 2012</small-->
+                  </p>
+                </li>
+				
+                <!-- Menu Body -->
+                
+                <!-- Menu Footer-->
+                <li class="user-footer">
+                  
+                  <div class="pull-left">
+                    <a href="javascript:void(0);" onclick="ganti_pwd();" class="btn btn-default btn-flat">Ubah Password</a>
+                  </div>
+				  <div class="pull-right">
+                    <a href="{$host}login/logout" class="btn btn-default btn-flat">Log out</a>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <!-- /.navbar-custom-menu -->
+      </div>
+      <!-- /.container-fluid -->
+    </nav>
+  </header>
+  <!-- Full Width Column -->
+  <div class="content-wrapper">
+    <div class="container" style="margin:0; padding:0 !important;">
+      <section class="content">
+        <div class="row">
+			<div class="col-md-12">
+			  <div class="box box-solid">
+				<div class="box-body">
+					<div id="konten">
+						{include file={$temp|default:"main/dashboard.html"}}
+					</div>
+				</div>
+				<!-- /.box-body -->
+			  </div>
+			  <!-- /.box -->
+			</div>
+		</div>
+      </section>
+      <!-- /.content -->
+    </div>
+    <!-- /.container -->
+  </div>
+  <!-- /.content-wrapper -->
+  <footer class="main-footer">
+    <div class="container">
+      <div class="pull-right hidden-xs">
+        <b>Version</b> 1.0
+      </div>
+      <strong>Copyright &copy; 2022 <a href="javascript:void(0);">PT. MSM</a>.</strong> All rights
+      reserved.
+    </div>
+    <!-- /.container -->
+  </footer>
+</div>
+<!-- ./wrapper -->
+
+
+</body>
+</html>
+<script>
+//setInterval(getNotif, 10000);
+</script>

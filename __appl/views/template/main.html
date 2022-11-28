@@ -1,0 +1,19 @@
+{assign var=buttonnya value='true'}
+{assign var=periode value='false'}
+{assign var=filter_core value='true'}
+{assign var=button_add value='true'}
+{assign var=button_edit value='true'}
+{assign var=button_delete value='true'}
+{assign var=button_import value='false'}
+{assign var=pending value='false'}
+{if $mod eq 'histori_pengajuan' || $mod eq 'histori_pengajuan_po' || $mod eq 'histori_po'}
+{assign var=buttonnya value='false'}
+{/if}
+{if $mod eq 'po' || $mod eq 'pengajuan_po'}
+{assign var=pending value='true'}
+{/if}
+{if $mod eq 'ver_po' || $mod eq 'barang_keluar' || $mod eq 'so_his' || $mod eq 'invoice_po' || $mod eq 'price' || $mod eq 'customer' || $mod eq 'his_penjualan' || $mod eq 'his_barang_keluar'}
+{assign var=buttonnya value='false'}
+{/if}
+
+{include file="template/grid.html" main={$mod} mod={$mod} button={$buttonnya} table={$table|default:''} filter_satker={$filter_satker|default:''} filter_core={$filter_core|default:'true'}  filter_periode={$periode|default:''} pending={$pending|default:''}}

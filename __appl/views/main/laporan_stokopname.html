@@ -1,0 +1,126 @@
+<style>
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+}
+.fileUpload input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+</style>
+<fieldset>
+<div class="span10">
+<form class="form-horizontal" id="form_{$acak}" url="{$host}modul/cruddata/{$mod}" method="post" enctype="multipart/form-data">
+<input type="hidden" name="id" value="{$data.h.id|default:''}">
+<input type="hidden" name="sts_crud" value="{$sts_crud|default:'add'}">
+<input type="hidden" name="flag" value="F">
+<table class="table">
+	<tr>
+		<td colspan="2">
+			<div id="list_so" class="list_so" style="text-align:center;;vertical-align:middle;overflow:auto;"> 
+				
+				<table class="table table-bordered table-hovered">
+					<thead style="background:#3C8DBC;color:#fff;">
+						<tr>
+							<th style="text-align:left;;vertical-align:middle;width:20%;" rowspan="2">SKU</th>
+							<th style="text-align:center;;vertical-align:middle;" colspan="{count($size)}">Qty</th>
+						</tr>
+						<tr>
+							{foreach from=$size item=i}
+							<th style="text-align:center;;vertical-align:middle;">{$i.ukuran|default:''}</th>
+							{/foreach}
+						</tr>
+					</thead>
+					
+					<tbody style="background:#D4E8F4;" class="bd_so">
+						{foreach from=$data.d item=a key=x}
+						<tr class="tr_em" id="tm_1" idx={$x}>
+							<td style="text-align:left;;vertical-align:middle;">
+								<input type="hidden" name="sku[]" onKeyup="this.value = this.value.toUpperCase()"  class="validasi autoo" value="{$x|default:''}" style="width:100%">
+								{$x|default:''}
+							</td>
+							{foreach from=$size item=i key=z}
+							<td style="text-align:left;;vertical-align:top;">
+								SIS : {$a.{$i.id}.qty_stok|default:0} <br>
+								S.O : {$a.{$i.id}.qty_so|default:0} <br>
+								<span style="{if $a.{$i.id}.selisih|default:0 < 0}background:red;color:#fff;{/if}{if $a.{$i.id}.selisih|default:0 > 0}background:navy;color:#fff;{/if}font-weight:bold;">Sel : {$a.{$i.id}.selisih|default:0}</span>
+								<input type="hidden" name="qty_stok_{$i.id}[]" id="qty_stok_{$i.id}_1_{$acak}" idx="1" class="angka t_qty_1" id_size="{$i.id}" style="width:50px;height:26px;" value="{$a.{$i.id}.qty_stok|default:''}">
+								<input type="hidden" name="qty_{$i.id}[]" id="qty_{$i.id}_1_{$acak}" idx="1" class="angka t_qty_1" id_size="{$i.id}" style="width:50px;height:26px;" value="{$a.{$i.id}.qty_so|default:''}">
+								<input type="hidden" name="selisih_{$i.id}[]" id="selisih_{$i.id}_1_{$acak}" idx="1" class="angka t_qty_1" id_size="{$i.id}" style="width:50px;height:26px;" value="{$a.{$i.id}.selisih|default:''}">
+							</td>
+							{/foreach}	
+						</tr>
+						{/foreach}
+					</tbody>
+				</table>
+				
+			</div>
+
+		</td>
+	</tr>
+	
+</table>
+</form>		
+</div>
+</fieldset>
+
+<script>
+	
+	$('#upl_{$mod}_{$acak}').click(function(){
+		upl("upload_so");
+	});
+	$('#download_{$mod}_{$acak}').click(function(){
+		tmp('template_so');
+	});
+	$('#cancel_{$mod}_{$acak}').click(function(){
+		$('#grid_nya_so').show();
+		$('#detil_nya_so').html('').hide();
+	});
+	$('#simpan_{$mod}_{$acak}').click(function(){
+		$.messager.confirm('FORDZA','Anda Yakin Transfer Stok Opname Ini ke Stok ?',function(re){
+			if(re){
+				submit_form('form_{$acak}',function(r){
+					if(r==1){
+						winLoadingClose();
+						$.messager.alert('FORDZA',"Stok Opname Tersimpan",'info');
+						$('#grid_nya_so').show();
+						$('#detil_nya_so').html('').hide();
+						$('#grid_so').datagrid('reload');
+					}else{
+						winLoadingClose();
+						$.messager.alert('FORDZA',"Data Gagal Tersimpan",'error');
+						console.log(r);
+					}
+				});
+			}
+		});
+	});
+	$('#pending_{$mod}_{$acak}').click(function(){
+		$.messager.confirm('FORDZA','Anda Yakin Pending Data Stok Opname Ini ?',function(re){
+			if(re){
+				loadingna();
+				$.post('{$host}modul/cruddata/ver_so',{ flag:'C',id:{$data.h.id|default:0} },function(r){
+					if(r==1){
+						winLoadingClose();
+						$.messager.alert('FORDZA',"Data Tersimpan",'info');
+						$('#grid_nya_so').show();
+						$('#detil_nya_so').html('').hide();
+						$('#grid_so').datagrid('reload');
+					}else{
+						winLoadingClose();
+						$.messager.alert('FORDZA',"Data Gagal Tersimpan",'error');
+						console.log(r);
+					}
+				});
+			}
+		});
+	});
+	
+</script>

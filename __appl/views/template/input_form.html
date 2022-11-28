@@ -1,0 +1,65 @@
+<tr>
+<td>&nbsp;</td>
+<td style="width:20%">
+	{$label|default:'-'} 
+	{if $label_validasi|default:'' eq 'true'}
+		<font color='red'>*)</font>
+	{/if}
+</td>
+<td>:</td>
+<td style="font-weight:bold;">
+{if $type eq 'select'}
+	<select id="{$id}_{$acak}" name="{$name}" class="form-control {$class|default:''}" style="{$style_type|default:''}">
+		<option value="">-- Pilih --</option>
+		{foreach from=$option item=i}
+		<option value="{$i.id}" {if $i.id eq $select|default:''}selected{/if}>{$i.txt}</option>
+		{/foreach}
+		{* {$option|default:''} *}
+	</select>
+{elseif $type eq 'text'}
+	<input  type="text" class="form-control {$class|default:''}" id="{$id}_{$acak}" name="{$name}" value="{$value|default:''}" style="{$style_type|default:''}" {$readonly|default:""} />
+{elseif $type eq 'text_group'}
+	<div class="input-append">
+	<input  type="text" class="form-control {$class|default:''}" id="{$id}_{$acak}" name="{$name}" value="{$value|default:''}" style="{$style_type|default:''}" />
+	<span class="btn btn-small">{$text_group|default:''}</span>
+	</div>
+{elseif $type eq 'file'}
+	<input type="file" class="{$class|default:''}" id="{$id}_{$acak}" name="{$name}" style="{$style_type|default:''}" {$multiple|default:''} />
+{elseif $type eq 'pwd'}
+	 <div class="input-group">
+        <input type="password" class="span4 {$class|default:''}" id="{$id}_{$acak}" name="{$name}" style="{$style_type|default:''}" value="{$value|default:''}" />
+        <span class="input-group-addon">
+			<a href="javascript:void(0);" onclick="konversi_pwd_text('{$id}_{$acak}')">Show</a>
+		</span> 
+       </div>
+{elseif $type eq 'textarea'}
+	<textarea class="form-control {$class|default:''}" style="{$style_type|default:''}" id="{$id}_{$acak}" name="{$name}">{$value|default:''}</textarea>
+{elseif $type eq 'editor'}
+	<textarea class="{$class|default:''}" style="{$style_type|default:''}" id="{$id}_{$acak}" name="{$name}">{$value|default:''}</textarea>
+	<script>
+		
+		CKEDITOR.replace( '{$id}', {
+			// Define the toolbar groups as it is a more accessible solution.
+			toolbarGroups: [
+				{ name: 'clipboard', groups: [ 'undo', 'clipboard' ] },
+				{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+				{ name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+				{ name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+				{ name: 'forms', groups: [ 'forms' ] },
+				{ name: 'document', groups: [ 'document', 'mode', 'doctools' ] },
+				{ name: 'links', groups: [ 'links' ] },
+				{ name: 'insert', groups: [ 'insert' ] },
+				{ name: 'styles', groups: [ 'styles' ] },
+				{ name: 'colors', groups: [ 'colors' ] },
+				{ name: 'tools', groups: [ 'tools' ] },
+				{ name: 'others', groups: [ 'others' ] },
+				{ name: 'about', groups: [ 'about' ] }
+			],
+			// Remove the redundant buttons from toolbar groups defined above.
+			removeButtons: 'Source,Save,Templates,NewPage,Preview,Print,Form,Checkbox,Radio,TextField,Textarea,Select,ImageButton,HiddenField,Blockquote,CreateDiv,Link,Unlink,Anchor,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Maximize,ShowBlocks,About,Scayt,SelectAll,Find,Replace,Paste,PasteText,PasteFromWord,Button'
+		} );
+	
+	</script>
+{/if}
+</td>
+</tr>

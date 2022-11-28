@@ -1,0 +1,38 @@
+<form class="form-horizontal" id="form_{$acak}" url="{$host}modul/cruddata/{$mod}" method="post" enctype="multipart/form-data">
+<table class="table">
+	{include file="template/input_form.html" type='file' label="File Excel" id="file" name="file" style_type="width:80%;height:30px;" class="validasi" value="{$data.h.file|default:''}" }
+</table>
+</form>
+<div class="control-group">
+	<center>
+	<label class="control-label" for="form-field-1"></label>
+	<div class="controls">
+		{include file="template/button_save.html" id_na="simpan_{$mod}"  btn_goyz="true" text="Import Data"}
+		{include file="template/button_save.html" id_na="cancel_{$mod}"  btn_goyz="true" text="Kembali Ke List"}
+	</div>
+	</center>
+</div>
+<script>
+$('#simpan_{$mod}_{$acak}').click(function(){
+	$(".validasi").validatebox({ required:true }); 
+	if ($('#form_{$acak}').form('validate')){
+		submit_form('form_{$acak}',function(r){
+			if(r==1){
+				winLoadingClose();
+				$.messager.alert('FORDZA',"Import Data Tersimpan",'info');
+				closeWindow();
+				$("#grid_stok").datagrid('reload')
+			}else{
+				winLoadingClose();
+				$.messager.alert('FORDZA',"Import Gagal Tersimpan",'error');
+				console.log(r);
+			}
+		});
+	}else{
+		$.messager.alert('FORDZA',"Pilih File",'error');
+	}
+});
+$('#cancel_{$mod}_{$acak}').click(function(){
+	closeWindow();
+});
+</script>

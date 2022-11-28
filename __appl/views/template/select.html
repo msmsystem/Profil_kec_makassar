@@ -1,0 +1,24 @@
+{*
+<label>{$tanya|default:'-'}</label> :<select name="tanya_{$id_tanya}" id="tanya_{$id_tanya}_{$acak}" >
+	{if !empty($x.pilihan)}
+	{foreach from=$x.pilihan item=i key=a}
+	<option value="{$a}">{$i}</option>
+	{/foreach}
+	{else}
+	<option value="">-- NO DATA --</option>
+	{/if}
+</select>
+*}
+
+{if $required|default:'' eq 'true'}
+	{assign var="req" value="required='required'"}	
+{else}
+	{assign var="req" value=""}
+{/if}
+
+<div class="form-group">
+	<label class="{$class_label|default:''}">{$label|default:'-'} {if $required|default:'' eq "true"}<font color="red">*</font>{/if}</label>
+	<select name="{$name}" id="{$id}" {$req} class="form-control {$class|default:''}">
+		{$option|default:''}
+	</select>
+</div>

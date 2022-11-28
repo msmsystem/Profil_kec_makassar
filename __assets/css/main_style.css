@@ -1,0 +1,268 @@
+
+
+/*
+
+RESPONSTABLE 2.0 by jordyvanraaij
+  Designed mobile first!
+
+If you like this solution, you might also want to check out the 1.0 version:
+  https://gist.github.com/jordyvanraaij/9069194
+
+*/
+
+// Default options for table style
+$table-breakpoint: 480px;
+$table-background-color: #FFF;
+$table-text-color: #024457;
+$table-outer-border: 1px solid #167F92;
+$table-cell-border: 1px solid #D9E4E6;
+
+// Extra options for table style (parse these arguments when including your mixin)
+$table-border-radius: 10px;
+$table-highlight-color: #EAF3F3;
+$table-header-background-color: #167F92;
+$table-header-text-color: #FFF;
+$table-header-border: 1px solid #FFF;
+
+// The Responstable mixin
+
+@mixin responstable(
+  $breakpoint: $table-breakpoint,
+  $background-color: $table-background-color,
+  $text-color: $table-text-color,
+  $outer-border: $table-outer-border,
+  $cell-border: $table-cell-border,
+  $border-radius: none,
+  $highlight-color: none,
+  $header-background-color: $table-background-color,
+  $header-text-color: $table-text-color,
+  $header-border: $table-cell-border) {
+  
+  .responstable {
+    margin: 1em 0;
+    width: 100%;
+    overflow: hidden;  
+    background: $background-color;
+    color: $text-color;
+    border-radius: $border-radius;
+    border: $outer-border;
+  
+    tr {
+      border: $cell-border; 
+      &:nth-child(odd) { // highlight the odd rows with a color
+        background-color: $highlight-color;
+      }  
+    }
+  
+    th {
+      display: none; // hide all the table header for mobile
+      border: $header-border;
+      background-color: $header-background-color;
+      color: $header-text-color;
+      padding: 1em;  
+      &:first-child { // show the first table header for mobile
+        display: table-cell;
+        text-align: center;
+      }
+      &:nth-child(2) { // show the second table header but replace the content with the data-th from the markup for mobile
+        display: table-cell;
+        span {display:none;}
+        &:after {content:attr(data-th);}
+      }
+      @media (min-width: $breakpoint) {
+        &:nth-child(2) { // hide the data-th and show the normal header for tablet and desktop
+          span {display: block;}
+          &:after {display: none;}
+        }
+      }
+    }
+  
+    td {
+      display: block; // display the table data as one block for mobile
+      word-wrap: break-word;
+      max-width: 7em;
+      &:first-child { 
+        display: table-cell; // display the first one as a table cell (radio button) for mobile
+        text-align: center;
+        border-right: $cell-border;
+      }
+      @media (min-width: $breakpoint) {
+        border: $cell-border;
+      }
+    }
+  
+    th, td {
+      text-align: left;
+      margin: .5em 1em;  
+      @media (min-width: $breakpoint) {
+        display: table-cell; // show the table as a normal table for tablet and desktop
+        padding: 1em;
+      }
+    }  
+  }    
+}
+
+// Include the mixin (with extra options as overrides)
+
+@include responstable(
+  $border-radius: $table-border-radius,
+  $highlight-color: $table-highlight-color,
+  $header-background-color: $table-header-background-color,
+  $header-text-color: $table-header-text-color,
+  $header-border: $table-header-border);
+
+// General styles
+
+body {
+  padding: 0 2em;
+  font-family: Arial, sans-serif;
+  color: #024457;
+  background: #f2f2f2;
+}
+
+h1 {
+  font-family: Verdana;
+  font-weight: normal;
+  color: #024457;
+  span {color: #167F92;}
+}
+
+body  {
+	font-family: arial,tahoma,helvetica,sans-serif;
+    font-size: 9pt;
+    line-height: 1.5;
+	
+	margin: 0; /* it's good practice to zero the margin and padding of the body element to account for differing browser defaults */
+	padding: 0;
+	/*text-align: center;  this centers the container in IE 5* browsers. The text is then set to the left aligned default in the #container selector */
+	color: #000000;
+	
+}
+.hidden{
+    display: none;
+}
+
+.loading{
+   
+	  /*top: 50%;
+	  left: 50%;
+	  margin-top: 15%;
+	  margin-left: 50%;
+	  height:50px;
+	  width:50px;
+	  z-index:1000;*/
+    background: url('../img/loading.gif') center center no-repeat!important;
+    min-height:50px;
+	min-width:50px;
+}
+
+div.info-empty {
+	display: block; 
+	margin: 100px auto 0px; 
+	background: none repeat scroll 0% 0% #EFEFEF; 
+	padding: 5px; text-align: center; 
+	border: 1px solid rgb(175, 175, 175); 
+	border-radius: 3px 3px 3px 3px;
+	font-size: 17px; 
+	width: 300px;
+}
+
+legend {
+	background-color: #CBDDF3;
+    background-image: -moz-linear-gradient(center top , #DAE7F6, #CDDEF3 45%, #ABC7EC 46%, #ABC7EC 50%, #B8CFEE 51%, #CBDDF3);
+    border-color: #99BCE8;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 3px 3px 3px 0px #333333;
+    font-size: 11px;
+    line-height: 15px;
+    border-radius: 4px 4px 4px 4px;
+    color: #333333;
+    font-size: 11pt;
+    font-weight: bold;
+    margin: 0px;
+    /*min-width: 150px;*/
+    padding: 7px 17px;
+	width: 235px;
+}
+
+fieldset {
+    background-attachment: scroll !important;
+    background-clip: border-box !important;
+    background-color: #F6F6F6;
+	background-image: -moz-linear-gradient(center top , #DAE7F6, #CDDEF3 45%, #ABC7EC 46%, #ABC7EC 50%, #B8CFEE 51%, #CBDDF3);
+    /* background-image: -moz-linear-gradient(center top , #DAE7F6, #FFFFFF 100%, #ABC7EC 99%, #ABC7EC 100%, #B8CFEE 100%, #CBDDF3) !important;  */
+ /* background: linear-gradient(90deg, rgba(208,247,247,1) 29%, rgba(168,247,246,0.08167016806722693) 100%); */
+    background-origin: padding-box !important;
+    background-position: 0 0 !important;
+    background-repeat: repeat-x !important;
+    background-size: auto auto !important;
+    border: 1px outset #99BCE8;
+    border-radius: 4px 4px 4px 4px;
+	padding:9px;
+	margin-bottom:5px;
+}
+
+
+
+#table-2 {
+	border: 1px solid #e3e3e3;
+	background-color: #f2f2f2;
+    
+	border-radius: 6px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+}
+#table-2 td, #table-2 th {
+	padding: 5px;
+	color: #333;
+}
+#table-2 thead {
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	padding: .2em 0 .2em .5em;
+	text-align: left;
+	color: #4B4B4B;
+	background-color: #C8C8C8;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#e3e3e3), color-stop(.6,#B3B3B3));
+	background-image: -moz-linear-gradient(center top, #D6D6D6, #B0B0B0, #B3B3B3 90%);
+	border-bottom: solid 1px #999;
+}
+#table-2 th {
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 20px;
+	font-style: normal;
+	font-weight: bold;
+	text-align: center;
+	text-shadow: white 1px 1px 1px;
+}
+#table-2 td {
+	line-height: 20px;
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	font-weight:bold;
+	border-bottom: 1px solid #fff;
+	border-right: 1px solid #fff;
+	border-top: 1px solid #fff;
+}
+#table-2 td:hover {
+	background-color: #fff;
+}
+.shadow {
+-webkit-box-shadow: 18px 10px 0px -4px rgba(0,0,0,0.2);
+-moz-box-shadow: 18px 10px 0px -4px rgba(0,0,0,0.2);
+box-shadow: 18px 10px 0px -4px rgba(0,0,0,0.2);        3px 3px 5px 6px #ccc;
+}
+.one-edge-shadow {
+	-webkit-box-shadow: 0 8px 6px -6px black;
+	   -moz-box-shadow: 0 8px 6px -6px black;
+	        box-shadow: 0 8px 6px -6px black;
+}
+	
+.autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
+.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
+.autocomplete-selected { background: #F0F0F0; }
+.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+
+
+

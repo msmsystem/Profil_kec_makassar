@@ -1,0 +1,81 @@
+<fieldset>
+	<legend>Form Master Kelurahan/Desa</legend>
+<div class="span10">
+<form class="form-horizontal" id="form_{$acak}" url="{$host}modul/cruddata/cl_kelurahan_desa" method="post" enctype="multipart/form-data">
+<table class="table table-hover">
+		<!--input type="hidden" name="id" value="{$data.id|default:''}"-->
+		<input type="hidden" name="sts_crud" value="{$sts_crud|default:'add'}">
+		{include file="template/input_form.html" type='select' label="Provinsi *" id="cl_provinsi_id" name="provinsi_id" style_type="width:80%" class="validasi" value="{$data.provinsi_id|default:''}" option=$prov select="{$data.provinsi_id|default:''}"}
+		{include file="template/input_form.html" type='select' label="Kab/Kota *" id="cl_kab_kota_id" name="kab_kota_id" style_type="width:80%" class="validasi" value="{$data.kab_kota_id|default:''}" select="{$data.kab_kota_id|default:''}"}
+		{include file="template/input_form.html" type='select' label="Kecamatan *" id="cl_kecamatan_id" name="kecamatan_id" style_type="width:80%" class="validasi" value="{$data.kecamatan_id|default:''}" select="{$data.kecamatan_id|default:''}"}
+		{include file="template/input_form.html" type='text' label="ID/Kode *" id="id" name="id" style_type="width:80%" class="validasi" value="{$data.id|default:''}"}
+		{include file="template/input_form.html" type='text' label="Nama Kelurahan/Desa *" id="nama" name="nama" style_type="width:80%" class="validasi" value="{$data.nama|default:''}"}
+		
+		
+</table>
+	
+</form>
+<div class="control-group">
+	<center>
+	<label class="control-label" for="form-field-1"></label>
+	<div class="controls">
+		{include file="template/button_save.html" id_na="simpan_{$mod}"  btn_goyz="true" text="Simpan / Update"}
+		{include file="template/button_save.html" id_na="cancel_{$mod}"  btn_goyz="true" text="Kembali Ke List"}
+	</div>
+	</center>
+</div>		
+</div>
+</fieldset>
+
+<script>
+	var idx_row={$jml_row|default:1};
+	//$(".validasi").validatebox({ required:true }); 
+	/*$('.tgl').datepicker({
+		 format: 'yyyy-mm-dd',
+		 autoclose: true
+	});
+	*/
+	$('#cl_provinsi_id_{$acak}').change(function(){
+		fillCombo(host+'modul/get_combo','cl_kab_kota_id_{$acak}','kab_kota', $(this).val());
+	});
+	$('#cl_kab_kota_id_{$acak}').change(function(){
+		fillCombo(host+'modul/get_combo','cl_kecamatan_id_{$acak}','kec', $(this).val());
+	});
+	
+	
+	{if $sts_crud|default:'add' eq 'edit'}
+		fillCombo(host+'modul/get_combo','cl_kab_kota_id_{$acak}','kab_kota', '{$data.provinsi_id}','{$data.kab_kota_id}');
+		fillCombo(host+'modul/get_combo','cl_kecamatan_id_{$acak}','kec', '{$data.kab_kota_id}','{$data.kecamatan_id}');
+		
+	{/if}
+	
+	$('#cancel_{$mod}_{$acak}').click(function(){
+		$('#grid_nya_{$mod}').show();
+		$('#detil_nya_{$mod}').html('').hide();
+	});
+	$('#simpan_{$mod}_{$acak}').click(function(){
+		$(".validasi").validatebox({ required:true }); 
+		if ($('#form_{$acak}').form('validate')){
+			submit_form('form_{$acak}',function(r){
+				if(r==1){
+					winLoadingClose();
+					$.messager.alert('BSR',"Data Tersimpan",'info');
+					$('#grid_nya_{$mod}').show();
+					$('#detil_nya_{$mod}').html('').hide();
+					$('#grid_{$mod}').datagrid('reload');
+				}else if(r==2){
+					winLoadingClose();
+					$.messager.alert('BSR',"NAMA USER SUDAH ADA!!!",'warning');
+					//console.log(r);
+				}else{
+					winLoadingClose();
+					$.messager.alert('BSR',"Data Gagal Tersimpan",'error');
+					console.log(r);
+				}
+			});
+		}else{
+			$.messager.alert('BSR',"Isi Form Yang Kosong",'error');
+		}
+
+	});
+</script>

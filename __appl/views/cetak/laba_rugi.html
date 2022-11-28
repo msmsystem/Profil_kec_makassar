@@ -1,0 +1,89 @@
+<style>
+table.timecard {
+	margin: auto;
+	width: 600px;
+	border-collapse: collapse;
+	border: 1px solid #fff; /*for older IE*/
+	font-size:10px;
+}
+
+
+table.timecard thead th#thDay {
+	width: 40%;	
+}
+
+table.timecard thead th#thRegular, table.timecard thead th#thOvertime, table.timecard thead th#thTotal {
+	width: 20%;
+}
+
+table.timecard th, table.timecard td {
+	padding: 3px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #000000 #000000;
+}
+
+table.timecard td {
+	text-align: right;
+}
+
+table.timecard tbody th {
+	text-align: left;
+	font-weight: normal;
+}
+
+table.timecard tfoot {
+	font-weight: bold;
+	font-size: large;
+	background-color: #687886;
+	color: #fff;
+}
+
+table.timecard tr.even {
+	background-color: #fde9d9;
+}
+</style>
+<table class="timecard">
+	<thead >
+		<tr style="background:#3C8DBC;color:#fff;">
+			<th style="text-align:left;vertical-align:middle;width:50px" >No.</th>
+			<th style="text-align:left;;vertical-align:middle;" >(Kode) Nama Project</th>
+			<th style="text-align:right;;vertical-align:middle;">Jumlah Pemasukan</th>
+			<th style="text-align:right;;vertical-align:middle;">Jumlah Pengeluaran</th>
+			<th style="text-align:right;;vertical-align:middle;">Laba</th>
+		</tr>
+	</thead>
+	<tbody style="background:#D4E8F4;">
+		{assign var=total_pemasukan value=0}
+		{assign var=total_pengeluaran value=0}
+		{assign var=total_laba value=0}
+		{foreach from=$data.h item=i name=x}
+		{assign var=total_pemasukan value=$total_pemasukan + $i.pemasukan}
+		{assign var=total_pengeluaran value=$total_pengeluaran + $i.grand_total}
+		{assign var=total_laba value=$total_laba + $i.laba}
+		<tr style="font-weight:bold;">
+			<td style="text-align:left;vertical-align:middle;width:50px" >{$smarty.foreach.x.iteration}</td>
+			<td style="text-align:left;;vertical-align:middle;" >({$i.kode_project|default:'-'}) {$i.nama_project|default:'-'}</td>
+			<td style="text-align:right;;vertical-align:middle;" >Rp. {$i.pemasukan|number_format:2:',':'.'|default:'-'}</td>
+			<td style="text-align:right;;vertical-align:middle;" >Rp. {$i.grand_total|number_format:2:',':'.'|default:'-'}</td>
+			<td style="text-align:right;;vertical-align:middle;" >Rp. {$i.laba|number_format:2:',':'.'|default:'-'}</td>
+		</tr>
+			{*
+			{foreach from=$i.detil item=a name=b}
+				<tr style="">
+					<td style="text-align:left;vertical-align:middle;width:50px" >&nbsp;</td>
+					<td style="text-align:left;;vertical-align:middle;" colspan="2">&nbsp;&nbsp;&nbsp;&nbsp; - {$a.nama_barang|default:'-'}</td>
+					<td style="text-align:right;;vertical-align:middle;" >Rp. {$a.total|number_format:2:',':'.'|default:'-'}</td>
+					<td style="text-align:right;;vertical-align:middle;" >&nbsp;</td>
+				</tr>
+			{/foreach}
+			*}
+		{/foreach}
+		<tr style="font-weight:bold;background:#3C8DBC;color:#fff;">
+			<td style="text-align:left;vertical-align:middle;" colspan="2">GRAND TOTAL</td>
+			<td style="text-align:right;vertical-align:middle;" >Rp. {$total_pemasukan|number_format:2:',':'.'|default:'-'}</td>
+			<td style="text-align:right;vertical-align:middle;" >Rp. {$total_pengeluaran|number_format:2:',':'.'|default:'-'}</td>
+			<td style="text-align:right;vertical-align:middle;" >Rp. {$total_laba|number_format:2:',':'.'|default:'-'}</td>
+		</tr>
+	</tbody>
+</table>

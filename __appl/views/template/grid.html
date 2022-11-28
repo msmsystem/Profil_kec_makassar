@@ -1,0 +1,248 @@
+<style type="text/css">
+	.datagrid-row-over td{
+		background:#D0E5F5;
+	}
+	.datagrid-row-selected td{
+		background:#FBEC88;
+		color:#000;
+	}
+</style>
+<div id="grid_nya_{$main}" style="margin-left:8px;">
+	<div id='grid_{$main}'></div>
+	<div id='tb_{$main}' style="padding:5px;height:{$tinggi_toolbar|default:'35px'};">
+		<div style="float:{$align|default:'left'}; width:70%;">
+		{if $filter_prov|default:'false' eq 'true'}
+				<label >Prov. </label>: &nbsp;&nbsp;
+				<select name="prov_{$acak}" id="prov_{$acak}" style="width:20%;height:22px;">
+					<option value="">-- Pilih --</option>
+					{foreach from=$prov item=i}
+					<option value="{$i.kode_prov}">{$i.provinsi}</option>
+					{/foreach}
+				</select>
+					
+		{/if}
+		{if $filter_kab|default:'false' eq 'true'}
+				<label>Kab. </label>: &nbsp;&nbsp;
+				<select name="kab_{$acak}" id="kab_{$acak}" style="width:20%;height:22px;">
+				</select>	
+		{/if}
+		{if $filter_kec|default:'false' eq 'true'}
+				<br><label >Kec. </label>: &nbsp;&nbsp;
+				<select name="kec_{$acak}" id="kec_{$acak}" style="width:20%;height:22px;">
+					
+				</select>	
+		{/if}
+		{if $filter_kel|default:'false' eq 'true'}
+				<label >Kel. </label>: &nbsp;&nbsp;
+				<select name="kel_{$acak}" id="kel_{$acak}" style="width:20%;height:22px;">
+				
+				</select>	
+		{/if}
+		{if $filter_core|default:'' eq 'true'}
+			<div style="float:{$align|default:'left'}; width:100%;">
+				<label style='width:100px;'>Pencarian </label>: &nbsp;&nbsp;
+				<!--select name="kat_{$acak}" id="kat_{$acak}" style="width:20%;height:22px;">
+					{$data_select|default:''}
+				</select-->
+				<input type="text" name="key_{$acak}" id="key_{$acak}" style="width:30%;height:22px;">
+				&nbsp;&nbsp;&nbsp;
+				{if $mod eq 'price'}
+				Supplier: &nbsp;
+				<select id="sup_{$acak}" name="sup" style="width:100px;height:22px;">
+					<option value="">-- All --</option>
+					{foreach from=$sup item=i}
+					<option value="{$i.kode_supplier}">{$i.supplier}</option>
+					{/foreach}
+					
+				</select>
+				
+				<a href="javascript:void(0)" style='' class="l-btn l-btn-small l-btn-plain" group="" id="" onClick="tmp('template_{$mod}');">
+					<span class="l-btn-left l-btn-icon-left">
+						<span class="l-btn-text">Download Template Excel</span><span class="l-btn-icon icon-excel">&nbsp;</span>
+					</span>
+				</a>
+				<a href="javascript:void(0)" style='' class="l-btn l-btn-small l-btn-plain" group="" id="" onClick="upl('upload_{$mod}');">
+					<span class="l-btn-left l-btn-icon-left">
+						<span class="l-btn-text">Import Excel</span><span class="l-btn-icon icon-excel">&nbsp;</span>
+					</span>
+				</a>
+				&nbsp;
+				
+				{/if}
+				{if $mod eq 'barang'}
+				Supplier: &nbsp;
+				<select id="sup_{$acak}" name="sup" style="width:100px;height:22px;">
+					<option value="">-- All --</option>
+					{foreach from=$sup item=i}
+					<option value="{$i.kode_supplier}">{$i.supplier}</option>
+					{/foreach}
+					
+				</select>
+				
+				<a href="javascript:void(0)" style='' class="l-btn l-btn-small l-btn-plain" group="" id="" onClick="openWindowWithPost('{$host}modul/download_template/barang');">
+					<span class="l-btn-left l-btn-icon-left">
+						<span class="l-btn-text">Download Template Excel</span><span class="l-btn-icon icon-excel">&nbsp;</span>
+					</span>
+				</a>
+				<a href="javascript:void(0)" style='' class="l-btn l-btn-small l-btn-plain" group="" id="" onClick="upl('upload_{$mod}');">
+					<span class="l-btn-left l-btn-icon-left">
+						<span class="l-btn-text">Import Excel</span><span class="l-btn-icon icon-excel">&nbsp;</span>
+					</span>
+				</a>
+				&nbsp;
+				
+				{/if}
+				{if $mod eq 'customer'}
+				<a href="javascript:void(0)" style='' class="l-btn l-btn-small l-btn-plain" group="" id="" onClick="cetak_excel('customer',0);">
+					<span class="l-btn-left l-btn-icon-left">
+						<span class="l-btn-text">Export Excel</span><span class="l-btn-icon icon-excel">&nbsp;</span>
+					</span>
+				</a>
+				{/if}
+				{if $button_import|default:'' eq 'true'}
+				<a href="javascript:void(0)" style='' class="l-btn l-btn-small l-btn-plain" group="" id="" onClick="get_form('{$main}','import_excel');">
+					<span class="l-btn-left l-btn-icon-left">
+						<span class="l-btn-text">Import Excel</span><span class="l-btn-icon icon-excel">&nbsp;</span>
+					</span>
+				</a>
+				&nbsp;
+				{/if}
+			</div>
+		{/if}
+			<!--input type="text" name="key_{$acak}" id="key_{$acak}" style="width:80%;height:22px;">
+				&nbsp;&nbsp;&nbsp;
+			<a href="javascript:void(0)" style='' class="l-btn l-btn-small l-btn-plain" group="" id="" onClick="cariData('{$main}','{$acak}');">
+				<span class="l-btn-left l-btn-icon-left">
+					<span class="l-btn-text">Cari</span><span class="l-btn-icon icon-search">&nbsp;</span>
+				</span>
+			</a-->
+		</div>
+		{if $button|default:'' eq 'true'}
+			<div id='tombol' style="float:right;width:30%;">
+
+				{if $button_delete|default:'' eq 'true'}
+				<a href="javascript:void(0)" style='float:right;' class="l-btn l-btn-small l-btn-plain" group="" id="" onClick="genform('delete', '{$mod}','{$main}');">
+					<span class="l-btn-left l-btn-icon-left">
+						<span class="l-btn-text">Hapus</span><span class="l-btn-icon icon-no">&nbsp;</span>
+					</span>
+				</a>	
+				&nbsp;			
+				{/if}
+				{if $button_edit|default:'' eq 'true'}
+				<a href="javascript:void(0)" style='float:right;' class="l-btn l-btn-small l-btn-plain" group="" id="" onClick="genform('edit', '{$mod}','{$main}');">
+					<span class="l-btn-left l-btn-icon-left">
+						<span class="l-btn-text">Edit</span><span class="l-btn-icon icon-edit">&nbsp;</span>
+					</span>
+				</a>
+				&nbsp;
+				{/if}
+				{if $button_add|default:'' eq 'true'}
+				<a href="javascript:void(0)" style='float:right;' class="l-btn l-btn-small l-btn-plain" group="" id="" onClick="genform('add', '{$mod}','{$main}');">
+					<span class="l-btn-left l-btn-icon-left">
+						<span class="l-btn-text">Tambah</span><span class="l-btn-icon icon-add">&nbsp;</span>
+					</span>
+				</a>
+				&nbsp;
+				{/if}
+				
+			</div>
+		{/if}
+		
+		{if $filter_periode|default:'' eq 'true'}
+			<div style="float:{$align|default:'left'}; width:60%;">
+				<label style='width:100px;'>Tahun </label>: &nbsp;&nbsp;
+				<input type="text" name="periode_{$acak}" id="periode_{$acak}" style="width:20%;height:22px;">
+				&nbsp;&nbsp;&nbsp;
+				{if $button_process|default:'' eq 'true'}
+				<a href="javascript:void(0)" style='' class="l-btn l-btn-small l-btn-plain" group="" id="" onClick="proseslaporan('{$main}', '{$table}', '{$acak}');">
+					<span class="l-btn-left l-btn-icon-left">
+						<span class="l-btn-text">Proses</span><span class="l-btn-icon icon-reload">&nbsp;</span>
+					</span>
+				</a>
+				{/if}
+				{if $button_pdf|default:'' eq 'true'}
+				<a href="javascript:void(0)" style='' class="l-btn l-btn-small l-btn-plain" group="" id="" onClick="export_data('pdf','{$mod}','{$acak}');">
+					<span class="l-btn-left l-btn-icon-left">
+						<span class="l-btn-text">PDF</span><span class="l-btn-icon icon-pdf">&nbsp;</span>
+					</span>
+				</a>
+				&nbsp;
+				{/if}
+				{if $button_excell|default:'' eq 'true'}
+				<a href="javascript:void(0)" style='' class="l-btn l-btn-small l-btn-plain" group="" id="" onClick="export_data('excel_html','{$mod}','{$acak}');">
+					<span class="l-btn-left l-btn-icon-left">
+						<span class="l-btn-text">Excell</span><span class="l-btn-icon icon-excel">&nbsp;</span>
+					</span>
+				</a>
+				&nbsp;
+				{/if}				
+			</div>
+		{/if}
+		{if $filter_laporan|default:'' eq 'true'}
+			<div style="float:{$align|default:'left'}; width:60%;">
+				{if $filter_satker|default:'' eq 'true'}
+				<label style='width:100px;'>Satker </label>: &nbsp;&nbsp;
+				<select name="filter_satker_{$acak}" id="filter_satker_{$acak}" style="width:20%;height:22px;">
+					{$satker|default:''}
+				</select>
+				{/if}
+				{if $filter_kelas|default:'' eq 'true'}
+				<label style='width:100px;'>Kelas Jabatan </label>: &nbsp;&nbsp;
+				<select name="filter_kelas_{$acak}" id="filter_kelas_{$acak}" style="width:20%;height:22px;">
+					{$kelas|default:''}
+				</select>
+				{/if}
+			</div>
+		{/if}
+				
+	</div>
+</div>
+<div id='detil_nya_{$main}' width='100%'></div>
+
+<script>
+$(function(){	
+	$('#grid_nya_{$main}').css({
+		'height':( {$height_grid|default:'getClientHeight()-140'} )
+	});
+	
+	/*$('#periode_{$acak}').datepicker({
+		format: 'mm-yyyy',
+		startView: "months", 
+		minViewMode: "months"
+	});
+	*/
+	var jns_grid;
+	{if $main eq 'services'}
+		jns_grid='tree';
+	{else}
+		jns_grid='grid';
+	{/if}
+	genGrid('{$main}','grid_{$main}', '', '', jns_grid);
+	
+	$("#prov_{$acak}").change(function(){
+		$('#kab_{$acak}').empty();
+		$('#kec_{$acak}').empty();
+		$('#kel_{$acak}').empty();
+		fillCombo(host+"backend/get_combo", "kab_{$acak}", "kabupaten",$(this).val());
+	});
+	$("#kab_{$acak}").change(function(){
+		$('#kec_{$acak}').empty();
+		fillCombo(host+"backend/get_combo", "kec_{$acak}", "kecamatan",$(this).val());
+	});
+	$("#kec_{$acak}").change(function(){
+		$('#kel_{$acak}').empty();
+		fillCombo(host+"backend/get_combo", "kel_{$acak}", "kelurahan",$(this).val());
+	});
+	$('#key_{$acak}').keypress(function(e) {
+		if(e.which == 13) {
+			cariData('{$main}', '{$acak}');
+		}
+	});
+	$('#pending_{$acak}').on('click',function(){
+		cariData('{$main}', '{$acak}');
+	});
+	$('#sup_{$acak}').change(function(){
+		cariData('{$main}', '{$acak}');
+	});
+});
+</script>

@@ -1,0 +1,30 @@
+<form class="form-horizontal" id="form_{$acak}" url="{$host}modul/cruddata/{$mod}" method="post" enctype="multipart/form-data">
+<table class="table">
+	{include file="template/input_form.html" type='text' label="Size" id="size" name="size" style_type="width:80%" class="validasi" value="{$data.h.size|default:''}"}
+</table>
+</form>
+<div class="control-group">
+	<center>
+	<label class="control-label" for="form-field-1"></label>
+	<div class="controls">
+		{include file="template/button_save.html" id_na="simpan_{$mod}"  btn_goyz="true" text="Cetak Barcode"}
+		{include file="template/button_save.html" id_na="cancel_{$mod}"  btn_goyz="true" text="Kembali Ke List"}
+	</div>
+	</center>
+</div>
+<script>
+$('#simpan_{$mod}_{$acak}').click(function(){
+	$(".validasi").validatebox({ required:true }); 
+	if ($('#form_{$acak}').form('validate')){
+		var params={};
+		params["sku"]='{$sku}';
+		params["size"]=$('#size_{$acak}').val();
+		openWindowWithPost(host+'modul/cetak_barcode',params);
+	}else{
+		$.messager.alert('FORDZA',"Isi Size ",'error');
+	}
+});
+$('#cancel_{$mod}_{$acak}').click(function(){
+	closeWindow();
+});
+</script>

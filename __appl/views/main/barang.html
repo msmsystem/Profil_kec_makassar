@@ -1,0 +1,75 @@
+<fieldset>
+	<legend>Form Input Barang</legend>
+<div class="span10">
+<form class="form-horizontal" id="form_{$acak}" url="{$host}modul/cruddata/tbl_master_barang" method="post" enctype="multipart/form-data">
+<table class="table table-hover">
+		<input type="hidden" name="id" value="{$data.id|default:''}">
+		<input type="hidden" name="sku_lama" value="{$data.sku|default:''}">
+		<input type="hidden" name="sts_crud" value="{$sts_crud|default:'add'}">
+		
+		{include file="template/input_form.html" type='text' label="SKU *" id="sku" name="sku" style_type="width:80%" class="validasi" value="{$data.sku|default:''}"}
+		{include file="template/input_form.html" type='select' label="Kategori *" id="cl_kategori_id" name="cl_kategori_id" style_type="width:80%" class="validasi" value="{$data.cl_kategori_id|default:''}" option=$kat select="{$data.cl_kategori_id|default:''}"}
+		{include file="template/input_form.html" type='select' label="Supplier *" id="cl_kode_supplier" name="cl_kode_supplier" style_type="width:80%" class="validasi" value="{$data.cl_kode_supplier|default:''}" option=$sup select="{$data.cl_kode_supplier|default:''}"}
+		{include file="template/input_form.html" type='select' label="Warna *" id="cl_kode_warna" name="cl_kode_warna" style_type="width:80%" class="validasi" value="{$data.cl_kode_warna|default:''}" option=$warna select="{$data.cl_kode_warna|default:''}"}
+		{include file="template/input_form.html" type='text' label="Nama Produk *" id="nama_produk" name="nama_produk" style_type="width:80%" class="validasi" value="{$data.nama_produk|default:''}"}
+		
+		<tr>
+			<td>&nbsp;</td><td>Status</td><td>:</td>
+			<td style="font-weight:bold;">
+				<input type="checkbox" name="status" value="A" {if $data.status|default:'A' eq 'A'}checked{/if}>&nbsp;&nbsp;Aktif
+			</td>
+		</tr>
+</table>
+	
+</form>
+<div class="control-group">
+	<center>
+	<label class="control-label" for="form-field-1"></label>
+	<div class="controls">
+		{include file="template/button_save.html" id_na="simpan_{$mod}"  btn_goyz="true" text="Simpan / Update"}
+		{include file="template/button_save.html" id_na="cancel_{$mod}"  btn_goyz="true" text="Kembali Ke List"}
+	</div>
+	</center>
+</div>		
+</div>
+</fieldset>
+
+<script>
+	var idx_row={$jml_row|default:1};
+	//$(".validasi").validatebox({ required:true }); 
+	/*$('.tgl').datepicker({
+		 format: 'yyyy-mm-dd',
+		 autoclose: true
+	});
+	*/
+	
+	$('#cancel_{$mod}_{$acak}').click(function(){
+		$('#grid_nya_{$mod}').show();
+		$('#detil_nya_{$mod}').html('').hide();
+	});
+	$('#simpan_{$mod}_{$acak}').click(function(){
+		$(".validasi").validatebox({ required:true }); 
+		if ($('#form_{$acak}').form('validate')){
+			submit_form('form_{$acak}',function(r){
+				if(r==1){
+					winLoadingClose();
+					$.messager.alert('BSR',"Data Tersimpan",'info');
+					$('#grid_nya_{$mod}').show();
+					$('#detil_nya_{$mod}').html('').hide();
+					$('#grid_{$mod}').datagrid('reload');
+				}else if(r==2){
+					winLoadingClose();
+					$.messager.alert('BSR',"SKU Sudah Ada",'warning');
+					console.log(r);
+				}else{
+					winLoadingClose();
+					$.messager.alert('BSR',"Data Gagal Tersimpan",'error');
+					console.log(r);
+				}
+			});
+		}else{
+			$.messager.alert('BSR',"Isi Form Yang Kosong",'error');
+		}
+
+	});
+</script>

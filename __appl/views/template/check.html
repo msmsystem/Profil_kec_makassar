@@ -1,0 +1,22 @@
+{*
+<label>{$tanya|default:'-'}</label> :
+	{if !empty($x.pilihan)}
+	{foreach from=$x.pilihan item=i key=a}
+		<input type="checkbox" name="tanya_{$id_tanya}_[]" value="{$a}">{$i}&nbsp;
+	{/foreach}
+	{else}
+	{/if}
+*}
+
+<div class="form-group">
+	<label>{$tanya|default:'-'} {if $required|default:'' eq "true"}<font color="red">*</font>{/if}</label>
+	<div class="checkbox">
+		{if !empty($x.pilihan)}
+			{foreach from=$x.pilihan item=i key=a}
+				<label>
+					<input type="checkbox" name="tanya_{$id_tanya}_[]" value="{$a}">{$i}
+				</label>&nbsp;&nbsp;&nbsp;
+			{/foreach}
+		{/if}
+	</div>
+</div>

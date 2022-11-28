@@ -1,0 +1,63 @@
+<style>
+	.card {
+	  /* Add shadows to create the "card" effect */
+	  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+	  transition: 0.3s;
+	  min-height:280px;
+	}
+
+	/* On mouse-over, add a deeper shadow */
+	.card:hover {
+	  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+	}
+
+	/* Add some padding inside the card container */
+	.container {
+	  padding: 2px 16px;
+	}
+	.rcorners3 {
+	  border-radius: 25px;
+	  background: rgb(131,58,180);
+	  background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
+	  color:#fff;
+	  background-position: left top;
+	  background-repeat: repeat;
+	  padding: 20px;
+	  width: 100%;
+	  min-height: 170px;
+	}
+</style>
+<div style="margin-bottom:20px;padding:10px;">
+	{foreach from=$data.summary_persuratan item=i key=k}
+	<div class="box-group" id="accordion">
+		<div class="panel box box-primary">
+           <div class="box-header with-border">
+             <h4 class="box-title">
+               <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne_{$k}" aria-expanded="true" class="">
+                 {$i.group_surat|default:''}
+               </a>
+             </h4>
+           </div>
+           <div id="collapseOne_{$k}" class="panel-collapse collapse {if $k|default:0 eq 0 }in{/if}" aria-expanded="true" style="">
+             <div class="box-body">
+				{foreach from=$i.child item=rows key=k}
+					<div class="col-lg-3 col-xs-6" style="margin-bottom:20px">
+						<div class="rcorners3">
+							<h4 style="text-align:center;"><b>{$rows.alias}</b></h4>
+							<p style="background:navy;color:#fff;text-align:center;padding:5px;">Total : {$rows.total|default:0}</p>
+						</div>
+						<!--div class="card">
+						  <img src="{$host}__assets/images/logo.png" alt="Avatar" style="width:100%">
+						  <div class="container">
+							<h4 style="text-align:center;"><b>{$rows.alias}</b></h4>
+							<p style="background:navy;color:#fff;text-align:center;padding:5px;">{$rows.total|default:0}</p>
+						  </div>
+						</div-->
+					</div>
+				{/foreach}
+             </div>
+           </div>
+         </div>
+	</div>
+	{/foreach}
+</div>

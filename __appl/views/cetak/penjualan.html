@@ -1,0 +1,166 @@
+<style>
+table.timecard {
+	margin: auto;
+	width: 600px;
+	border-collapse: collapse;
+	border: 1px solid #fff; /*for older IE*/
+	
+}
+
+
+table.timecard thead th#thDay {
+	width: 40%;	
+}
+
+table.timecard thead th#thRegular, table.timecard thead th#thOvertime, table.timecard thead th#thTotal {
+	width: 20%;
+}
+
+table.timecard th, table.timecard td {
+	padding: 3px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #000000 #000000;
+}
+
+table.timecard td {
+	text-align: right;
+}
+
+table.timecard tbody th {
+	text-align: left;
+	font-weight: bold;
+}
+
+table.timecard tfoot {
+	font-weight: bold;
+	font-size: large;
+	background-color: #687886;
+	color: #fff;
+}
+
+table.timecard tr.even {
+	background-color: #fde9d9;
+}
+</style>
+<hr>
+<table style="width:100%">
+	<tr>
+		<td style="text-align:center;;vertical-align:middle;font-size:15px;">
+			<strong>INVOICE PENJUALAN</strong>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:left;vertical-align:middle;font-size:8px;">
+			<table style="width:100%;">
+				<tr>
+					<td style="width:50%;text-align:left;;vertical-align:top;">
+						<table style="font-size:10px;font-weight:bold;">
+							<tr>
+								<td>No. Invoice</td>
+								<td>:</td>
+								<td>{$data.h.no_invoice|default:'-'}</td>
+							</tr>
+							<tr>
+								<td>Tanggal</td>
+								<td>:</td>
+								<td style="text-align:left;vertical-align:top;">{$data.h.tgl|default:'-'}</td>
+							</tr>
+							<tr>
+								<td>Market</td>
+								<td>:</td>
+								<td>{$data.h.sumber|default:'-'}</td>
+							</tr>
+							<tr>
+								<td colspan="3">&nbsp;</td>
+							</tr>
+							
+							
+						</table>
+					</td>
+					<td style="width:50%;text-align:right;vertical-align:top;">
+						<table style="font-size:10px;font-weight:bold;">
+							<tr>
+								<td>Nama Customer</td>
+								<td>:</td>
+								<td>{$data.h.nama_customer|default:'-'}</td>
+							</tr>
+							<tr>
+								<td>Alamat Customer</td>
+								<td>:</td>
+								<td>{$data.h.alamat_customer|default:'-'}</td>
+							</tr>
+							<tr>
+								<td>Telp Customer</td>
+								<td>:</td>
+								<td>{$data.h.telp_customer|default:'-'}</td>
+							</tr>
+							
+							<tr>
+								<td colspan="3">&nbsp;</td>
+							</tr>
+							
+						</table>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<table class="timecard" style="width:100%;font-size:12px;">
+		<tbody style="background:#D4E8F4;" class="bd_email">
+			<tr style="background:#D4E8F4;font-weight:bold;">
+				<th style="text-align:left;;vertical-align:middle;width:20%;" >SKU</th>
+				<th style="text-align:left;;vertical-align:middle;width:25%;" >Nama Barang</th>
+				<th style="text-align:left;;vertical-align:middle;width:10%;" >Size</th>
+				<th style="text-align:left;;vertical-align:middle;width:15%;" >Harga Jual</th>
+				<th style="text-align:left;;vertical-align:middle;width:15%;" >Discount</th>
+				<th style="text-align:center;;vertical-align:middle;width:5%;">Qty</th>
+				<th style="text-align:left;;vertical-align:middle;width:20%;" >Total</th>
+			</tr>
+			
+			{assign var=total value=0}
+			{assign var=x value=0}
+			{foreach from=$data.d item=z key=y}
+			{assign var=x value=$x+1}
+			<tr class="tr_em" id="tm_1" idx={$y}>
+				<td style="text-align:left;;vertical-align:middle;">
+					{$z.sku|default:''}
+				</td>
+				<td style="text-align:left;;vertical-align:middle;">
+					{$z.nama_produk|default:''}
+				</td>
+				<td style="text-align:left;;vertical-align:middle;">
+					{$z.ukuran|default:''}
+				</td>
+				<td style="text-align:right;;vertical-align:middle;">
+					Rp. <span id="t_harga_1">{$z.harga_jual|number_format:0:',':'.'|default:''}</span>
+					
+				</td>
+				<td style="text-align:right;;vertical-align:middle;">
+					{$z.diskon|default:0}
+				</td>
+				<td style="text-align:right;;vertical-align:middle;">
+					{$z.qty|default:''}
+				</td>
+				<td style="text-align:right;;vertical-align:middle;">
+					Rp. <span id="t_total_{$y}">{$z.total|number_format:0:',':'.'|default:''}</span>
+					
+				</td>
+			</tr>
+			{/foreach}
+			
+		</tbody>
+		<tfoot>
+			<tr style="background:#3C8DBC;color:#fff;font-weight:bold">
+				<td style="text-align:left;;vertical-align:middle;width:20%;font-weight:bold" colspan="5" >GrandTotal</td>
+				<td style="text-align:right;;vertical-align:middle;font-weight:bold"><span id="h_tot_qty">{$data.h.total_qty|number_format:0:',':'.'|default:0}</span>
+		
+				</td>
+				<td style="text-align:right;;vertical-align:middle;font-weight:bold">Rp. <span id="h_tot_harga">{$data.h.grand_total|number_format:0:',':'.'|default:0}</span>
+					
+				</td>
+			</tr>
+			
+		</tfoot>
+</table>

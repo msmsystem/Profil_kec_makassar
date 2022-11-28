@@ -1,0 +1,64 @@
+<table class="table table-bordered table-hovered">
+	<thead style="background:#3C8DBC;color:#fff;">
+		<tr>
+			<th style="text-align:left;;vertical-align:middle;width:20%;" rowspan="2">SKU</th>
+			<th style="text-align:left;;vertical-align:middle;width:30%;" rowspan="2">Nama Barang</th>
+			<th style="text-align:center;;vertical-align:middle;width:5%;" colspan="{count($size)}">Qty</th>
+			<th style="text-align:left;;vertical-align:middle;width:15%;" rowspan="2">Total</th>
+			
+		</tr>
+		<tr>
+			{foreach from=$size item=i}
+			<th style="text-align:center;;vertical-align:middle;width:5%;">{$i.ukuran|default:''}</th>
+			{/foreach}
+		</tr>
+	</thead>
+	
+	<tbody style="background:#D4E8F4;" class="bd_po">
+		{assign var=grand_total value=0}
+		{foreach from=$data.h item=c key=d}
+			<tr style="text-align:left;;vertical-align:middle;background:#d1d1e0;font-weight:bold;">
+				<td colspan="{count($size)+3}">
+					{$c.no_faktur|default:''}
+				</td>
+			</tr>
+			{assign var=total value=0}
+			{assign var=x value=0}
+			{foreach from=$c.detil item=z key=y}
+			{assign var=total value=$total+$z.tot_qty}
+			{assign var=x value=$x+1}
+			<tr class="tr_em" id="tm_1" idx={$x}>
+				<td>
+					{$y|default:''}
+					
+				</td>
+				<td>{$z.nama_produk|default:''}
+					
+				</td>
+				{foreach from=$size item=i key=a}
+				<td style="text-align:center;;vertical-align:middle;width:5%;">
+					{$z.{$i.id}.qty|default:0}
+				</td>
+				{/foreach}
+				<td style="text-align:right;;vertical-align:top;">
+					{assign var=grand_total value=$z.tot_qty+$grand_total}
+					<span id="t_tot_{$x}_{$acak}">{$z.tot_qty|default:0}</span>
+					
+				</td>
+				
+			</tr>
+			{/foreach}
+		{/foreach}
+		
+	</tbody>
+	<tfoot>
+		<tr style="background:#3C8DBC;color:#fff;">
+			<td style="text-align:left;;vertical-align:middle;width:20%" colspan="{count($size)+2}" >GrandTotal</td>
+			<td style="text-align:right;;vertical-align:middle;"><span id="h_tot_qty">{$grand_total|default:0}</span>
+				
+			</td>
+			
+		</tr>
+		
+	</tfoot>
+</table>

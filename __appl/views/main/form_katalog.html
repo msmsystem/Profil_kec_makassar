@@ -1,0 +1,60 @@
+<fieldset>
+<div class="span10">
+<form class="form-horizontal" id="form_{$acak}" url="{$host}modul/cruddata/cl_katalog" method="post" enctype="multipart/form-data">
+<table class="table table-hover">
+		<input type="hidden" name="id" value="{$data.id|default:''}">
+		<input type="hidden" name="cl_vendor_id" value="{$cl_vendor_id|default:''}">
+		<input type="hidden" name="sts_crud" value="{$sts_crud|default:'add'}">
+		{include file="template/input_form.html" type='text' label="Nama Barang *" id="nama_barang" name="nama_barang" style_type="width:80%" class="validasi" value="{$data.nama_barang|default:''}"}
+		{include file="template/input_form.html" type='text' label="Satuan *" id="satuan" name="satuan" style_type="width:20%" class="validasi" value="{$data.satuan|default:''}"}
+		{include file="template/input_form.html" type='text' label="Harga *" id="harga_satuan" name="harga_satuan" style_type="width:30%;height:26px;" class="validasi angka" value="{$data.harga_satuan|default:''}"}
+		<tr>
+			<td>&nbsp;</td><td>Status</td><td>:</td>
+			<td style="font-weight:bold;">
+				<input type="checkbox" name="status" value="A" {if $data.status|default:'A' eq 'A'}checked{/if}>&nbsp;&nbsp;Aktif
+			</td>
+		</tr>
+</table>
+	
+</form>
+<div class="control-group">
+	<center>
+	<label class="control-label" for="form-field-1"></label>
+	<div class="controls">
+		{include file="template/button_save.html" id_na="simpan_{$mod}"  btn_goyz="true" text="Simpan"}
+		{include file="template/button_save.html" id_na="cancel_{$mod}"  btn_goyz="true" text="Kembali Ke List"}
+	</div>
+	</center>
+</div>		
+</div>
+</fieldset>
+
+<script>
+	var idx_row={$jml_row|default:1};
+	$('.angka').numberbox({
+		required:true,min:0,precision:0,groupSeparator:',',decimalSeparator:'.'
+	});
+	$('#cancel_{$mod}_{$acak}').click(function(){
+		closeWindow();
+	});
+	$('#simpan_{$mod}_{$acak}').click(function(){
+		$(".validasi").validatebox({ required:true }); 
+		if ($('#form_{$acak}').form('validate')){
+			submit_form('form_{$acak}',function(r){
+				if(r==1){
+					winLoadingClose();
+					$.messager.alert('BSR',"Data Tersimpan",'info');
+					closeWindow();
+					dt.datagrid('reload');
+				}else{
+					winLoadingClose();
+					$.messager.alert('BSR',"Data Gagal Tersimpan",'error');
+					console.log(r);
+				}
+			});
+		}else{
+			$.messager.alert('BSR',"Isi Form Yang Kosong",'error');
+		}
+
+	});
+</script>

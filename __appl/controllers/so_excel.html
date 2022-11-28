@@ -1,0 +1,13 @@
+{foreach from=$dt item=a key=x}
+<tr class="tr_em" id="tm_1" idx={$x}>
+	<td>
+		{$a.sku|default:''}
+	</td>
+	{foreach from=$size item=i key=a}
+	<td style="text-align:left;;vertical-align:top;">
+		{$a.size.{$i.id}.qty|default:''}
+		<input type="hidden" name="t_qty_{$i.id}[]" id="t_qty_{$i.id}_{$x}_{$acak}" id_size="{$i.id}" class="h_tot_qty_{$x}" style="width:100%" value="{$a.size.{$i.id}.qty|default:''}">
+	</td>
+	{/foreach}	
+</tr>
+{/foreach}

@@ -1,0 +1,91 @@
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAnOo-qFl3VL_r5oj_N_1RWzx7Cpq432Qc&callback=initMap" defer ></script>
+<div class="row" style="margin-bottom:20px;">
+	<div class="col-md-12">
+          <!-- Profile Image -->
+          <div class="box box-primary">
+            <div class="box-body box-profile">
+              <img class="profile-user-img img-responsive img-circle" src="{$host}__assets/images/logo.png" alt="User profile picture">
+
+              <h3 class="profile-username text-center">{$profil.nama_kecamatan|default:''}</h3>
+
+              <p class="text-muted text-center">Kecamatan {$profil.nama_kecamatan|default:''}</p>
+
+              <ul class="nav nav-stacked">
+                <li >
+                  <a href="#"><b>Jumlah Penduduk</b><span class="pull-right badge bg-blue">{$profil.jml_penduduk|number_format:0:',':'.'|default:''}</span></a>
+                </li>
+                <li >
+                  <a href="#"><b>Luas Wilayah</b><span class="pull-right badge bg-blue">{$profil.luas_wilayah|number_format:0:',':'.'|default:''}</span></a>
+                </li>
+                <li>
+                  <a href="#"><b>Jumlah Keluarahan/Desa</b><span class="pull-right badge bg-blue">{$profil.jml_kelurahan|number_format:0:',':'.'|default:''}</span></a>
+                </li>
+              </ul>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+
+          <!-- About Me Box -->
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">Informasi</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+             
+              <strong><i class="fa fa-map-marker margin-r-5"></i>Lokasi</strong>
+
+              <p class="text-muted">{$profil.alamat|default:''}</p>
+              <hr>
+
+              <strong><i class="fa fa-file-text-o margin-r-5"></i> Kontak</strong>
+
+              <p>Telp  : {$profil.telp|default:''} <br>
+				Email : {$profil.email|default:''}
+			  </p>
+              
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+		  
+		  <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">MAP</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+             
+                <div id="isi_peta_{$acak}" class="col-md-12" >
+					<div id="map_{$acak}" style="width:100%;" ></div>
+				</div>
+					
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+    </div>	
+</div>
+
+<script>
+
+   
+        var peta;
+		var lat={$profil.lat|default:-6.505762};
+		var longi={$profil.longi|default:106.788157};
+		$('#map_{$acak}').css('height',450);
+		let map;
+
+		function initMap() {
+		  map = new google.maps.Map(document.getElementById("map_{$acak}"), {
+			center: { lat: lat, lng: longi },
+			zoom: 8,
+		  });
+		}
+
+		//window.initMap = initMap;
+		initMap();
+</script>
+
+

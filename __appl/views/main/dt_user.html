@@ -1,0 +1,56 @@
+<div id="grid_nya_dt_project_{$acak}" style="margin-left:8px;">
+	<div id='grid_dt_project_{$acak}'></div>
+	<div id='tb_dt_project_{$acak}' style="padding:5px;height:{$tinggi_toolbar|default:'35px'};">
+		<div style="float:{$align|default:'left'}; width:100%;">
+			<label style='width:100px;'>Pencarian </label>: &nbsp;&nbsp;
+			<input type="text" name="key_{$acak}" id="key_{$acak}" style="width:50%;height:22px;">
+			&nbsp;&nbsp;&nbsp;
+		</div>
+	</div>
+</div>
+<script>
+$('#grid_nya_dt_project_{$acak}').css('height',(getClientHeight()-200));
+
+var dt=$("#grid_dt_project_{$acak}").datagrid({
+		rownumbers:true,
+		iconCls:'database',
+        fit:true,
+        striped:true,
+        pagination:true,
+        remoteSort: false,
+		showFooter:false,
+		singleSelect:true,
+        url: host+'modul/getdata/user',		
+		nowrap: false,
+		pageSize:15,
+		pageList:[15,25,50,75,100,200],
+		queryParams:{
+			
+		},
+		toolbar: '#tb_dt_project_{$acak}',
+		columns:[[
+			
+			{ field:'create_date',title:'Pilih',width:60, halign:'center',align:'center',
+				formatter: function(value,row,index){
+					return "<a href='javascript:void(0);' onclick='pilih_project(\""+row.id+"\",\""+row.nama_lengkap+"\")' class='btn btn-sm btn-success'>Pilih</a>";
+				}
+			},
+			{ field:'nama_lengkap',title:'Nama',width:250, halign:'left',align:'left' },
+			{ field:'departemen',title:'Departement',width:150, halign:'left',align:'left' },
+			{ field:'user_group',title:'Group',width:150, halign:'left',align:'left' }
+        ]],
+		onLoadSuccess: function(data){
+			$('#grid_dt_project_{$acak}').resizable();
+		}
+	});
+	$("#key_{$acak}").keypress(function(e) {
+		if(e.which == 13) {
+			dt.datagrid('reload',{ key:$(this).val() });
+		}
+	});
+	function pilih_project(kode,nm){
+		$('#id_user_{$id_dep}').val(kode);
+		$('#nama_user_{$id_dep}').val(nm);
+		closeWindow();
+	}
+</script>

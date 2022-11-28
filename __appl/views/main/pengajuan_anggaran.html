@@ -1,0 +1,237 @@
+<style>
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+}
+.fileUpload input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+</style>
+<fieldset>
+	<legend>Form Pengajuan Anggaran</legend>
+<div class="span10">
+<form class="form-horizontal" id="form_{$acak}" url="{$host}modul/cruddata/{$mod}" method="post" enctype="multipart/form-data">
+<input type="hidden" name="id" value="{$data.h.id|default:''}">
+<input type="hidden" name="sts_crud" value="{$sts_crud|default:'add'}">
+<input type="hidden" name="tbl_tahapan_sop_id" value="{$data.h.tbl_tahapan_sop_id|default:''}">
+<input type="hidden" name="flag" value="{$data.h.flag|default:''}">
+<table class="table">
+	<tr>
+		<td>
+			<table class="table">
+				<tr>
+					<td>&nbsp;</td><td>Kode Project</td><td>:</td>
+					<td style="font-weight:bold;">
+						<div class="input-group input-group-sm">
+							<input type="text" class="form-control kd_na" readonly name="kode_project" id="kode_project_{$acak}" value="{$data.h.kode_project|default:''}">
+								<span class="input-group-btn">
+								  <a class="btn btn-info btn-flat" type="button" id="b_project_{$acak}">...</a>
+								</span>
+						</div>
+					</td>
+				</tr>
+				{include file="template/input_form.html" type='text' label="Tgl. Pengajuan *" id="tgl" name="tgl" style_type="width:80%" class="validasi" value="{$data.h.tgl|default:$smarty.now|date_format:"%Y-%m-%d"}" readonly="readonly"}
+			</table>
+		</td>
+		<td>
+			<table class="table">
+				{include file="template/input_form.html" type='text' label="Nama Project *" id="nama_project" name="nama_project" style_type="width:80%" class="validasi nm_na" value="{$data.h.nama_project|default:''}" readonly="readonly"}
+				{include file="template/input_form.html" type='text' label="Diajukan Oleh *" id="create_by" name="create_by" style_type="width:80%" class="validasi" value="{$auth.nama_lengkap|default:''}" readonly="readonly"}
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<table class="table table-bordered table-hovered">
+				<thead style="background:#3C8DBC;color:#fff;">
+					<tr>
+						<th style="text-align:left;;vertical-align:middle;" >Nama Barang</th>
+						<th style="text-align:left;;vertical-align:middle;width:50px;">Qty</th>
+						<th style="text-align:left;;vertical-align:middle;width:10%">Satuan</th>
+						<th style="text-align:left;;vertical-align:middle;width:10%">Harga Satuan</th>
+						<th style="text-align:left;;vertical-align:middle;">Total</th>
+						<th style="text-align:left;;vertical-align:middle;">Keterangan</th>
+						<th style="text-align:left;;vertical-align:middle;width:50px;">Attc.</th>
+						<th style="text-align:center;;vertical-align:middle;"><a href="javascript:void(0);" class="btn btn-sm btn-warning" onclick="tambah_row('bd_email','{$acak}')">+</a></th>
+					</tr>
+				</thead>
+				
+				<tbody style="background:#D4E8F4;" class="bd_email">
+					{if $sts_crud|default:'add' eq 'add'}
+					<tr class="tr_em" id="tm_1" idx=1>
+						<td>
+							<input type="hidden" name="cl_produk_id[]" id="cl_produk_id_1" class="" style="width:100%" value="">
+							<input type="text" name="produk[]" onKeyup="this.value = this.value.toUpperCase()"  class="validasi autoo" style="width:100%">
+						</td>
+						<td>
+							<input type="text" name="qty[]" id="qty_1_{$acak}" class="angka" style="width:50px;height:26px;">
+							<input type="hidden" name="t_qty[]" id="t_qty_1_{$acak}" class="h_tot_qty" style="width:100%">
+						</td>
+						<td><input type="text" name="satuan[]" class="validasi" style="width:100%"></td>
+						<td><input type="text" name="harga[]" id="harga_1_{$acak}" idx="1"  class="angka2" style="width:100%;height:26px;"></td>
+						<td style="text-align:right;;vertical-align:top;">
+							<span id="t_tot_1_{$acak}"></span>
+							<input type="hidden" name="total[]" id="tot_1_{$acak}" class="h_tot" style="width:100%">
+						</td>
+						
+						<td><input type="text" name="keterangan[]" class="" style="width:100%"></td>
+						<td style="text-align:center;;vertical-align:top;">
+							<div class="fileUpload btn btn-sm btn-warning">
+								<span>Upload</span>
+							  <input type='file' class="upload"  id='s_file_{$acak}' name='s_file[]' onChange="$('.nm_file_1').html($(this).val());" >
+							</div>
+							<br><span class="nm_file_1" style=""></span>
+						</td>
+						<td>&nbsp;</td>
+					</tr>
+					{else}
+					{foreach from=$data.d item=i key=x}
+					{assign var=total value=$i.qty*$i.harga}
+					<tr class="tr_em" id="tm_{$x}" idx={$x}>
+						<td>
+							<input type="hidden" name="cl_produk_id[]" id="cl_produk_id_{$x}" class="" style="width:100%" value="{$i.cl_produk_id|default:''}">
+							<input type="text" name="produk[]" onKeyup="this.value = this.value.toUpperCase()"  class="validasi autoo" style="width:100%" value="{$i.nama_barang|default:''}">
+						</td>
+						<td>
+							<input type="text" name="qty[]" id="qty_{$x}_{$acak}" class="angka" style="width:50px;height:26px;" value="{$i.qty|default:''}">
+							<input type="hidden" name="t_qty[]" id="t_qty_{$x}_{$acak}" class="h_tot_qty" style="width:100%" value="{$i.qty|default:''}">
+						</td>
+						<td><input type="text" name="satuan[]" class="validasi" style="width:100%" value="{$i.satuan|default:''}"></td>
+						<td><input type="text" name="harga[]" id="harga_{$x}_{$acak}" idx="{$x}"  class="angka2" style="width:100%;height:26px;" value="{$i.harga|default:''}"></td>
+						<td style="text-align:right;;vertical-align:top;">
+							<span id="t_tot_{$x}_{$acak}">{$total|number_format:0:',':'.'|default:''}</span>
+							<input type="hidden" name="total[]" id="tot_{$x}_{$acak}" class="h_tot" style="width:100%" value="{$total|default:''}">
+						</td>
+						<td><input type="text" name="keterangan[]" class="" style="width:100%" value="{$i.keterangan|default:''}"></td>
+						<td style="text-align:center;;vertical-align:top;">
+							<input type="hidden" name="s_file[]" value="{$i.file|default:''}">
+							<div class="fileUpload btn btn-sm btn-warning">
+								<span>Upload</span>
+							  <input type='file' class="upload"  id='s_file_{$x}_{$acak}' name='s_file[]' onChange="$('.nm_file_{$x}').html($(this).val());" >
+							</div>
+							<br><span class="nm_file_{$x}" style="">
+								{if $i.file|default:'' != ''}
+									
+									<a href="{$host}__repo/file_rincian/{$i.file|default:''}" target="__blank">{$i.file|default:''}</a>
+								{/if}
+								</span>
+						</td>
+						<td style="text-align:center;;vertical-align:middle;"><a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="$(this).parents('tr').first().remove();hitung_total();">-</a></td>
+					</tr>
+					{/foreach}
+					{/if}
+				</tbody>
+				<tfoot>
+					<tr style="background:#3C8DBC;color:#fff;">
+						<td style="text-align:left;;vertical-align:middle;width:20%" >Grand Total</td>
+						<td style="text-align:right;;vertical-align:middle;"><span id="h_tot_qty"></span></td>
+						<td style="text-align:left;;vertical-align:middle;">&nbsp;</td>
+						<td style="text-align:left;;vertical-align:middle;">&nbsp;</td>
+						<td style="text-align:right;;vertical-align:middle;">Rp. <span id="h_tot"></span><input type="hidden" name="grand_total" id="grand_total"  style="width:100%"></td>
+						<td style="text-align:left;;vertical-align:middle;">&nbsp;</td>
+						<td style="text-align:center;;vertical-align:middle;">&nbsp;</td>
+						<td style="text-align:center;;vertical-align:middle;">&nbsp;</td>
+					</tr>
+				</tfoot>
+			</table>
+		</td>
+	</tr>
+</table>
+</form>
+<div class="control-group">
+	<center>
+	<label class="control-label" for="form-field-1"></label>
+	<div class="controls">
+		{include file="template/button_save.html" id_na="simpan_{$mod}"  btn_goyz="true" text="Simpan / Update"}
+		{include file="template/button_save.html" id_na="cancel_{$mod}"  btn_goyz="true" text="Kembali Ke List"}
+	</div>
+	</center>
+</div>		
+</div>
+</fieldset>
+
+<script>
+	var idx_row={$jml_row|default:1};
+	//$(".validasi").validatebox({ required:true }); 
+	$('.angka').numberbox({
+		required:true,min:0,precision:0,groupSeparator:',',decimalSeparator:'.'
+	});
+	{if $sts_crud|default:'add' eq 'edit'}hitung_total();{/if}
+	$('.angka2').numberbox({
+		required:true,min:0,precision:0,groupSeparator:',',decimalSeparator:'.',
+		onChange:function(){
+			console.log();
+			var idx=($(this).attr('idx'));
+			var qty=parseFloat($('#qty_'+idx+'_{$acak}').val());
+			var harga=parseFloat($('#'+$(this).attr('id')).val());
+			var t_tot=qty*harga;
+			$('#t_tot_'+idx+'_{$acak}').html(NumberFormat(t_tot));
+			$('#tot_'+idx+'_{$acak}').val(t_tot);
+			$('#t_qty_'+idx+'_{$acak}').val(qty);
+			hitung_total();
+			//get_total('qty','harga_beli','total',idx_row);
+		}
+	});
+	$('.tgl').datepicker({
+		 format: 'yyyy-mm-dd',
+		 autoclose: true
+	});
+	
+	$('.autoo').autoComplete({
+		minChars: 2,
+		source: function(term, response){
+			$.getJSON(host+'modul/getdata/auto_barang',{ q: term },function(data){ response(data); });
+		},
+		renderItem: function (item, search){
+			{literal}search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');{/literal}
+			var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
+			return '<div class="autocomplete-suggestion" data-id="'+item[1]+'" data-val="' + item[0] + '">'
+				+ item[0].replace(re, "<b>$1</b>") + '</div>';
+		},
+		onSelect: function(e, term, item){
+			//alert('Item "'+item.data('val')+' ('+item.data('id')+')" selected by '+(e.type == 'keydown' ? 'pressing enter' : 'mouse click')+'.');
+			$('#cl_produk_id_1').val(item.data('id'));
+		}
+	});
+	$('#b_project_{$acak}').click(function(){
+		loadingna();
+		$.post(host+"modul/get_konten/dt_project",function(r){
+			winLoadingClose();
+			windowForm(r,'Data Project',800,getClientHeight()-100);
+		})
+		
+	});
+	$('#cancel_{$mod}_{$acak}').click(function(){
+		$('#grid_nya_{$mod}').show();
+		$('#detil_nya_{$mod}').html('').hide();
+	});
+	$('#simpan_{$mod}_{$acak}').click(function(){
+		$(".validasi").validatebox({ required:true }); 
+		if ($('#form_{$acak}').form('validate')){
+			submit_form('form_{$acak}',function(r){
+				if(r==1){
+					winLoadingClose();
+					$.messager.alert('BSR',"Data Tersimpan",'info');
+					$('#grid_nya_{$mod}').show();
+					$('#detil_nya_{$mod}').html('').hide();
+					$('#grid_{$mod}').datagrid('reload');
+				}else{
+					winLoadingClose();
+					$.messager.alert('BSR',"Data Gagal Tersimpan",'error');
+					console.log(r);
+				}
+			});
+		}else{
+			$.messager.alert('BSR',"Isi Form Yang Kosong",'error');
+		}
+
+	});
+</script>

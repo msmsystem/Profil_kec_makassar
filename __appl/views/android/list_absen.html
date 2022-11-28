@@ -1,0 +1,56 @@
+<table id="dg" style="margin-top:5px;">  
+    
+</table>
+<script>
+	$(function(){
+			$('#dg').datagrid({
+				header:'#hh',
+				singleSelect:true,
+				border:false,
+				fit:true,
+				url:host+'android/getdata/get_absen',
+				queryParams:{
+					user_id:{$user_id|default:0}
+				},
+				fitColumns:true,
+				scrollbarSize:1,
+				rownumbers:false,
+				nowrap: false,
+				columns:[
+				[	
+				
+				{ field:'tgl',title:'Tanggal',width:30,height:10, halign:'center',align:'center' },
+				{ field:'M',title:'M',width:30, halign:'center',align:'center',
+					styler: function(value,row,index){
+						if(value){
+							if(row.TELAT==1)return "background:#850303;color:#ffffff";
+						}else{
+							return "background:red;color:#ffffff";
+						}
+					}
+				},
+				{ field:'P',title:'P',width:30, halign:'center',align:'center',
+					styler: function(value,row,index){
+						if(value){
+							if(row.PLG_CEPAT==1)return "background:#850303;color:#ffffff";
+						}else{
+							return "background:red;color:#ffffff";
+						}
+					}
+				},
+				{ field:'ket',title:'Ket',width:30, halign:'left',align:'left',
+					formatter: function(value,row,index){
+						if(row.DL){
+							return "Dinas Luar";
+						}else{
+							return row.ket
+						}
+					}
+				},
+				
+				]
+				]
+				//data:data
+			});
+		});
+</script>

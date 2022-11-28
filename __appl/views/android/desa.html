@@ -1,0 +1,39 @@
+<div class="row" style="margin-bottom:20px;">
+	<div class="col-lg-12">
+		<center>
+		<label style="width:80px;">Kelurahan/Desa</label>: &nbsp;&nbsp;
+		</center>
+	</div>
+	<div class="col-lg-12">
+		<div  style="padding:5px;" >
+		<select name="desa" id="desa_{$acak}" style="" class="form-control">
+			{foreach from=$desa item=i}
+			<option value="{$i.id}">{$i.nama}</option>
+			{/foreach}
+		</select>
+		
+		</div>
+	</div>
+</div>
+<div class="row" style="margin-bottom:20px;">
+	<div id="isi_{$acak}">
+		
+	</div>
+</div>
+
+<script>
+	$(function(){
+		
+		$('#desa_{$acak}').change(function(){
+			//alert('aaa');
+			$('#isi_{$acak}').empty()
+			$.post(host+'android/get_konten/chart_desa',{ desa:$(this).val() } ,function(r){
+				$('#isi_{$acak}').html(r);
+			});
+		});
+		
+		$('#desa_{$acak}').trigger('change');
+	});
+
+</script>
+

@@ -1,0 +1,63 @@
+<style>
+.divTable{
+	display: table;
+	width: 100%;
+}
+.divTableRow {
+	display: table-row;
+}
+.divTableHeading {
+	background-color: #EEE;
+	display: table-header-group;
+}
+.divTableCell, .divTableHead {
+	border: 8px solid #000;
+	display: table-cell;
+	padding: 3px 10px;
+	text-align:center;
+}
+.divTableHeading {
+	background-color: #EEE;
+	display: table-header-group;
+	font-weight: bold;
+}
+.divTableFoot {
+	background-color: #EEE;
+	display: table-footer-group;
+	font-weight: bold;
+}
+.divTableBody {
+	display: table-row-group;
+}
+</style>
+<center>
+<div style="width:100%;text-align:center;left:150px;">
+	<div class="divTable">
+		<div class="divTableBody">
+			<div class="divTableRow">
+				<div class="divTableCell" style="width:70%">
+					<br>
+					<img src="{$host}__repo/barcode/{$dt.sku}.png" style="width:50%">
+					<p style="font-size:30px;font-weight:bold">{$dt.nama_produk}</p>
+				</div style="width:25%">
+				<div class="divTableCell" style="vertical-align:middle;font-weight:bold">
+					<span style="vertical-align:middle;font-size:20px;font-weight:bold">Size :</span><br> 
+					<span style="vertical-align:middle;font-size:100px;font-weight:bold">{$size}</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- DivTable.com -->
+
+<table style="width:100%;border:1px">
+	<tr >
+		<td style="text-align:right;vertical-align:top;width:50%" rowspan="2">
+			
+		</td>
+		<td style="text-align:left;;vertical-align:middle;width:50%">
+			
+		</td>
+	</tr>
+</table>
+</center>

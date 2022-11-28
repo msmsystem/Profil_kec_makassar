@@ -1,0 +1,11 @@
+
+{if $btn_goyz|default:'false' eq 'true'}
+<a href="{$href|default:'javascript:void(0);'}"  target='{$target|default:''}' class="btn btn-small {$style_btn|default:'btn-success'}" group="" id="{$id_na|default:'add'}_{$acak}" onClick="{$click|default:''}" style="{$style|default:''}">{$text}</a> 
+{else}
+<a href="javascript:void(0);" id="{$id_simpan}" class="btn btn-small btn-success ">
+	{$text_simpan|default:'Simpan'}
+</a>
+<a href="javascript:void(0);" id="{$id_batal}" class="btn btn-small btn-danger">
+	{$text_batal|default:'Batal'}
+</a>
+{/if}

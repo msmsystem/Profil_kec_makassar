@@ -1,0 +1,175 @@
+<table class="table table-bordered table-hovered">
+	<thead style="background:#3C8DBC;color:#fff;">
+		<tr>
+			<th style="text-align:left;;vertical-align:middle;width:20%;" rowspan="2">SKU</th>
+			<th style="text-align:left;;vertical-align:middle;width:30%;" rowspan="2">Nama Barang</th>
+			<th style="text-align:center;;vertical-align:middle;width:5%;" colspan="{count($size)}">Qty</th>
+			<th style="text-align:left;;vertical-align:middle;width:15%;" rowspan="2">Total</th>
+			
+		</tr>
+		<tr>
+			{foreach from=$size item=i}
+			<th style="text-align:center;;vertical-align:middle;width:5%;">{$i.ukuran|default:''}</th>
+			{/foreach}
+		</tr>
+	</thead>
+	
+	<tbody style="background:#D4E8F4;" class="bd_po">
+		
+		{assign var=g_total_harga value=0}
+		{assign var=total_harga value=0}
+		{assign var=total value=0}
+		{assign var=x value=0}
+		{foreach from=$data.d item=z key=y}
+		{assign var=total value=$total+$z.tot_qty}
+		{assign var=total_harga value=($z.tot_qty * $z.harga)}
+		{assign var=x value=$x+1}
+		<tr class="tr_em" id="tm_1" idx={$x}>
+			<td>
+				<input type="text" name="sku[]" onKeyup="this.value = this.value.toUpperCase()"  class="validasi autoo" style="width:100%" value="{$y|default:''}">
+			</td>
+			<td>
+				<input type="text" name="nama_produk[]" id="nama_produk_{$x}" class="validasi" style="width:100%" value="{$z.nama_produk|default:''}">
+				<input type="hidden" name="harga[]" id="harga_{$x}" class="validasi" style="width:100%" value="{$z.harga|default:0}">
+			</td>
+			{foreach from=$size item=i key=a}
+			<td style="text-align:center;;vertical-align:middle;width:5%;">
+				<input type="text" name="qty_{$i.id}[]" id="qty_{$i.id}_{$x}_{$acak}" idx="{$x}" class="angka t_qty_{$x}" id_size="{$i.id}" style="width:50px;height:26px;{if $z.{$i.id}.qty|default:0 > 0}background:#ffffb3{/if}" value="{$z.{$i.id}.qty|default:0}">
+				<input type="hidden" name="t_qty_{$i.id}[]" id="t_qty_{$i.id}_{$x}_{$acak}" id_size="{$i.id}" class="h_tot_qty_{$x}" style="width:100%" value="{$z.{$i.id}.qty|default:0}">
+			</td>
+			{/foreach}
+			<td style="text-align:right;;vertical-align:top;">
+				<span id="t_tot_{$x}_{$acak}">{$z.tot_qty|default:0}</span>
+				<input type="hidden" name="total[]" id="tot_{$x}_{$acak}" class="h_tot" style="width:100%" value="{$z.tot_qty|default:0}">
+				<input type="hidden" name="total_harga[]" id="tot_harga_{$x}_{$acak}" class="h_tot_harga" style="width:100%" value="{$total_harga}">
+			</td>
+			
+		</tr>
+		{assign var=g_total_harga value=($g_total_harga+$total_harga)}
+		{/foreach}
+		
+	</tbody>
+	<tfoot>
+		<tr style="background:#3C8DBC;color:#fff;">
+			<td style="text-align:left;;vertical-align:middle;width:20%" colspan="{count($size)+2}" >GrandTotal</td>
+			<td style="text-align:right;;vertical-align:middle;"><span id="h_tot_qty">{$total|default:0}</span>
+				<input type="hidden" name="tot_qty" id="tot_qty" value="{$total|default:0}">
+				<input type="hidden" name="grand_total" id="grand_total" value="{$g_total_harga|default:0}">
+			</td>
+			
+		</tr>
+		
+	</tfoot>
+</table>
+<script>
+var idx_row={$jml_row|default:1};
+	var idx_row_termin={$jml_row_termin|default:1};
+	var tmp_row;
+	//$( document ).ready(function() {
+		function template_row(){
+			idx_row++;
+			tmp_row='';
+			{foreach from=$size item=i key=a}
+				tmp_row +='<td style="text-align:center;;vertical-align:middle;width:5%;">';
+				tmp_row +='<input type="text" name="qty_{$i.id}[]" id="qty_{$i.id}_'+idx_row+'_{$acak}" idx="'+idx_row+'" id_size="{$i.id}" class="angka t_qty_'+idx_row+'" style="width:50px;height:26px;" value="0">';
+				tmp_row +='<input type="hidden" name="t_qty_{$i.id}[]" id="t_qty_{$i.id}_'+idx_row+'_{$acak}" id_size="{$i.id}" class="h_tot_qty_'+idx_row+'" style="width:100%">';
+				tmp_row +='</td>';
+			{/foreach}
+			tambah_row('bd_po','{$acak}');
+			//return tmp_row;
+		}
+	//});
+	
+	//$(".validasi").validatebox({ required:true }); 
+	$('#flag_ppn_{$acak}').on('click',function(){
+		get_ppn('{$acak}');
+	});
+	$('.angka3').numberbox({
+		required:true,min:0,precision:0,groupSeparator:'.',decimalSeparator:',',
+		onChange:function(x,y){
+			//console.log();
+			var idx=($(this).attr('idx'));
+			var gt=parseFloat($('#grand_total_ppn_{$acak}').val());
+			//var harga=parseFloat($('#'+$(this).attr('id')).val());
+			var qty=parseFloat(x);
+			var t_tot=((qty/100)*gt);
+			//console.log(qty+'->'+harga);
+			$('#termin_t_tot_'+idx+'_{$acak}').html(NumberFormat(t_tot));
+			$('#termin_tot_'+idx+'_{$acak}').val(t_tot);
+			//$('#t_qty_'+idx+'_{$acak}').val(qty);
+			//hitung_total();
+			//get_total('qty','harga_beli','total',idx_row);
+		}
+	});
+	$('.angka').numberbox({
+		required:true,min:0,precision:0,groupSeparator:'.',decimalSeparator:',',
+		onChange:function(x,y){
+			//console.log();
+			var idx=($(this).attr('idx'));
+			var id_size=($(this).attr('id_size'));
+			var harga=parseFloat($('#harga_'+idx+'_{$acak}').val());
+			//var harga=parseFloat($('#'+$(this).attr('id')).val());
+			var qty=parseFloat(x);
+			var t_tot=qty*harga;
+			//console.log(qty+'->'+harga);
+			//$('#t_tot_'+idx+'_{$acak}').html(NumberFormat(t_tot));
+			//$('#tot_'+idx+'_{$acak}').val(t_tot);
+			$('#t_qty_'+id_size+'_'+idx+'_{$acak}').val(qty);
+			hitung_total(idx,'{$acak}');
+			//get_ppn('{$acak}');
+			//$('#flag_ppn_{$acak}').trigger('click');
+			//get_total('qty','harga_beli','total',idx_row);
+		}
+	});
+	{if $sts_crud|default:'add' eq 'edit'}
+		{if $data.h.flag_ppn eq 1}
+			$('#flag_ppn_{$acak}').prop('checked', true);
+		{/if}
+		
+		hitung_total();
+		//$('#flag_ppn_{$acak}').trigger('click');
+		
+	{/if}
+	
+	
+	$('.angka2').numberbox({
+		required:true,min:0,precision:0,groupSeparator:',',decimalSeparator:'.',
+		onChange:function(){
+			//console.log();
+			var idx=($(this).attr('idx'));
+			var qty=parseFloat($('#qty_'+idx+'_{$acak}').val());
+			var harga=parseFloat($('#'+$(this).attr('id')).val());
+			var t_tot=qty*harga;
+			$('#t_tot_'+idx+'_{$acak}').html(NumberFormat(t_tot));
+			$('#tot_'+idx+'_{$acak}').val(t_tot);
+			$('#t_qty_'+idx+'_{$acak}').val(qty);
+			hitung_total();
+			get_ppn('{$acak}');
+			//$('#flag_ppn_{$acak}').trigger('click');
+			//get_total('qty','harga_beli','total',idx_row);
+		}
+	});
+	$('.tgl').datepicker({
+		 format: 'yyyy-mm-dd',
+		 autoclose: true
+	});
+	
+	$('.autoo').autoComplete({
+		minChars: 2,
+		source: function(term, response){
+			$.getJSON(host+'modul/getdata/auto_katalog',{ q: term,supplier:$('#kode_supplier_{$acak}').val() },function(data){ response(data); });
+		},
+		renderItem: function (item, search){
+			{literal}search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');{/literal}
+			var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
+			return '<div class="autocomplete-suggestion" data-nama="'+item[1]+'" data-val="' + item[0] + '">'
+				+ item[0].replace(re, "<b>$1</b>") + '</div>';
+		},
+		onSelect: function(e, term, item){
+			//alert('Item "'+item.data('val')+' ('+item.data('id')+')" selected by '+(e.type == 'keydown' ? 'pressing enter' : 'mouse click')+'.');
+			$('#nama_produk_1').val(item.data('nama'));
+			//$('#satuan_1').val(item.data('satuan'));
+			//$('#harga_1_{$acak}').numberbox('setValue',item.data('harga'));
+		}
+	});
+</script>

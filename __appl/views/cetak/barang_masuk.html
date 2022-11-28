@@ -1,0 +1,151 @@
+<style>
+table.timecard {
+	margin: auto;
+	width: 600px;
+	border-collapse: collapse;
+	border: 1px solid #fff; /*for older IE*/
+	
+}
+
+
+table.timecard thead th#thDay {
+	width: 40%;	
+}
+
+table.timecard thead th#thRegular, table.timecard thead th#thOvertime, table.timecard thead th#thTotal {
+	width: 20%;
+}
+
+table.timecard th, table.timecard td {
+	padding: 3px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #000000 #000000;
+}
+
+table.timecard td {
+	text-align: right;
+}
+
+table.timecard tbody th {
+	text-align: left;
+	font-weight: bold;
+}
+
+table.timecard tfoot {
+	font-weight: bold;
+	font-size: large;
+	background-color: #687886;
+	color: #fff;
+}
+
+table.timecard tr.even {
+	background-color: #fde9d9;
+}
+</style>
+<hr>
+<table style="width:100%">
+	<tr>
+		<td style="text-align:center;;vertical-align:middle;font-size:15px;">
+			<strong>FAKTUR BARANG MASUK</strong>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:left;vertical-align:middle;font-size:8px;">
+			<table style="width:100%;">
+				<tr>
+					<td style="width:50%;text-align:left;;vertical-align:top;">
+						<table style="font-size:10px;font-weight:bold;">
+							<tr>
+								<td>No. Faktur</td>
+								<td>:</td>
+								<td>{$data.h.no_faktur|default:'-'}</td>
+							</tr>
+							<tr>
+								<td>No. PO</td>
+								<td>:</td>
+								<td>{$data.h.no_po|default:'-'}</td>
+							</tr>
+							<tr>
+								<td>Supplier</td>
+								<td>:</td>
+								<td>{$data.h.supplier|default:'-'}</td>
+							</tr>
+							<tr>
+								<td colspan="3">&nbsp;</td>
+							</tr>
+							
+							
+						</table>
+					</td>
+					<td style="width:50%;text-align:right;vertical-align:top;">
+						<table style="font-size:10px;font-weight:bold;">
+							<tr>
+								<td>Tanggal Masuk</td>
+								<td>:</td>
+								<td style="text-align:left;vertical-align:top;">{$data.h.tgl|default:'-'}</td>
+							</tr>
+							<tr>
+								<td>Tanggal PO</td>
+								<td>:</td>
+								<td style="text-align:left;vertical-align:top;">{$data.h.tgl_po|default:'-'}</td>
+							</tr>
+							
+							<tr>
+								<td>Tgl. Pengiriman</td>
+								<td>:</td>
+								<td style="text-align:left;vertical-align:top;">{$data.h.tgl_kirim_po|default:'-'}</td>
+							</tr>
+							<tr>
+								<td colspan="3">&nbsp;</td>
+							</tr>
+							
+						</table>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<table class="timecard" style="width:100%;font-size:15px;">
+		<tbody style="background:#D4E8F4;" class="bd_email">
+			<tr style="background:#D4E8F4;font-weight:bold;">
+				<th style="text-align:left;;vertical-align:middle;width:10%;" rowspan="2">No</th>
+				<th style="text-align:left;;vertical-align:middle;width:20%;" rowspan="2">SKU</th>
+				<th style="text-align:left;;vertical-align:middle;width:30%;" rowspan="2">Nama Barang</th>
+				<th style="text-align:center;;vertical-align:middle;width:5%;" colspan="{count($size)}">Qty</th>
+				<th style="text-align:left;;vertical-align:middle;width:15%;" rowspan="2">Total</th>
+			</tr>
+			
+			<tr style="background:#D4E8F4;">
+				{foreach from=$size item=i}
+				<th style="text-align:center;;vertical-align:middle;width:5%;">{$i.ukuran|default:''}</th>
+				{/foreach}
+			</tr>
+			
+			{assign var=total value=0}
+			{assign var=x value=0}
+			{foreach from=$data.d item=z name=y key=a}
+			{assign var=total value=$total+$z.tot_qty}
+			{assign var=x value=$x+1}
+			<tr class="tr_em" id="tm_1" idx=1>
+				<td style="text-align:left;vertical-align:middle;">{$smarty.foreach.y.iteration}</td>
+				<td style="text-align:left;vertical-align:middle;">{$a|default:''}</td>
+				<td style="text-align:left;vertical-align:middle;">{$z.nama_produk|default:''}</td>
+				 {foreach from=$size item=i}
+				<td style="text-align:right;vertical-align:middle;">{$z.{$i.id}.qty|default:0}</td>
+				{/foreach} 
+				<td style="text-align:right;vertical-align:middle;">{$z.tot_qty|default:0}</td>
+				
+			</tr>
+			{/foreach}
+			
+		</tbody>
+		<tfoot>
+			<tr style="background:#3C8DBC;color:#fff;font-weight:bold;">
+				<td style="text-align:left;;vertical-align:middle;width:20%" colspan="{count($size)+3}" >GrandTotal</td>
+				<td style="text-align:right;;vertical-align:middle;">{$total|default:0}</td>
+				
+			</tr>
+		</tfoot>
+</table>

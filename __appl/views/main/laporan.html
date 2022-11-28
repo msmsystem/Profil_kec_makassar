@@ -1,0 +1,118 @@
+<div class="col-12" id="filter_lap_{$acak}">
+	<table class="table">
+		<tr>
+			{if $mod eq 'laporan_stokopname'}
+			<td>
+				<table class="table">
+				<tr>
+					<td>&nbsp;</td><td>Kode SO</td><td>:</td>
+					<td style="font-weight:bold;">
+						<select class="form-control" id="so_kode_{$acak}" name="so_kode" style="width:80%">
+							{foreach from=$tgl item=i}
+							<option value="{$i.so_kode}">{$i.so_kode} ({$i.create_date})</option>
+							{/foreach}
+						</select>
+					</td>
+				</tr>
+				</table>
+			</td>
+			{else}
+			<td>
+				<table class="table">
+					{include file="template/input_form.html" type='text' label="Tgl. Mulai" id="tgl_mulai" name="tgl_mulai" style_type="width:80%" class="validasi tgl" value="{$data.h.tgl|default:''}"}
+					{if $mod eq 'laporan_sales'}
+					<tr>
+							<td>&nbsp;</td><td>Sales</td><td>:</td>
+							<td style="font-weight:bold;">
+								<select class="form-control" id="sales_{$acak}" name="sales" style="width:80%">
+									{foreach from=$sales item=i}
+									<option value="{$i.nama_user}">{$i.nama_lengkap}</option>
+									{/foreach}
+								</select>
+							</td>
+					</tr>
+					{/if}
+					{if $mod eq 'laporan_barangmasuk'}
+					<tr>
+							<td>&nbsp;</td><td>Supplier</td><td>:</td>
+							<td style="font-weight:bold;">
+								<select class="form-control" id="supplier_{$acak}" name="supplier" style="width:80%">
+									<option value="">-- Semua Supplier --</option>
+									{foreach from=$supplier item=i}
+									<option value="{$i.kode_supplier}">{$i.supplier}</option>
+									{/foreach}
+								</select>
+							</td>
+					</tr>
+					{/if}
+				</table>
+			</td>
+			<td>
+				<table class="table">
+					{include file="template/input_form.html" type='text' label="Tgl. Akhir" id="tgl_akhir" name="tgl_akhir" style_type="width:80%" class="validasi tgl" value="{$data.h.tgl|default:''}"}
+				</table>
+			</td>
+		</tr>
+		{/if}
+	</table>
+	<center>
+		{include file="template/button_save.html" id_na="get_lap_{$mod}"  btn_goyz="true" text="Tampilkan"}
+		{include file="template/button_save.html" id_na="cetak_{$mod}"  btn_goyz="true" text="Export Excel"}
+	{*	{include file="template/button_save.html" id_na="cetak_pdf_{$mod}"  btn_goyz="true" text="Export Pdf"} *}
+	</center>
+</div><br>
+<div class="col-12" id="isi_lap_{$acak}">
+</div>
+<script>
+$('.tgl').datepicker({
+	 format: 'yyyy-mm-dd',
+	 autoclose: true
+});
+$('#b_project_{$acak}').click(function(){
+	loadingna();
+	$.post(host+"modul/get_konten/dt_project",function(r){
+		winLoadingClose();
+		windowForm(r,'Data Project',800,getClientHeight()-100);
+	})
+	
+});
+$('#cetak_pdf_{$mod}_{$acak}').click(function(){
+	var param={};
+	param["kode_supplier"]=$('#supplier_{$acak}').val();
+	param["so_kode"]=$('#so_kode_{$acak}').val();
+	param["nama_user"]=$('#sales_{$acak}').val();
+	param["lokasi"]=$('#cl_lokasi_id_{$acak}').val();
+	param["tgl_mulai"]=$('#tgl_mulai_{$acak}').val();
+	param["tgl_akhir"]=$('#tgl_akhir_{$acak}').val();
+	param["cetak"]=1;
+	param["type"]='pdf';
+	openWindowWithPost(host+'modul/get_konten/{$mod}',param);
+});
+$('#cetak_{$mod}_{$acak}').click(function(){
+	var param={};
+	param["kode_supplier"]=$('#supplier_{$acak}').val();
+	param["so_kode"]=$('#so_kode_{$acak}').val();
+	param["nama_user"]=$('#sales_{$acak}').val();
+	param["lokasi"]=$('#cl_lokasi_id_{$acak}').val();
+	param["tgl_mulai"]=$('#tgl_mulai_{$acak}').val();
+	param["tgl_akhir"]=$('#tgl_akhir_{$acak}').val();
+	param["cetak"]=1;
+	param["type"]='excel';
+	openWindowWithPost(host+'modul/get_konten/{$mod}',param);
+});
+$('#get_lap_{$mod}_{$acak}').click(function(){
+	var param={};
+	param["kode_supplier"]=$('#supplier_{$acak}').val();
+	param["so_kode"]=$('#so_kode_{$acak}').val();
+	param["nama_user"]=$('#sales_{$acak}').val();
+	param["lokasi"]=$('#cl_lokasi_id_{$acak}').val();
+	param["tgl_mulai"]=$('#tgl_mulai_{$acak}').val();
+	param["tgl_akhir"]=$('#tgl_akhir_{$acak}').val();
+	param["cetak"]=0;
+	param["type"]='';
+	$('#isi_lap_{$acak}').addClass('loading').html('');
+	$.post(host+'modul/get_konten/{$mod}',param,function(r){
+		$('#isi_lap_{$acak}').removeClass('loading').html(r);
+	});
+});
+</script>

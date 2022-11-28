@@ -1,0 +1,185 @@
+<style>
+table.timecard {
+	margin: auto;
+	width: 600px;
+	border-collapse: collapse;
+	border: 1px solid #fff; /*for older IE*/
+	
+}
+
+
+table.timecard thead th#thDay {
+	width: 40%;	
+}
+
+table.timecard thead th#thRegular, table.timecard thead th#thOvertime, table.timecard thead th#thTotal {
+	width: 20%;
+}
+
+table.timecard th, table.timecard td {
+	padding: 3px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #000000 #000000;
+}
+
+table.timecard td {
+	text-align: right;
+}
+
+table.timecard tbody th {
+	text-align: left;
+	font-weight: normal;
+}
+
+table.timecard tfoot {
+	font-weight: bold;
+	font-size: large;
+	background-color: #687886;
+	color: #fff;
+}
+
+table.timecard tr.even {
+	background-color: #fde9d9;
+}
+</style>
+{if $mod eq 'pengajuan_anggaran'}
+<table style="width:100%">
+	<tr>
+		<td style="text-align:center;;vertical-align:middle;font-size:10px;">
+			<strong>FORM PENGAJUAN ANGGARAN</strong>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:left;vertical-align:middle;font-size:12px;">
+			<table style="width:100%">
+				<tr>
+					<td style="width:50%;text-align:left;;vertical-align:top;">
+						<table style="font-size:10px;font-weight:bold;">
+							<tr>
+								<td>Kode Project </td>
+								<td>:</td>
+								<td>{$data.h.kode_project|default:'-'}</td>
+							</tr>
+							<tr>
+								<td>No. Pengajuan</td>
+								<td>:</td>
+								<td>{$data.h.no_pengajuan|default:'-'}</td>
+							</tr>
+							<tr>
+								<td>Nama Pemohon</td>
+								<td>:</td>
+								<td>{$data.h.nama_lengkap|default:'-'}</td>
+							</tr>
+						</table>
+					</td>
+					<td style="width:50%;text-align:right;vertical-align:top;">
+						<table style="font-size:10px;font-weight:bold;">
+							<tr>
+								<td>Nama Project </td>
+								<td>:</td>
+								<td>{$data.h.nama_project|default:'-'}</td>
+							</tr>
+							<tr>
+								<td>Tanggal Pengajuan</td>
+								<td>:</td>
+								<td>{$data.h.tgl|default:'-'}</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			
+		</td>
+	</tr>
+	<tr>
+		<td>
+			
+			<table class="timecard" style="width:100%;font-size:10px;">
+				<tbody style="background:#D4E8F4;" class="bd_email">
+					<tr style="font-size:10px;font-weight:bold;background:#8ebced">
+						<td style="text-align:left;vertical-align:middle;width:30px;" >No.</td>
+						<td style="text-align:left;;vertical-align:middle;" >Nama Barang</td>
+						<td style="text-align:right;;vertical-align:middle;width:10%">Jumlah/Qty</td>
+						<td style="text-align:right;;vertical-align:middle;">Harga Satuan</td>
+						<td style="text-align:right;;vertical-align:middle;">Total</td>
+						<td style="text-align:left;;vertical-align:middle;">Keterangan</td>
+					</tr>
+					{assign var=t_qty value=0}
+					{assign var=t_harga value=0}
+					{foreach from=$data.d item=i name=x}
+					{assign var=t_qty value=$t_qty + $i.qty}
+					{assign var=t_harga value=$t_harga + $i.total}
+					<tr class="tr_em" id="tm_1" idx=1>
+						<td style="text-align:left;vertical-align:middle;">{$smarty.foreach.x.iteration}</td>
+						<td style="text-align:left;vertical-align:middle;">{$i.nama_barang|default:''}</td>
+						<td style="text-align:right;vertical-align:middle;">{$i.qty|number_format:0:',':'.'|default:''}({$i.satuan|default:''})</td>
+						<td style="text-align:right;vertical-align:middle;">Rp. {$i.harga|number_format:0:',':'.'|default:''}</td>
+						<td style="text-align:right;vertical-align:middle;">Rp. {$i.total|number_format:0:',':'.'|default:''}</td>
+						<td style="text-align:left;vertical-align:middle;">{$i.keterangan|default:''}</td>
+					</tr>
+					{/foreach}
+					<!--tr class="tr_em" id="tm_1" idx=1>
+						<td style="text-align:left;vertical-align:middle;">2.</td>
+						<td style="text-align:left;vertical-align:middle;">PANEL BOX</td>
+						<td style="text-align:right;vertical-align:middle;">10</td>
+						<td style="text-align:right;vertical-align:middle;">2.000.000</td>
+						<td style="text-align:right;vertical-align:middle;">Rp. 20.000.000</td>
+						<td style="text-align:left;vertical-align:middle;">PANEL NYA JALAN TOL</td>
+					</tr-->
+				</tbody>
+				<tfoot>
+					<tr style="background:#3C8DBC;color:#fff;">
+						<th style="text-align:left;;vertical-align:middle;" colspan="2">Grand Total</td>
+						<th style="text-align:right;;vertical-align:middle;">{$t_qty|number_format:0:',':'.'|default:''}</td>
+						<th style="text-align:left;;vertical-align:middle;">&nbsp;</td>
+						<th style="text-align:right;;vertical-align:middle;">Rp. {$t_harga|number_format:0:',':'.'|default:''}</td>
+						<th style="text-align:left;;vertical-align:middle;">&nbsp;</td>
+						
+					</tr>
+				</tfoot>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<td>
+			<table class="timecard" style="width:100%;font-size:10px;">
+				<thead >
+					<tr style="">
+						<th style="text-align:center;;vertical-align:middle;" >Pemohon</th>
+						<th style="text-align:center;;vertical-align:middle;" >IT. Manager</th>
+						<th style="text-align:center;;vertical-align:middle;" >Operasional<br>Manager</th>
+						<th style="text-align:center;;vertical-align:middle;" >Keuangan</th>
+						<th style="text-align:center;;vertical-align:middle;" >Approve</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td style="height:100px;width:20%;text-align:center;"><img src="{$host}__repo/ttd/{$data.h.ttd|default:''}" style="width:100px;"></td>
+						<td style="height:100px;width:20%;text-align:center;">{if $ttd.IT.ttd|default:'' != ''}<img src="{$host}__repo/ttd/{$ttd.IT.ttd|default:''}" style="width:100px;">{/if}</td>
+						<td style="height:100px;width:20%;text-align:center;">{if $ttd.Operational.ttd|default:'' != ''}<img src="{$host}__repo/ttd/{$ttd.Operational.ttd|default:''}" style="width:100px;">{/if}</td>
+						<td style="height:100px;width:20%;text-align:center;">{if $ttd.Finance.ttd|default:'' != ''}<img src="{$host}__repo/ttd/{$ttd.Finance.ttd|default:''}" style="width:100px;">{/if}</td>
+						<td style="height:100px;width:20%;text-align:center;">{if $ttd.Owner.ttd|default:'' != ''}<img src="{$host}__repo/ttd/{$ttd.Owner.ttd|default:''}" style="width:100px;">{/if}</td>
+					</tr>
+					<tr>
+						<td style="text-align:center;;vertical-align:middle;" >{$data.h.nama_lengkap}</td>
+						<td style="text-align:center;;vertical-align:middle;" >{if $ttd.IT.ttd|default:'' != ''}{$ttd.IT.nama_lengkap|default:''}{/if}</td>
+						<td style="text-align:center;;vertical-align:middle;" >{if $ttd.Operational.ttd|default:'' != ''}{$ttd.Operational.nama_lengkap|default:''}{/if}</td>
+						<td style="text-align:center;;vertical-align:middle;" >{if $ttd.Finance.ttd|default:'' != ''}{$ttd.Finance.nama_lengkap|default:''}{/if}</td>
+						<td style="text-align:center;;vertical-align:middle;" >{if $ttd.Owner.ttd|default:'' != ''}{$ttd.Owner.nama_lengkap|default:''}{/if}</td>
+					</tr>
+				</tbody>
+			</table>
+		</td>
+	</tr>
+	
+</table>
+{/if}

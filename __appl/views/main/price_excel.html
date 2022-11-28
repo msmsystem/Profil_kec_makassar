@@ -1,0 +1,30 @@
+<table class="table table-bordered table-hovered">
+	<thead style="background:#3C8DBC;color:#fff;">
+		<tr>
+			<th style="text-align:left;;vertical-align:middle;width:20%;" rowspan="2">SKU</th>
+			<th style="text-align:center;;vertical-align:middle;" colspan="{count($size)}">Qty</th>
+		</tr>
+		<tr>
+			{foreach from=$size item=i}
+			<th style="text-align:center;;vertical-align:middle;">{$i.ukuran|default:''}</th>
+			{/foreach}
+		</tr>
+	</thead>
+	
+	<tbody style="background:#D4E8F4;" class="bd_so">
+		{foreach from=$dt item=a key=x}
+		<tr class="tr_em" id="tm_1" idx={$x}>
+			<td style="text-align:left;;vertical-align:middle;">
+				<input type="hidden" name="sku[]" onKeyup="this.value = this.value.toUpperCase()"  class="validasi autoo" value="{$a.sku|default:''}" style="width:100%">
+				{$a.sku|default:''}
+			</td>
+			{foreach from=$size item=i key=z}
+			<td style="text-align:center;;vertical-align:top;">
+				
+				<input type="text" name="qty_{$i.id}[]" id="qty_{$i.id}_1_{$acak}" idx="1" class="angka t_qty_1" id_size="{$i.id}" style="width:50px;height:26px;" value="{$a.size.{$i.id}.qty|default:''}">
+			</td>
+			{/foreach}	
+		</tr>
+		{/foreach}
+	</tbody>
+</table>

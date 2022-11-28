@@ -1,0 +1,61 @@
+<fieldset>
+<div class="span10">
+<form class="form-horizontal" id="form_{$acak}" url="{$host}modul/cruddata/ganti_pwd" method="post" enctype="multipart/form-data">
+<table class="table table-hover">
+		<input type="hidden" name="id" value="{$data.id|default:$auth.id}">
+		<input type="hidden" name="sts_crud" value="edit">
+		
+		{include file="template/input_form.html" type='pwd' label="Password Lama *" id="pwd_lama" name="pwd_lama" style_type="width:80%" class="validasi" value="{$data.nama_vendor|default:''}"}
+		{include file="template/input_form.html" type='pwd' label="Password Baru *" id="pwd_baru" name="pwd_baru" style_type="width:80%" class="validasi" value="{$data.alamat|default:''}"}
+		{include file="template/input_form.html" type='pwd' label="Ulangi Password Baru *" id="u_pwd_baru" name="u_pwd_baru" style_type="width:80%" class="validasi" value="{$data.alamat|default:''}"}
+</table>
+	
+</form>
+<div class="control-group">
+	<center>
+	<label class="control-label" for="form-field-1"></label>
+	<div class="controls">
+		{include file="template/button_save.html" id_na="simpan_{$mod}"  btn_goyz="true" text="Ganti"}
+	</div>
+	</center>
+</div>		
+</div>
+</fieldset>
+
+<script>
+	
+	$('#simpan_{$mod}_{$acak}').click(function(){
+		$(".validasi").validatebox({ required:true }); 
+		if ($('#form_{$acak}').form('validate')){
+			
+			if($('#pwd_baru_{$acak}').val()==$('#u_pwd_baru_{$acak}').val()){
+				//loadingna();
+				$.post(host+'modul/cek_pwd_lama',{ pwd:$('#pwd_lama_{$acak}').val() },function(x){
+					if(x==1){
+						submit_form('form_{$acak}',function(r){
+							if(r==1){
+								winLoadingClose();
+								$.messager.alert('BSR',"Password Sudah Diganti",'info');
+								closeWindow();
+								setTimeout(function(){ window.location.href = '{$host}login/logout'; }, 3000);
+							}else{
+								winLoadingClose();
+								$.messager.alert('BSR',"Data Gagal Tersimpan",'error');
+								console.log(r);
+							}
+						});
+					}else{
+						$.messager.alert('BSR',"Password Lama Salah",'info');
+					}
+				});
+			}else{
+				$.messager.alert('BSR',"Password Baru Tidak Sama Dengan Ulangi Password",'info');
+			}
+		
+			
+		}else{
+			$.messager.alert('BSR',"Isi Form Yang Kosong",'error');
+		}
+
+	});
+</script>

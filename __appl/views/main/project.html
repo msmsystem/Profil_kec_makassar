@@ -1,0 +1,122 @@
+<fieldset>
+	<legend>Form Input Project</legend>
+<div class="span10">
+<form class="form-horizontal" id="form_{$acak}" url="{$host}modul/cruddata/cl_project" method="post" enctype="multipart/form-data">
+<table class="table table-hover">
+		<input type="hidden" name="id" value="{$data.kode_project|default:''}">
+		<input type="hidden" name="sts_crud" value="{$sts_crud|default:'add'}">
+		<tr>
+			<td>&nbsp;</td><td>Lokasi</td><td>:</td>
+			<td style="font-weight:bold;">
+				<select name="cl_lokasi_id" id="cl_lokasi_id_{$acak}" class="form-control">
+					{foreach from=$lok item=i}
+					<option value="{$i.id}" kd="{$i.kode_lokasi}" {if $sts_crud|default:'add' eq 'edit'}{if $data.cl_lokasi_id eq $i.id}selected{/if}{/if}>{$i.lokasi}</option>
+					{/foreach}
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td><td>Type Project</td><td>:</td>
+			<td style="font-weight:bold;">
+				<select name="type_project" id="type_project_{$acak}" class="form-control">
+					<option value="P" {if $sts_crud|default:'add' eq 'edit'}{if $data.type_project eq 'P'}selected{/if}{/if}>PENGADAAN</option>
+					<option value="M" {if $sts_crud|default:'add' eq 'edit'}{if $data.type_project eq 'M'}selected{/if}{/if}>MAINTANANCE</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td><td>Kode Project</td><td>:</td>
+			<td style="font-weight:bold;">
+				<span id="kd_lok_{$acak}">{$kdlok|default:''}</span>/
+				<span id="type_{$acak}">{$type|default:''}</span>-
+				<input type="text" name="nm_pro" id="nm_pro_{$acak}" class="validasi" value="{$nm|default:''}">/
+				<select name="bln" id="bln_{$acak}">
+					<option value="I" {if $bln|default:'I' eq 'I'}selected{/if}>I</option>
+					<option value="II" {if $bln|default:'I' eq 'II'}selected{/if}>II</option>
+					<option value="III" {if $bln|default:'I' eq 'III'}selected{/if}>III</option>
+					<option value="IV" {if $bln|default:'I' eq 'IV'}selected{/if}>IV</option>
+					<option value="V" {if $bln|default:'I' eq 'V'}selected{/if}>V</option>
+					<option value="VI" {if $bln|default:'I' eq 'VI'}selected{/if}>VI</option>
+					<option value="VII" {if $bln|default:'I' eq 'VII'}selected{/if}>VII</option>
+					<option value="VIII" {if $bln|default:'I' eq 'VIII'}selected{/if}>VIII</option>
+					<option value="IX" {if $bln|default:'I' eq 'IX'}selected{/if}>IX</option>
+					<option value="X" {if $bln|default:'I' eq 'X'}selected{/if}>X</option>
+					<option value="XI" {if $bln|default:'I' eq 'XI'}selected{/if}>XI</option>
+					<option value="XII" {if $bln|default:'I' eq 'XII'}selected{/if}>XII</option>
+				</select>
+				/
+				<select name="thn" id="thn_{$acak}">
+					{for $i=($smarty.now|date_format:"%Y" - 2) to $smarty.now|date_format:"%Y"}
+					<option value="{$i}" {if $thn|default:2019 eq $i}selected{/if}>{$i}</option>
+					{/for}
+				</select>
+				
+				<input type="hidden" name="kode_project" id="kode_project_{$acak}" value="{$data.kode_project|default:''}">
+			</td>
+		</tr>
+		{include file="template/input_form.html" type='text' label="Deskripsi Project *" id="nama_project" name="nama_project" style_type="width:80%" class="validasi" value="{$data.nama_project|default:''}"}
+		<tr>
+			<td>&nbsp;</td><td>Status</td><td>:</td>
+			<td style="font-weight:bold;">
+				<input type="checkbox" name="status" value="A" checked>&nbsp;&nbsp;Aktif
+			</td>
+		</tr>
+</table>
+	
+</form>
+<div class="control-group">
+	<center>
+	<label class="control-label" for="form-field-1"></label>
+	<div class="controls">
+		{include file="template/button_save.html" id_na="simpan_{$mod}"  btn_goyz="true" text="Simpan / Update"}
+		{include file="template/button_save.html" id_na="cancel_{$mod}"  btn_goyz="true" text="Kembali Ke List"}
+	</div>
+	</center>
+</div>		
+</div>
+</fieldset>
+
+<script>
+	var idx_row={$jml_row|default:1};
+	//$(".validasi").validatebox({ required:true }); 
+	/*$('.tgl').datepicker({
+		 format: 'yyyy-mm-dd',
+		 autoclose: true
+	});
+	*/
+	$('#cl_lokasi_id_{$acak}').change(function(){
+		$('#kd_lok_{$acak}').html($('option:selected', this).attr('kd'));
+	});
+	$('#type_project_{$acak}').change(function(){
+		$('#type_{$acak}').html($(this).val());
+	});
+	$('#cl_lokasi_id_{$acak}').trigger('change');
+	$('#type_project_{$acak}').trigger('change');
+	$('#cancel_{$mod}_{$acak}').click(function(){
+		$('#grid_nya_{$mod}').show();
+		$('#detil_nya_{$mod}').html('').hide();
+	});
+	$('#simpan_{$mod}_{$acak}').click(function(){
+		$(".validasi").validatebox({ required:true }); 
+		if ($('#form_{$acak}').form('validate')){
+			$('#kode_project_{$acak}').val($('#kd_lok_{$acak}').html()+'/'+$('#type_{$acak}').html()+'-'+$('#nm_pro_{$acak}').val()+'/'+$('#bln_{$acak}').val()+'/'+$('#thn_{$acak}').val());
+			//console.log($('#kode_project_{$acak}').val());
+			submit_form('form_{$acak}',function(r){
+				if(r==1){
+					winLoadingClose();
+					$.messager.alert('BSR',"Data Tersimpan",'info');
+					$('#grid_nya_{$mod}').show();
+					$('#detil_nya_{$mod}').html('').hide();
+					$('#grid_{$mod}').datagrid('reload');
+				}else{
+					winLoadingClose();
+					$.messager.alert('BSR',"Data Gagal Tersimpan",'error');
+					console.log(r);
+				}
+			});
+		}else{
+			$.messager.alert('BSR',"Isi Form Yang Kosong",'error');
+		}
+
+	});
+</script>

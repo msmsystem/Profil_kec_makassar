@@ -1,0 +1,41 @@
+<table class="table table-bordered table-hovered">
+				<thead style="background:#3C8DBC;color:#fff;">
+					<tr>
+						<th style="text-align:left;;vertical-align:middle;width:80%;" >Keterangan Pembayaran</th>
+						<th style="text-align:right;;vertical-align:middle;width:20%;">Total</th>
+					</tr>
+				</thead>
+				<tbody style="background:#D4E8F4;" class="bd_termin">
+					{assign var=grandtotal value=0}
+					{foreach from=$data.h item=a key=y}
+					<tr class="tr_em" >
+						<td colspan="2" style="text-align:left;;vertical-align:middle;background:#d1d1e0;font-weight:bold;">
+							{$a.no_po|default:''}
+						</td>
+					</tr>
+					{foreach from=$a.detil item=i key=x}
+					{assign var=grandtotal value=$grandtotal+$i.total}
+					<tr class="tr_em" >
+						<td>
+							{$i.ket|default:''}
+						</td>
+						<td style="text-align:right;;vertical-align:top;">
+							Rp. {$i.total|number_format:0:',':'.'|default:''}
+						</td>
+					</tr>
+					{/foreach}
+					{/foreach}
+					
+				</tbody>
+				<tfoot>
+					<tr style="background:#3C8DBC;color:#fff;">
+						<td style="text-align:left;;vertical-align:middle;width:20%"  >GrandTotal</td>
+						<td style="text-align:right;;vertical-align:middle;" id="row_total">
+							Rp. <span id="h_tot_termin">{$grandtotal|number_format:0:',':'.'|default:0}</span>
+							<input type="hidden" name="total" id="total_termin"  style="width:150px;height:26px;">
+							
+						</td>
+					</tr>
+					
+				</tfoot>
+			</table>

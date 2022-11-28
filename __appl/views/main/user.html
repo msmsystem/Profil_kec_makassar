@@ -1,0 +1,97 @@
+<fieldset>
+	<legend>Form User Management</legend>
+<div class="span10">
+<form class="form-horizontal" id="form_{$acak}" url="{$host}modul/cruddata/tbl_user" method="post" enctype="multipart/form-data">
+<table class="table table-hover">
+		<input type="hidden" name="id" value="{$data.id|default:''}">
+		<input type="hidden" name="sts_crud" value="{$sts_crud|default:'add'}">
+		{if $sts_crud|default:'add' eq 'add'}
+		{include file="template/input_form.html" type='text' label="User ID *" id="nama_user" name="nama_user" style_type="width:80%" class="validasi" value="{$data.nama_user|default:''}"}
+		{include file="template/input_form.html" type='pwd' label="Password *" id="password" name="password" style_type="width:80%" class="validasi" value="{$data.password|default:''}"}
+		{else}
+		<tr>
+			<td>&nbsp;</td><td>UserId</td><td>:</td>
+			<td style="font-weight:bold;">
+				{$data.nama_user}
+			</td>
+		</tr>
+		{/if}
+		{include file="template/input_form.html" type='select' label="User Group *" id="cl_user_group_id" name="cl_user_group_id" style_type="width:80%" class="validasi" value="{$data.cl_user_group_id|default:''}" option=$group select="{$data.cl_user_group_id|default:''}"}
+		{include file="template/input_form.html" type='select' label="Departemen *" id="cl_departemen" name="cl_departemen" style_type="width:80%" class="validasi" value="{$data.cl_departemen|default:''}" option=$departemen select="{$data.cl_departemen|default:''}"}
+		{include file="template/input_form.html" type='select' label="Jabatan *" id="cl_jabatan_id" name="cl_jabatan_id" style_type="width:80%" class="validasi" value="{$data.cl_jabatan_id|default:''}" option=$jabatan select="{$data.cl_jabatan_id|default:''}"}
+		{include file="template/input_form.html" type='text' label="Nama Lengkap *" id="nama_lengkap" name="nama_lengkap" style_type="width:80%" class="validasi" value="{$data.nama_lengkap|default:''}"}
+		{include file="template/input_form.html" type='text' label="Email *" id="email" name="email" style_type="width:80%" class="validasi" value="{$data.email|default:''}"}
+		{include file="template/input_form.html" type='text' label="Telp *" id="tlp" name="tlp" style_type="width:80%" class="validasi" value="{$data.tlp|default:''}"}
+		<tr>
+			<td>&nbsp;</td><td>Status</td><td>:</td>
+			<td style="font-weight:bold;">
+				<input type="checkbox" name="status" value="A" {if $sts_crud eq 'edit'}{if $data.status|default:'' eq 'A'}checked{/if}{else}checked{/if}>&nbsp;&nbsp;Aktif
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td><td>Ttd</td><td>:</td>
+			<td style="font-weight:bold;">
+				<input type="file" name="ttd" id="ttd_{$acak}">
+			</td>
+		</tr>
+		{if $sts_crud|default:'add' eq 'edit'}
+		<tr>
+			<td>&nbsp;</td><td>Ttd Exist :</td><td>:</td>
+			<td style="font-weight:bold;">
+				<img src="{$host}__repo/ttd/{$data.ttd|default:''}">
+			</td>
+		</tr>
+		{/if}
+</table>
+	
+</form>
+<div class="control-group">
+	<center>
+	<label class="control-label" for="form-field-1"></label>
+	<div class="controls">
+		{include file="template/button_save.html" id_na="simpan_{$mod}"  btn_goyz="true" text="Simpan / Update"}
+		{include file="template/button_save.html" id_na="cancel_{$mod}"  btn_goyz="true" text="Kembali Ke List"}
+	</div>
+	</center>
+</div>		
+</div>
+</fieldset>
+
+<script>
+	var idx_row={$jml_row|default:1};
+	//$(".validasi").validatebox({ required:true }); 
+	/*$('.tgl').datepicker({
+		 format: 'yyyy-mm-dd',
+		 autoclose: true
+	});
+	*/
+	$('#cancel_{$mod}_{$acak}').click(function(){
+		$('#grid_nya_{$mod}').show();
+		$('#detil_nya_{$mod}').html('').hide();
+	});
+	$('#simpan_{$mod}_{$acak}').click(function(){
+		$(".validasi").validatebox({ required:true }); 
+		if ($('#form_{$acak}').form('validate')){
+			submit_form('form_{$acak}',function(r){
+				if(r==1){
+					winLoadingClose();
+					$.messager.alert('BSR',"Data Tersimpan",'info');
+					$('#grid_nya_{$mod}').show();
+					$('#detil_nya_{$mod}').html('').hide();
+					$('#grid_{$mod}').datagrid('reload');
+				}else if(r==2){
+					winLoadingClose();
+					$.messager.alert('BSR',"NAMA USER SUDAH ADA!!!",'warning');
+					//console.log(r);
+				}else{
+					winLoadingClose();
+					$.messager.alert('BSR',"Data Gagal Tersimpan",'error');
+					console.log(r);
+				}
+			});
+		}else{
+			$.messager.alert('BSR',"Isi Form Yang Kosong",'error');
+		}
+
+	});
+</script>

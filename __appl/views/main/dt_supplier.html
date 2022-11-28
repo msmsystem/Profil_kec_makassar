@@ -1,0 +1,67 @@
+<div id="grid_nya_dt_project_{$acak}" style="margin-left:8px;">
+	<div id='grid_dt_project_{$acak}'></div>
+	<div id='tb_dt_project_{$acak}' style="padding:5px;height:{$tinggi_toolbar|default:'35px'};">
+		<div style="float:{$align|default:'left'}; width:100%;">
+			<label style='width:100px;'>Pencarian </label>: &nbsp;&nbsp;
+			<input type="text" name="key_{$acak}" id="key_{$acak}" style="width:50%;height:22px;">
+			&nbsp;&nbsp;&nbsp;
+		</div>
+	</div>
+</div>
+<script>
+$('#grid_nya_dt_project_{$acak}').css('height',(getClientHeight()-200));
+
+var dt=$("#grid_dt_project_{$acak}").datagrid({
+		rownumbers:true,
+		iconCls:'database',
+        fit:true,
+        striped:true,
+        pagination:true,
+        remoteSort: false,
+		showFooter:false,
+		singleSelect:true,
+        url: host+'modul/getdata/cl_supplier',		
+		nowrap: false,
+		pageSize:15,
+		pageList:[15,25,50,75,100,200],
+		queryParams:{
+			
+		},
+		toolbar: '#tb_dt_project_{$acak}',
+		columns:[[
+			
+			{ field:'create_date',title:'Pilih',width:60, halign:'center',align:'center',
+				formatter: function(value,row,index){
+					var telp='';
+					var alamat=''
+					var email=''
+					if(row.alamat)alamat=row.alamat;
+					if(row.telp)telp=row.telp;
+					if(row.email)email=row.email;
+					
+					return "<a href='javascript:void(0);' onclick='pilih_supplier(\""+row.kode_supplier+"\",\""+row.supplier+"\",\""+alamat+"\",\""+telp+"\",\""+email+"\")' class='btn btn-sm btn-success'>Pilih</a>";
+				}
+			},
+			{ field:'kode_supplier',title:'Kode Supplier',width:150, halign:'left',align:'left' },
+			{ field:'supplier',title:'Supplier',width:150, halign:'left',align:'left' },
+			{ field:'alamat',title:'Alamat',width:300, halign:'left',align:'left' },
+			{ field:'telp',title:'Telp',width:150, halign:'left',align:'left' }
+        ]],
+		onLoadSuccess: function(data){
+			$('#grid_dt_project_{$acak}').resizable();
+		}
+	});
+	$("#key_{$acak}").keypress(function(e) {
+		if(e.which == 13) {
+			dt.datagrid('reload',{ key:$(this).val() });
+		}
+	});
+	function pilih_supplier(kd,nm,alamat,telp,email){
+		$('.kode_na').val(kd);
+		$('.nm_supplier_na').val(nm);
+		$('.telp_na').val((telp ? telp : ''));
+		$('.email_na').val(email);
+		$('.alamat_na').val(alamat);
+		closeWindow();
+	}
+</script>

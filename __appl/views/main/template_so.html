@@ -1,0 +1,22 @@
+<table class="table">
+	{include file="template/input_form.html" type='select' label="Supplier" id="cl_kode_supplier" name="cl_kode_supplier" style_type="width:80%" class="validasi" value="{$data.cl_sumber_id|default:''}" option=$supp select="{$data.h.cl_kode_supplier|default:''}"}
+</table>
+<div class="control-group">
+	<center>
+	<label class="control-label" for="form-field-1"></label>
+	<div class="controls">
+		{include file="template/button_save.html" id_na="simpan_{$mod}"  btn_goyz="true" text="Download"}
+		{include file="template/button_save.html" id_na="cancel_{$mod}"  btn_goyz="true" text="Kembali Ke List"}
+	</div>
+	</center>
+</div>
+<script>
+$('#simpan_{$mod}_{$acak}').click(function(){
+	var params={};
+	params["cl_kode_supplier"]=$('#cl_kode_supplier_{$acak}').val();
+	openWindowWithPost(host+'modul/download_template/so',params);
+});
+$('#cancel_{$mod}_{$acak}').click(function(){
+	closeWindow();
+});
+</script>

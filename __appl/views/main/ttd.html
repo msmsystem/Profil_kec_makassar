@@ -1,0 +1,67 @@
+<fieldset>
+<div class="span10">
+<form class="form-horizontal" id="form_{$acak}" url="{$host}modul/cruddata/tbl_ttd" method="post" enctype="multipart/form-data">
+<table class="table table-hover">
+		<input type="hidden" name="id" value="{$data.id|default:$auth.id}">
+		<input type="hidden" name="sts_crud" value="edit">
+		{foreach from=$departemen item=i}
+		<tr>
+			<td>&nbsp;</td><td>{$i.departemen}</td><td>:</td>
+			<td style="font-weight:bold;">
+				<div class="input-group input-group-sm">
+					<input type="hidden" class="form-control " readonly name="cl_depatemen_id[]" id="cl_depatemen_id_{$i.id}" value="{$i.id|default:''}">
+					<input type="hidden" class="form-control kd_na" readonly name="id_user[]" id="id_user_{$i.id}" value="{$data.{$i.id}.id_user|default:''}">
+					<input type="text" class="form-control nm_na validasi" readonly name="nama_user[]" id="nama_user_{$i.id}" value="{$data.{$i.id}.nama|default:''}">
+						<span class="input-group-btn">
+						  <a class="btn btn-info btn-flat bt_user" id_dep="{$i.id}" type="button" id="b_user_{$acak}">...</a>
+						</span>
+				</div>
+			</td>
+		</tr>
+		{/foreach}
+</table>
+	
+</form>
+<div class="control-group">
+	<center>
+	<label class="control-label" for="form-field-1"></label>
+	<div class="controls">
+		{include file="template/button_save.html" id_na="simpan_{$mod}"  btn_goyz="true" text="Set Tanda Tangan"}
+	</div>
+	</center>
+</div>		
+</div>
+</fieldset>
+
+<script>
+	$('.bt_user').click(function(){
+		var id_dep=$(this).attr('id_dep');
+		loadingna();
+		$.post(host+"modul/get_konten/dt_user",{ id_dep:id_dep },function(r){
+			winLoadingClose();
+			windowForm(r,'Data Project',800,getClientHeight()-100);
+		})
+		
+	});
+	$('#simpan_{$mod}_{$acak}').click(function(){
+		$(".validasi").validatebox({ required:true }); 
+		if ($('#form_{$acak}').form('validate')){
+			submit_form('form_{$acak}',function(r){
+				if(r==1){
+					winLoadingClose();
+					$.messager.alert('BSR',"Data Tersimpan",'info');
+					$('#grid_nya_{$mod}').show();
+					$('#detil_nya_{$mod}').html('').hide();
+					$('#grid_{$mod}').datagrid('reload');
+				}else{
+					winLoadingClose();
+					$.messager.alert('BSR',"Data Gagal Tersimpan",'error');
+					console.log(r);
+				}
+			});
+		}else{
+			$.messager.alert('BSR',"Isi Form Yang Kosong",'error');
+		}
+
+	});
+</script>

@@ -1,0 +1,125 @@
+<style>
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+}
+.fileUpload input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+</style>
+<fieldset>
+<div class="span10">
+<form class="form-horizontal" id="form_{$acak}" url="{$host}modul/cruddata/{$mod}" method="post" enctype="multipart/form-data">
+<input type="hidden" name="id" value="{$data.h.id|default:''}">
+<input type="hidden" name="sts_crud" value="{$sts_crud|default:'add'}">
+<input type="hidden" name="flag" value="F">
+<table class="table">
+	<tr>
+		<td colspan="2">
+			<div id="list_so" class="list_so" style="text-align:center;;vertical-align:middle;overflow:auto;"> 
+				
+				<table class="table table-bordered table-hovered">
+					<thead style="background:#3C8DBC;color:#fff;">
+						<tr>
+							<th style="text-align:left;;vertical-align:middle;width:20%;" >No Invoice</th>
+							<th style="text-align:left;;vertical-align:middle;" >SKU</th>
+							<th style="text-align:right;;vertical-align:middle;" >Qty</th>
+							<th style="text-align:right;;vertical-align:middle;" >Harga Jual</th>
+							<th style="text-align:right;;vertical-align:middle;" >Harga Beli</th>
+							<th style="text-align:right;;vertical-align:middle;" >Profit</th>
+						</tr>
+						
+					</thead>
+					
+					<tbody style="background:#D4E8F4;" class="bd_so">
+						{assign var=grandtotal value=0}
+						{assign var=t_jual value=0}
+						
+						{foreach from=$data item=a key=x}
+						
+						<tr >
+							<td style="text-align:left;;vertical-align:middle;background:#d1d1e0;font-weight:bold;" colspan="6" >
+								{$a.invoice|default:''}
+							</td>
+						</tr>
+							
+							{assign var=t_beli value=0}
+							{assign var=total value=0}
+							{assign var=total_profit value=0}
+							{foreach from=$a.detil item=b key=c}
+							{assign var=t_jual value=($t_jual+$b.total)}
+							{assign var=t_beli value=($b.harga_beli*$b.qty)}
+							{assign var=total_profit value=($b.total-$t_beli)}
+							{assign var=total value=$total+$total_profit}
+							
+							<tr >
+								<td style="text-align:left;;vertical-align:middle;" >
+									&nbsp;
+								</td>
+								<td style="text-align:left;;vertical-align:middle;">
+									{$b.sku|default:''}
+								</td>
+								<td style="text-align:right;;vertical-align:middle;" >
+									{$b.qty|default:''}
+								</td>
+								<td style="text-align:right;;vertical-align:middle;" >
+									Rp. {$b.total|number_format:0:',':'.'|default:''}
+								</td>
+								
+								<td style="text-align:right;;vertical-align:middle;" >
+									Rp. {$t_beli|number_format:0:',':'.'|default:''}
+								</td>
+								<td style="text-align:right;;vertical-align:middle;" >
+									Rp. {$total_profit|number_format:0:',':'.'|default:''}
+								</td>
+								
+							</tr>
+							{/foreach}
+							{assign var=grandtotal value=$grandtotal+$total}
+						<tr style="text-align:left;;vertical-align:middle;background:#b3b3cc;font-weight:bold;">
+							<td  colspan="5" >
+								Total
+							</td>
+							<td  style="text-align:right;;vertical-align:middle;" >
+								Rp. {$total|number_format:0:',':'.'|default:''}
+							</td>
+						</tr>
+						{/foreach}
+						<tr style="text-align:left;;vertical-align:middle;background:#9494b8;font-weight:bold;">
+							<td  colspan="3" >
+								GrandTotal
+							</td>
+							<td  style="text-align:right;;vertical-align:middle;" >
+								Rp. {$t_jual|number_format:0:',':'.'|default:''}
+							</td>
+							<td >
+								&nbsp;
+							</td>
+							<td  style="text-align:right;;vertical-align:middle;" >
+								Rp. {$grandtotal|number_format:0:',':'.'|default:''}
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				
+			</div>
+
+		</td>
+	</tr>
+	
+</table>
+</form>		
+</div>
+</fieldset>
+
+<script>
+	
+</script>

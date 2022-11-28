@@ -1,0 +1,188 @@
+<style>
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+}
+.fileUpload input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+</style>
+<fieldset>
+	<legend>Form Barang Masuk</legend>
+<div class="span10">
+<form class="form-horizontal" id="form_{$acak}" url="{$host}modul/cruddata/{$mod}" method="post" enctype="multipart/form-data">
+<input type="hidden" name="id" value="{$data.h.id|default:''}">
+<input type="hidden" name="sts_crud" value="{$sts_crud|default:'add'}">
+<input type="hidden" name="flag" value="{$data.h.flag|default:''}">
+<table class="table">
+	<tr>
+		<td>
+			<table class="table">
+				
+				<tr>
+					<td>&nbsp;</td><td>NO PO</td><td>:</td>
+					<td style="font-weight:bold;">
+						<div class="input-group input-group-sm">
+							<input type="text" class="form-control no_po_na" readonly name="no_po" id="no_po_{$acak}" value="{$data.h.no_po|default:''}">
+							<input type="hidden" class="form-control id_po_na" readonly name="id_po" id="id_po_na_{$acak}" value="{$data.h.kode_supplier|default:''}">
+								<span class="input-group-btn">
+								  <a class="btn btn-info btn-flat" type="button" id="b_vendor_{$acak}">...</a>
+								</span>
+						</div>
+					</td>
+				</tr>
+				{include file="template/input_form.html" type='text' label="Tgl. Masuk" id="tgl" name="tgl" style_type="width:80%" class="validasi" value="{$data.h.tgl|default:$smarty.now|date_format:"%Y-%m-%d"}" readonly="readonly"}
+				{include file="template/input_form.html" type='text' label="No. Tlp" id="tlp_perusahaan" name="tlp_perusahaan" style_type="width:80%" class="telp_na" value="{$data.h.telp|default:''}"}
+			</table>
+		</td>
+		<td>
+			<table class="table">
+				{include file="template/input_form.html" type='text' label="Supplier" id="email" name="email" style_type="width:80%;height:30px;" class="nm_supplier_na" value="{$data.h.supplier|default:''}" readonly="readonly"}
+				{include file="template/input_form.html" type='text' label="Almt.Supplier" id="alamat_perusahaan" name="alamat_perusahaan" style_type="width:80%" class="alamat_na" value="{$data.h.alamat|default:''}"}
+				
+				{include file="template/input_form.html" type='text' label="Tgl. Pengiriman" id="tgl_pengiriman" name="tgl_pengiriman" style_type="width:80%" class="validasi tgl_kirim_na" value="{$data.h.tgl_kirim_po|default:''}"}
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<div id="list_detil_{$acak}" style="{if $sts_crud|default:'add' eq 'add'}display:none;{/if}" class="dt_masuk">
+				
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<table class="table">
+				{include file="template/input_form.html" type='textarea' label="Note/Catatan PO" id="note" name="note" style_type="width:80%;" class="validasi catat_na" value="{if $sts_crud|default:'add' eq 'edit'}{$data.h.note_po}{else}{$data.h.note|default:''}{/if}" }
+			</table>
+		</td>
+	</tr>
+	
+	<!--tr>
+		<td colspan="2">
+			<h5>Pembayaran/Termin</h5>
+			<table class="table table-bordered table-hovered">
+				<thead style="background:#3C8DBC;color:#fff;">
+					<tr>
+						<th style="text-align:left;;vertical-align:middle;width:80%;" >Keterangan Pembayaran</th>
+						<th style="text-align:left;;vertical-align:middle;width:5%;">Jumlah(%)</th>
+						<th style="text-align:left;;vertical-align:middle;width:15%;">Total</th>
+						
+						<th style="text-align:center;;vertical-align:middle;width:10%;"><a href="javascript:void(0);" class="btn btn-sm btn-warning" onclick="tambah_row('bd_termin','{$acak}')">+</a></th>
+					</tr>
+				</thead>
+				<tbody style="background:#D4E8F4;" class="bd_termin">
+					{if $sts_crud|default:'add' eq 'add'}
+					<tr class="tr_em" id="tm_1" idx=1>
+						<td>
+							<input type="text" name="termin_ket[]" onKeyup="this.value = this.value.toUpperCase()"  class="validasi" style="width:100%">
+						</td>
+						<td style="text-align:center;;vertical-align:top;">
+							<input type="text" name="termin_jml[]" id="jml_1_{$acak}" idx="1" class="angka3" style="width:50px;height:26px;">
+						</td>
+						<td style="text-align:right;;vertical-align:top;">
+							<span id="termin_t_tot_1_{$acak}"></span>
+							<input type="hidden" name="termin_total[]" id="termin_tot_1_{$acak}" class="termin_tot" style="width:100%">
+						</td>
+						
+						
+						<td>&nbsp;</td>
+					</tr>
+					{else}
+					{foreach from=$data.termin item=i key=x}
+					<tr class="tr_em" id="tm_{$x}" idx={$x}>
+						<td>
+							<input type="text" name="termin_ket[]" onKeyup="this.value = this.value.toUpperCase()"  class="validasi" style="width:100%" value="{$i.ket|default:''}">
+						</td>
+						<td style="text-align:center;;vertical-align:top;">
+							<input type="text" name="termin_jml[]" id="jml_{$x}_{$acak}" idx="{$x}" class="angka3" style="width:50px;height:26px;" value="{$i.jml|default:''}">
+						</td>
+						<td style="text-align:right;;vertical-align:top;">
+							<span id="termin_t_tot_{$x}_{$acak}">{$i.total|number_format:0:',':'.'|default:''}</span>
+							<input type="hidden" name="termin_total[]" id="termin_tot_{$x}_{$acak}" class="termin_tot" style="width:100%" value="{$i.total|default:''}">
+						</td>
+						
+						
+						<td>&nbsp;</td>
+					</tr>
+					{/foreach}
+					{/if}
+				</tbody>
+			</table>
+		</td>
+	</tr-->
+</table>
+</form>
+<div class="control-group">
+	<center>
+	<label class="control-label" for="form-field-1"></label>
+	<div class="controls">
+		{include file="template/button_save.html" id_na="simpan_{$mod}"  btn_goyz="true" text="Simpan / Update"}
+		{include file="template/button_save.html" id_na="cancel_{$mod}"  btn_goyz="true" text="Kembali Ke List"}
+	</div>
+	</center>
+</div>		
+</div>
+</fieldset>
+
+<script>
+	
+	$('#b_vendor_{$acak}').click(function(){
+		loadingna();
+		$.post(host+"modul/get_konten/dt_po",function(r){
+			winLoadingClose();
+			windowForm(r,'Data Project',800,getClientHeight()-100);
+		})
+		
+	});
+	$('#b_project_{$acak}').click(function(){
+		loadingna();
+		$.post(host+"modul/get_konten/dt_project",function(r){
+			winLoadingClose();
+			windowForm(r,'Data Project',800,getClientHeight()-100);
+		})
+		
+	});
+	$('#cancel_{$mod}_{$acak}').click(function(){
+		$('#grid_nya_{$mod}').show();
+		$('#detil_nya_{$mod}').html('').hide();
+	});
+	$('#simpan_{$mod}_{$acak}').click(function(){
+		$(".validasi").validatebox({ required:true }); 
+		if ($('#form_{$acak}').form('validate')){
+			submit_form('form_{$acak}',function(r){
+				if(r==1){
+					winLoadingClose();
+					$.messager.alert('FORDZA',"Data Tersimpan",'info');
+					$('#grid_nya_{$mod}').show();
+					$('#detil_nya_{$mod}').html('').hide();
+					$('#grid_{$mod}').datagrid('reload');
+				}else{
+					winLoadingClose();
+					$.messager.alert('FORDZA',"Data Gagal Tersimpan",'error');
+					console.log(r);
+				}
+			});
+		}else{
+			$.messager.alert('BSR',"Isi Form Yang Kosong",'error');
+		}
+
+	});
+	
+	{if $sts_crud|default:'add' eq 'edit'}
+		loadingna();
+		$.post(host+'modul/get_konten/detil_masuk',{ id:{$data.h.id|default:0},editstatus:'edit' },function(r){
+			$('.dt_masuk').removeClass('loading').html(r);
+			winLoadingClose();
+		});
+	{/if}
+</script>

@@ -1,0 +1,64 @@
+<fieldset>
+<div class="span10">
+<form class="form-horizontal" id="form_{$acak}" url="{$host}modul/cruddata/tbl_upload_bukti" method="post" enctype="multipart/form-data">
+<table class="table table-hover">
+		<input type="hidden" name="id" value="{$data.id|default:''}">
+		<input type="hidden" name="tbl_h_pengajuan_id" value="{$tbl_h_pengajuan_id|default:''}">
+		<input type="hidden" name="sts_crud" value="{$sts_crud|default:'add'}">
+		<input type="hidden" name="flag" value="{$flag|default:'P'}">
+		
+		{include file="template/input_form.html" type='text' label="Tgl. Pembayaran *" id="tgl_pembayaran" name="tgl_pembayaran" style_type="width:80%" class="validasi tgl" value="{$data.tgl_pembayaran|default:''}"}
+		{include file="template/input_form.html" type='file' label="Bukti Pembayaran *" id="file" name="file" style_type="width:80%" class="validasi" value="{$data.file|default:''}"}
+		<tr>
+			<td>&nbsp;</td><td>File Exist</td><td>:</td>
+			<td style="font-weight:bold;">
+				<a href="{$host}__repo/bukti_pembayaran/{$data.file|default:''}">{$data.file|default:''}</a>
+			</td>
+		</tr>
+</table>
+	
+</form>
+<div class="control-group">
+	<center>
+	<label class="control-label" for="form-field-1"></label>
+	<div class="controls">
+		{include file="template/button_save.html" id_na="simpan_{$mod}"  btn_goyz="true" text="Upload"}
+		{include file="template/button_save.html" id_na="cancel_{$mod}"  btn_goyz="true" text="Kembali Ke List"}
+	</div>
+	</center>
+</div>		
+</div>
+</fieldset>
+
+<script>
+	var idx_row={$jml_row|default:1};
+	//$(".validasi").validatebox({ required:true }); 
+	$('.tgl').datepicker({
+		 format: 'yyyy-mm-dd',
+		 autoclose: true
+	});
+	
+	$('#cancel_{$mod}_{$acak}').click(function(){
+		closeWindow();
+	});
+	$('#simpan_{$mod}_{$acak}').click(function(){
+		$(".validasi").validatebox({ required:true }); 
+		if ($('#form_{$acak}').form('validate')){
+			submit_form('form_{$acak}',function(r){
+				if(r==1){
+					winLoadingClose();
+					$.messager.alert('BSR',"Data Tersimpan",'info');
+					closeWindow();
+					$('#grid_histori_pengajuan_po').datagrid('reload');
+				}else{
+					winLoadingClose();
+					$.messager.alert('BSR',"Data Gagal Tersimpan",'error');
+					console.log(r);
+				}
+			});
+		}else{
+			$.messager.alert('BSR',"Isi Form Yang Kosong",'error');
+		}
+
+	});
+</script>

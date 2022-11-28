@@ -1,0 +1,106 @@
+<style type="text/css">
+	.datagrid-row-over td{
+		background:#D0E5F5;
+	}
+	.datagrid-row-selected td{
+		background:#FBEC88;
+		color:#000;
+	}
+</style>
+<div id="grid_nya_{$main}" style="margin-left:8px;">
+	<div id='grid_{$main}'></div>
+	<div id='tb_{$main}' style="padding:5px;height:{$tinggi_toolbar|default:'35px'};">
+		<div style="float:{$align|default:'left'}; width:100%;">
+			<div style="float:{$align|default:'left'}; width:100%;">
+				<label style='width:100px;'>Pencarian </label>: &nbsp;&nbsp;
+				
+				<input type="text" name="key_{$acak}" id="key_{$acak}" style="width:50%;height:22px;">
+				&nbsp;&nbsp;&nbsp;
+				Supplier: &nbsp;
+				<select id="sup_{$acak}" name="sup" style="width:10%;height:22px;">
+					<option value="">-- All --</option>
+					{foreach from=$sup item=i}
+					<option value="{$i.kode_supplier}">{$i.supplier}</option>
+					{/foreach}
+					
+				</select>
+				{if $auth.cl_user_group_id eq 1}
+				<a href="javascript:void(0)" style='' class="l-btn l-btn-small l-btn-plain" group="" id="" onClick="tmp('template_stok');">
+					<span class="l-btn-left l-btn-icon-left">
+						<span class="l-btn-text">Download Template Excel</span><span class="l-btn-icon icon-excel">&nbsp;</span>
+					</span>
+				</a>
+				<a href="javascript:void(0)" style='' class="l-btn l-btn-small l-btn-plain" group="" id="" onClick="upl('upload_stok');">
+					<span class="l-btn-left l-btn-icon-left">
+						<span class="l-btn-text">Import Excel</span><span class="l-btn-icon icon-excel">&nbsp;</span>
+					</span>
+				</a>
+				&nbsp;
+				{/if}
+			</div>
+		</div>
+		
+				
+	</div>
+</div>
+<div id='detil_nya_{$main}' width='100%'></div>
+
+<script>
+$(function(){	
+	$('#grid_nya_{$main}').css({
+		'height':( {$height_grid|default:'getClientHeight()-140'} )
+	});
+	var dt=$("#grid_{$main}").datagrid({
+		rownumbers:true,
+		iconCls:'database',
+        fit:true,
+        striped:true,
+        pagination:true,
+        remoteSort: false,
+		showFooter:false,
+		singleSelect:true,
+        url: host+'modul/getdata/stok',		
+		nowrap: false,
+		pageSize:20,
+		pageList:[20,50,75,100,200],
+		queryParams:{
+			sts:'F'
+		},
+		toolbar: '#tb_{$main}',
+		columns:[[
+			
+			
+			{ field:'sku',title:'SKU',width:150, halign:'left',align:'left',rowspan:2 },
+			{ field:'nama_produk',title:'Nama Produk',width:250, halign:'left',align:'left',rowspan:2 },
+			{ field:'qty',title:'QTY',width:200, halign:'center',align:'center',colspan:{count($size)} },
+			
+        ],[
+			{foreach from=$size item=i}
+			{ field:'ukuran_{$i.id}',title:'{$i.ukuran}',width:80, halign:'center',align:'center',
+				styler: function(value,row,index){
+						if(value < 10 )return "background:#a4a5a5;color:#000";
+					}
+			},
+			{/foreach}
+		]],
+		onLoadSuccess: function(data){
+			$('#grid_dt_project_{$acak}').resizable();
+		}
+	});
+	$('#key_{$acak}').keypress(function(e) {
+		if(e.which == 13) {
+			var _post={};
+			_post['key']=$('#key_{$acak}').val();
+			_post['kode_supplier']=$('#sup_{$acak}').val();
+			dt.datagrid('reload',_post);
+		}
+	});
+	$('#sup_{$acak}').change(function(){
+		var _post={};
+			_post['key']=$('#key_{$acak}').val();
+			_post['kode_supplier']=$('#sup_{$acak}').val();
+			dt.datagrid('reload',_post);
+	});
+	
+});
+</script>

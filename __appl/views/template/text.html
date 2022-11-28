@@ -1,0 +1,14 @@
+{*
+<label>{$tanya|default:'-'}</label> : <input type="text" name="tanya_{$id_tanya}" id="tanya_{$id_tanya}_{$acak}" value="">
+*}
+
+{if $required|default:'' eq 'true'}
+	{assign var="req" value="required='required'"}	
+{else}
+	{assign var="req" value=""}
+{/if}
+
+<div class="form-group">
+	<label class="{$class_label|default:''}">{$label|default:'-'} {if $required|default:'' eq "true"}<font color="red">*</font>{/if}</label>
+	<input type="text" name="{$name}" {$req} id="{$id}" class="form-control {$class|default:''}">
+</div>

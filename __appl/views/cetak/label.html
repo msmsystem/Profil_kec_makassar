@@ -1,0 +1,122 @@
+<style>
+.divTable{
+	display: table;
+	width: 100%;
+}
+.divTableRow {
+	display: table-row;
+}
+.divTableHeading {
+	background-color: #EEE;
+	display: table-header-group;
+}
+.divTableCell, .divTableHead {
+	border: 1px solid #000;
+	display: table-cell;
+	padding: 3px 10px;
+	text-align:center;
+}
+.divTableHeading {
+	background-color: #EEE;
+	display: table-header-group;
+	font-weight: bold;
+}
+.divTableFoot {
+	background-color: #EEE;
+	display: table-footer-group;
+	font-weight: bold;
+}
+.divTableBody {
+	display: table-row-group;
+}
+</style>
+<center>
+<div style="width:100%;text-align:center;">
+	<div class="divTable">
+		<div class="divTableBody">
+			<div class="divTableRow">
+				<div class="divTableCell" style="width:70%">
+					<table style="font-family:tahoma;font-size:12px;">
+						<tr>
+							<td style="width:100%" colspan="2"><strong>{$data.h.no_invoice|default:''}</strong></td>
+						</tr>
+						<tr>
+							<td style="width:100%" colspan="2">&nbsp;</td>
+						</tr>
+						<tr style="font-size:15px;">
+							<td style="width:60%">Kepada :</td>
+							<td style="width:40%">Dari :</td>
+						</tr>
+						<tr>
+							<td style="width:50%;font-size:15px;">
+								<strong>{$data.h.nama_customer|default:''}</strong><br>
+								{$data.h.alamat_customer|default:''}<br>
+								{$data.h.telp_customer|default:''}<br>
+							</td>
+							<td style="width:50%;font-size:15px;">
+								<strong>{$data.h.nama_pengirim|default:''}</strong><br>
+								{$data.h.alamat_pengirim|default:''}<br>
+								{$data.h.telp_pengirim|default:''}<br>
+							</td>
+						</tr>
+						<tr>
+							<td style="width:100%" colspan="2">
+							&nbsp;
+							</td>
+							
+						</tr>
+						
+						<tr >
+							<td style="width:100%" colspan="2">
+							</hr>
+							<t/d>
+						</tr>
+						<tr>
+							<td style="width:100%" colspan="2">
+							<table style="width:100%;font-size:10px;">
+								<tr>
+									<td>No. </td>
+									<td>Produk</td>
+									<td style="text-align:right;">Jumlah</td>
+								</tr>
+								{foreach from=$data.d item=i name=x}
+								<tr>
+									<td>{$smarty.foreach.x.iteration}</td>
+									<td>{$i.nama_produk|default:''}</td>
+									<td style="text-align:right;">{$i.qty|default:''} pcs</td>
+								</tr>
+								{/foreach}
+							</table>
+							
+							
+							
+							<td>
+							
+						</tr>
+						<tr>
+							<td style="width:50%">
+							Total yang harus dibayarkan secara tunai oleh pembeli ke kurir  :
+							</td>
+							<td style="width:50%;font-size:11px;" >
+							Rp. {$data.h.grand_total|number_format:0:'.':','|default:''}
+							</td>
+						</tr>
+					</table>
+				</div >
+			</div>
+		</div>
+	</div>
+</div>
+<!-- DivTable.com -->
+
+<table style="width:100%;border:1px">
+	<tr >
+		<td style="text-align:right;vertical-align:top;width:50%" rowspan="2">
+			
+		</td>
+		<td style="text-align:left;;vertical-align:middle;width:50%">
+			
+		</td>
+	</tr>
+</table>
+</center>

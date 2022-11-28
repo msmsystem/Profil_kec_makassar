@@ -1,0 +1,66 @@
+<fieldset>
+	<legend>Form Master Provinsi</legend>
+<div class="span10">
+<form class="form-horizontal" id="form_{$acak}" url="{$host}modul/cruddata/cl_provinsi" method="post" enctype="multipart/form-data">
+<table class="table table-hover">
+		<!--input type="hidden" name="id" value="{$data.id|default:''}"-->
+		<input type="hidden" name="sts_crud" value="{$sts_crud|default:'add'}">
+		
+		{include file="template/input_form.html" type='text' label="ID/Kode *" id="id" name="id" style_type="width:80%" class="validasi" value="{$data.id|default:''}"}
+		{include file="template/input_form.html" type='text' label="Nama Provinsi *" id="nama" name="nama" style_type="width:80%" class="validasi" value="{$data.nama|default:''}"}
+		
+		
+</table>
+	
+</form>
+<div class="control-group">
+	<center>
+	<label class="control-label" for="form-field-1"></label>
+	<div class="controls">
+		{include file="template/button_save.html" id_na="simpan_{$mod}"  btn_goyz="true" text="Simpan / Update"}
+		{include file="template/button_save.html" id_na="cancel_{$mod}"  btn_goyz="true" text="Kembali Ke List"}
+	</div>
+	</center>
+</div>		
+</div>
+</fieldset>
+
+<script>
+	var idx_row={$jml_row|default:1};
+	//$(".validasi").validatebox({ required:true }); 
+	/*$('.tgl').datepicker({
+		 format: 'yyyy-mm-dd',
+		 autoclose: true
+	});
+	*/
+	
+	$('#cancel_{$mod}_{$acak}').click(function(){
+		$('#grid_nya_{$mod}').show();
+		$('#detil_nya_{$mod}').html('').hide();
+	});
+	$('#simpan_{$mod}_{$acak}').click(function(){
+		$(".validasi").validatebox({ required:true }); 
+		if ($('#form_{$acak}').form('validate')){
+			submit_form('form_{$acak}',function(r){
+				if(r==1){
+					winLoadingClose();
+					$.messager.alert('BSR',"Data Tersimpan",'info');
+					$('#grid_nya_{$mod}').show();
+					$('#detil_nya_{$mod}').html('').hide();
+					$('#grid_{$mod}').datagrid('reload');
+				}else if(r==2){
+					winLoadingClose();
+					$.messager.alert('BSR',"NAMA USER SUDAH ADA!!!",'warning');
+					//console.log(r);
+				}else{
+					winLoadingClose();
+					$.messager.alert('BSR',"Data Gagal Tersimpan",'error');
+					console.log(r);
+				}
+			});
+		}else{
+			$.messager.alert('BSR',"Isi Form Yang Kosong",'error');
+		}
+
+	});
+</script>

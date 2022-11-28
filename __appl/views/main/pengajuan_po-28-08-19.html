@@ -1,0 +1,198 @@
+<style>
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+}
+.fileUpload input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+</style>
+<fieldset>
+	<legend>Pengajuan Anggaran PO</legend>
+<div class="span10">
+<form class="form-horizontal" id="form_{$acak}" url="{$host}modul/cruddata/{$mod}" method="post" enctype="multipart/form-data">
+<input type="hidden" name="id" value="{$data.h.id|default:''}">
+<input type="hidden" name="sts_crud" value="{$sts_crud|default:'add'}">
+<table class="table">
+	<tr>
+		<td>
+			<table class="table">
+				<tr>
+					<td>&nbsp;</td><td>PO</td><td>:</td>
+					<td style="font-weight:bold;">
+						<div class="input-group input-group-sm">
+							<input type="hidden" class="form-control id_na" readonly name="tbl_h_po_id" id="tbl_h_po_id_{$acak}" value="{$data.h.tbl_h_po_id|default:''}">
+							<input type="text" class="form-control kd_na" readonly name="no_po" id="no_po_{$acak}" value="{$data.h.no_po|default:''}">
+								<span class="input-group-btn">
+								  <a class="btn btn-info btn-flat" type="button" id="b_po_{$acak}">...</a>
+								</span>
+						</div>
+					</td>
+				</tr>
+				{include file="template/input_form.html" type='text' label="Kode Project *" id="kode_project" name="kode_project" style_type="width:80%" class="validasi kode_project_na" value="{$data.h.kode_project|default:''}" readonly="readonly"}
+				{include file="template/input_form.html" type='text' label="Tgl. Pengajuan *" id="tgl" name="tgl" style_type="width:80%" class="validasi" value="{$data.h.tgl|default:$smarty.now|date_format:"%Y-%m-%d"}" readonly="readonly"}
+			</table>
+		</td>
+		<td>
+			<table class="table">
+				<input type="hidden" name="t_po" id="t_po_{$acak}" class="t_po_na" value="{$data.h.grand_total_ppn|default:0}">
+				{include file="template/input_form.html" type='text' label="Total PO *" id="total_po" name="total_po" style_type="width:80%" class="validasi total_na" value="{$data.h.grand_total_ppn|number_format:0:',':'.'|default:''}" readonly="readonly"}
+				{include file="template/input_form.html" type='text' label="Nama Project *" id="nama_project" name="nama_project" style_type="width:80%" class="validasi nm_na" value="{$data.h.nama_project|default:''}" readonly="readonly"}
+				{include file="template/input_form.html" type='text' label="Diajukan Oleh *" id="create_by" name="create_by" style_type="width:80%" class="validasi" value="{$auth.nama_lengkap|default:''}" readonly="readonly"}
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<table class="table table-bordered table-hovered">
+				<thead style="background:#3C8DBC;color:#fff;">
+					<tr>
+						<th style="text-align:left;;vertical-align:middle;width:50%;" >Item Pengajuan</th>
+						<th style="text-align:center;;vertical-align:middle;width:10%;">Jml(%)</th>
+						<th style="text-align:left;;vertical-align:middle;width:30%;">Total</th>
+						<th style="text-align:center;;vertical-align:middle;width:10%;"><a href="javascript:void(0);" class="btn btn-sm btn-warning" onclick="tambah_row('bd_peng_po','{$acak}')">+</a></th>
+					</tr>
+				</thead>
+				
+				<tbody style="background:#D4E8F4;" class="bd_peng_po">
+					{if $sts_crud|default:'add' eq 'add'}
+					<tr class="tr_em" id="tm_1" idx=1>
+						<td>
+							<input type="text" name="ket[]" onKeyup="this.value = this.value.toUpperCase()"  class="validasi autoo" style="width:100%">
+						</td>
+						<td style="text-align:center;;vertical-align:top;">
+							<input type="text" name="qty[]" id="qty_1_{$acak}" idx="1" class="angka4 au_1" style="width:50px;height:26px;">
+						</td>
+						<td style="text-align:right;;vertical-align:top;">
+							Rp. <span id="t_tot_1_{$acak}"></span>
+							<input type="hidden" name="total[]" id="tot_1_{$acak}" class="h_tot" style="width:100%">
+						</td>
+						<td>&nbsp;</td>
+					</tr>
+					{else}
+					{foreach from=$data.d item=i key=x}
+					{assign var=total value=$i.qty*$i.harga}
+					<tr class="tr_em" id="tm_{$x}" idx={$x}>
+						<td>
+							<input type="text" name="ket[]" onKeyup="this.value = this.value.toUpperCase()"  class="validasi autoo" style="width:100%" value="{$i.ket|default:''}">
+						</td>
+						<td style="text-align:center;;vertical-align:top;">
+							<input type="text" name="qty[]" id="qty_{$x}_{$acak}" idx="{$x}" class="angka4 au_{$x}" style="width:50px;height:26px;" value="{$i.qty|default:''}">
+						</td>
+						<td style="text-align:right;;vertical-align:top;">
+							Rp. <span id="t_tot_{$x}_{$acak}">{$i.total|number_format:0:',':'.'|default:''}</span>
+							<input type="hidden" name="total[]" id="tot_{$x}_{$acak}" class="h_tot" style="width:100%" value="{$i.total|default:''}">
+						</td>
+						<td style="text-align:center;vertical-align:middle;"><a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="$(this).parents('tr').first().remove();hitung_total_po();">-</a></td>
+					</tr>
+					{/foreach}
+					{/if}
+				</tbody>
+				<tfoot>
+					<tr style="background:#3C8DBC;color:#fff;">
+						<td style="text-align:left;;vertical-align:middle;width:50%" >Grand Total</td>
+						<td style="text-align:right;;vertical-align:middle;"><span id="h_tot_qty"></span></td>
+						<td style="text-align:right;;vertical-align:middle;">Rp. <span id="h_tot"></span><input type="hidden" name="grand_total" id="grand_total"  style="width:100%"></td>
+						<td style="text-align:center;;vertical-align:middle;">&nbsp;</td>
+					</tr>
+				</tfoot>
+			</table>
+		</td>
+	</tr>
+</table>
+</form>
+<div class="control-group">
+	<center>
+	<label class="control-label" for="form-field-1"></label>
+	<div class="controls">
+		{include file="template/button_save.html" id_na="simpan_{$mod}"  btn_goyz="true" text="Simpan / Update"}
+		{include file="template/button_save.html" id_na="cancel_{$mod}"  btn_goyz="true" text="Kembali Ke List"}
+	</div>
+	</center>
+</div>		
+</div>
+</fieldset>
+
+<script>
+	var idx_row={$jml_row|default:1};
+	//$(".validasi").validatebox({ required:true }); 
+	{if $sts_crud|default:'add' eq 'edit'}hitung_total();{/if}
+	$('.angka4').numberbox({
+		required:true,min:0,precision:0,groupSeparator:',',decimalSeparator:'.',
+		onChange:function(x,y){
+			//console.log();
+			var idx=($(this).attr('idx'));
+			var harga=parseFloat($('#t_po_{$acak}').val());
+			var t_tot=((x/100) * harga);
+			console.log(t_tot);
+			$('#t_tot_'+idx+'_{$acak}').html(NumberFormat(t_tot));
+			$('#tot_'+idx+'_{$acak}').val(t_tot);
+			hitung_total_po();
+		}
+	});
+	$('.tgl').datepicker({
+		 format: 'yyyy-mm-dd',
+		 autoclose: true
+	});
+	
+	$('.autoo').autoComplete({
+		minChars: 1,
+		source: function(term, response){
+			$.getJSON(host+'modul/getdata/auto_po',{ q: term,po:$('#tbl_h_po_id_{$acak}').val() },function(data){ response(data); });
+		},
+		renderItem: function (item, search){
+			{literal}search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');{/literal}
+			var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
+			return '<div class="autocomplete-suggestion" data-id="'+item[1]+'" data-jml="'+item[2]+'" data-total="'+item[3]+'" data-val="' + item[0] + '">'
+				+ item[0].replace(re, "<b>$1</b>") + '</div>';
+		},
+		onSelect: function(e, term, item){
+			//alert('Item "'+item.data('val')+' ('+item.data('id')+')" selected by '+(e.type == 'keydown' ? 'pressing enter' : 'mouse click')+'.');
+			$('.au_1').numberbox('setValue',item.data('jml'));
+			$('#t_tot_1_{$acak}').html(NumberFormat(item.data('total')));
+			$('#tot_1_{$acak}').val(item.data('total'));
+			hitung_total_po();
+		}
+	});
+	$('#b_po_{$acak}').click(function(){
+		loadingna();
+		$.post(host+"modul/get_konten/dt_po",function(r){
+			winLoadingClose();
+			windowForm(r,'Data Project',800,getClientHeight()-100);
+		})
+		
+	});
+	$('#cancel_{$mod}_{$acak}').click(function(){
+		$('#grid_nya_{$mod}').show();
+		$('#detil_nya_{$mod}').html('').hide();
+	});
+	$('#simpan_{$mod}_{$acak}').click(function(){
+		$(".validasi").validatebox({ required:true }); 
+		if ($('#form_{$acak}').form('validate')){
+			submit_form('form_{$acak}',function(r){
+				if(r==1){
+					winLoadingClose();
+					$.messager.alert('BSR',"Data Tersimpan",'info');
+					$('#grid_nya_{$mod}').show();
+					$('#detil_nya_{$mod}').html('').hide();
+					$('#grid_{$mod}').datagrid('reload');
+				}else{
+					winLoadingClose();
+					$.messager.alert('BSR',"Data Gagal Tersimpan",'error');
+					console.log(r);
+				}
+			});
+		}else{
+			$.messager.alert('BSR',"Isi Form Yang Kosong",'error');
+		}
+
+	});
+</script>

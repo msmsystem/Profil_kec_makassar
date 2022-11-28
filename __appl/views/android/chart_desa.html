@@ -1,0 +1,546 @@
+<div class="col-md-12" style="margin-top:10px;">
+	<div class="nav-tabs-custom" >
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#tab_1" data-toggle="tab">Data Pelayanan</a></li>
+			<li><a href="#tab_2" data-toggle="tab">Data Grafik</a></li>
+		</ul>
+	<div class="tab-content">
+		<div class="tab-pane active" id="tab_1">
+			{include file="android/pelayanan_desa.html"}
+		</div>
+
+		<div class="tab-pane" id="tab_2">
+			<div class="row" style="margin-bottom:20px;">
+				<div class="col-lg-6">
+					<div class="box box-success">
+						<div class="box-header with-border">
+							<h3 class="box-title">Statistik Berdasarkan Jenis Kelamin</h3>
+						</div>
+						<div class="box-body">
+							<div class="row">
+								<div class="col-lg-6">
+									<div id="chart_jenis_kelamin"></div>
+								</div>
+								<div class="col-lg-6">
+									<table class="table table-bordered table-striped">
+										<tbody>
+											{foreach from=$data.jenis_kelamin item=rows key=x}
+												{if $x eq '0'}
+													<tr>
+														<td width="70%">{$rows.keterangan|upper|default:''}</td>
+														<td width="30%" class="text-center">{$rows.total|number_format:0:",":"."|default:''}</td>
+													</tr>
+												{else}
+													<tr>
+														<td>{$rows.keterangan|upper|default:''}</td>
+														<td class="text-center">{$rows.total|number_format:0:",":"."|default:''}</td>
+													</tr>
+												{/if}
+											{/foreach}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="box box-danger">
+						<div class="box-header with-border">
+							<h3 class="box-title">Statistik Berdasarkan Agama</h3>
+						</div>
+						<div class="box-body">
+							<div class="row">
+								<div class="col-lg-6">
+									<div id="chart_agama"></div>
+								</div>
+								<div class="col-lg-6">
+									<table class="table table-bordered table-striped">
+										<tbody>
+											{foreach from=$data.agama item=rows key=x}
+												{if $x eq '0'}
+													<tr>
+														<td width="60%">{$rows.keterangan|upper|default:''}</td>
+														<td width="40%" class="text-center">{$rows.total|number_format:0:",":"."|default:''}</td>
+													</tr>
+												{else}
+													<tr>
+														<td>{$rows.keterangan|upper|default:''}</td>
+														<td class="text-center">{$rows.total|number_format:0:",":"."|default:''}</td>
+													</tr>
+												{/if}
+											{/foreach}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+
+			<div class="row" style="margin-bottom:20px;">
+				<div class="col-lg-6">
+					<div class="box box-danger">
+						<div class="box-header with-border">
+							<h3 class="box-title">Statistik Berdasarkan Status Data</h3>
+						</div>
+						<div class="box-body">
+							<div class="row">
+								<div class="col-lg-6">
+									<div id="chart_status_data"></div>
+								</div>
+								<div class="col-lg-6">
+									<table class="table table-bordered table-striped">
+										<tbody>
+											{foreach from=$data.status_data item=rows key=x}
+												{if $x eq '0'}
+													<tr>
+														<td width="70%">{$rows.keterangan|upper|default:''}</td>
+														<td width="30%" class="text-center">{$rows.total|number_format:0:",":"."|default:''}</td>
+													</tr>
+												{else}
+													<tr>
+														<td>{$rows.keterangan|upper|default:''}</td>
+														<td class="text-center">{$rows.total|number_format:0:",":"."|default:''}</td>
+													</tr>
+												{/if}
+											{/foreach}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="box box-success">
+						<div class="box-header with-border">
+							<h3 class="box-title">Statistik Berdasarkan Status Kawin</h3>
+						</div>
+						<div class="box-body">
+							<div class="row">
+								<div class="col-lg-6">
+									<div id="chart_status_kawin"></div>
+								</div>
+								<div class="col-lg-6">
+									<table class="table table-bordered table-striped">
+										<tbody>
+											{foreach from=$data.status_kawin item=rows key=x}
+												{if $x eq '0'}
+													<tr>
+														<td width="70%">{$rows.keterangan|upper|default:''}</td>
+														<td width="30%" class="text-center">{$rows.total|number_format:0:",":"."|default:''}</td>
+													</tr>
+												{else}
+													<tr>
+														<td>{$rows.keterangan|upper|default:''}</td>
+														<td class="text-center">{$rows.total|number_format:0:",":"."|default:''}</td>
+													</tr>
+												{/if}
+											{/foreach}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row" style="margin-bottom:20px;">
+				<div class="col-lg-12">
+					<div class="box box-info">
+						<div class="box-header with-border">
+							<h3 class="box-title">Statistik Berdasarkan Pendidikan</h3>
+						</div>
+						<div class="box-body">
+							<div class="row">
+								<div class="col-lg-9">
+									<div id="chart_pendidikan"></div>
+								</div>
+								<div class="col-lg-3">
+									<table class="table table-bordered table-striped">
+										<tbody>
+											{foreach from=$data.pendidikan item=rows key=x}
+												{if $x eq '0'}
+													<tr>
+														<td width="60%">{$rows.keterangan|upper|default:''}</td>
+														<td width="40%" class="text-center">{$rows.total|number_format:0:",":"."|default:''}</td>
+													</tr>
+												{else}
+													<tr>
+														<td>{$rows.keterangan|upper|default:''}</td>
+														<td class="text-center">{$rows.total|number_format:0:",":"."|default:''}</td>
+													</tr>
+												{/if}
+											{/foreach}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="box box-info">
+						<div class="box-header with-border">
+							<h3 class="box-title">Statistik Berdasarkan Range Umur Penduduk</h3>
+						</div>
+						<div class="box-body">
+							<div class="row">
+								<div class="col-lg-9">
+									<div id="chart_range_umur"></div>
+								</div>
+								<div class="col-lg-3">
+									<table class="table table-bordered table-striped">
+										<tbody>
+											{foreach from=$data.range_umur item=rows key=x}
+												{if $x eq '0'}
+													<tr>
+														<td width="60%">{$rows.keterangan|upper|default:''}</td>
+														<td width="40%" class="text-center">{$rows.total|number_format:0:",":"."|default:''}</td>
+													</tr>
+												{else}
+													<tr>
+														<td>{$rows.keterangan|upper|default:''}</td>
+														<td class="text-center">{$rows.total|number_format:0:",":"."|default:''}</td>
+													</tr>
+												{/if}
+											{/foreach}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		
+
+	</div>
+
+	</div>
+
+</div>
+<!--div class="row" style="margin-bottom:20px;">
+	<div class="col-lg-6">
+		<div class="box box-success">
+			<div class="box-header with-border">
+				<h3 class="box-title">Statistik Berdasarkan Jenis Kelamin</h3>
+			</div>
+			<div class="box-body">
+				<div class="row">
+					<div class="col-lg-6">
+						<div id="chart_jenis_kelamin"></div>
+					</div>
+					<div class="col-lg-6">
+						<table class="table table-bordered table-striped">
+							<tbody>
+								{foreach from=$data.jenis_kelamin item=rows key=x}
+									{if $x eq '0'}
+										<tr>
+											<td width="70%">{$rows.keterangan|upper|default:''}</td>
+											<td width="30%" class="text-center">{$rows.total|number_format:0:",":"."|default:''}</td>
+										</tr>
+									{else}
+										<tr>
+											<td>{$rows.keterangan|upper|default:''}</td>
+											<td class="text-center">{$rows.total|number_format:0:",":"."|default:''}</td>
+										</tr>
+									{/if}
+								{/foreach}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-6">
+		<div class="box box-danger">
+			<div class="box-header with-border">
+				<h3 class="box-title">Statistik Berdasarkan Agama</h3>
+			</div>
+			<div class="box-body">
+				<div class="row">
+					<div class="col-lg-6">
+						<div id="chart_agama"></div>
+					</div>
+					<div class="col-lg-6">
+						<table class="table table-bordered table-striped">
+							<tbody>
+								{foreach from=$data.agama item=rows key=x}
+									{if $x eq '0'}
+										<tr>
+											<td width="60%">{$rows.keterangan|upper|default:''}</td>
+											<td width="40%" class="text-center">{$rows.total|number_format:0:",":"."|default:''}</td>
+										</tr>
+									{else}
+										<tr>
+											<td>{$rows.keterangan|upper|default:''}</td>
+											<td class="text-center">{$rows.total|number_format:0:",":"."|default:''}</td>
+										</tr>
+									{/if}
+								{/foreach}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+
+<div class="row" style="margin-bottom:20px;">
+	<div class="col-lg-6">
+		<div class="box box-danger">
+			<div class="box-header with-border">
+				<h3 class="box-title">Statistik Berdasarkan Status Data</h3>
+			</div>
+			<div class="box-body">
+				<div class="row">
+					<div class="col-lg-6">
+						<div id="chart_status_data"></div>
+					</div>
+					<div class="col-lg-6">
+						<table class="table table-bordered table-striped">
+							<tbody>
+								{foreach from=$data.status_data item=rows key=x}
+									{if $x eq '0'}
+										<tr>
+											<td width="70%">{$rows.keterangan|upper|default:''}</td>
+											<td width="30%" class="text-center">{$rows.total|number_format:0:",":"."|default:''}</td>
+										</tr>
+									{else}
+										<tr>
+											<td>{$rows.keterangan|upper|default:''}</td>
+											<td class="text-center">{$rows.total|number_format:0:",":"."|default:''}</td>
+										</tr>
+									{/if}
+								{/foreach}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-6">
+		<div class="box box-success">
+			<div class="box-header with-border">
+				<h3 class="box-title">Statistik Berdasarkan Status Kawin</h3>
+			</div>
+			<div class="box-body">
+				<div class="row">
+					<div class="col-lg-6">
+						<div id="chart_status_kawin"></div>
+					</div>
+					<div class="col-lg-6">
+						<table class="table table-bordered table-striped">
+							<tbody>
+								{foreach from=$data.status_kawin item=rows key=x}
+									{if $x eq '0'}
+										<tr>
+											<td width="70%">{$rows.keterangan|upper|default:''}</td>
+											<td width="30%" class="text-center">{$rows.total|number_format:0:",":"."|default:''}</td>
+										</tr>
+									{else}
+										<tr>
+											<td>{$rows.keterangan|upper|default:''}</td>
+											<td class="text-center">{$rows.total|number_format:0:",":"."|default:''}</td>
+										</tr>
+									{/if}
+								{/foreach}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row" style="margin-bottom:20px;">
+	<div class="col-lg-12">
+		<div class="box box-info">
+			<div class="box-header with-border">
+				<h3 class="box-title">Statistik Berdasarkan Pendidikan</h3>
+			</div>
+			<div class="box-body">
+				<div class="row">
+					<div class="col-lg-9">
+						<div id="chart_pendidikan"></div>
+					</div>
+					<div class="col-lg-3">
+						<table class="table table-bordered table-striped">
+							<tbody>
+								{foreach from=$data.pendidikan item=rows key=x}
+									{if $x eq '0'}
+										<tr>
+											<td width="60%">{$rows.keterangan|upper|default:''}</td>
+											<td width="40%" class="text-center">{$rows.total|number_format:0:",":"."|default:''}</td>
+										</tr>
+									{else}
+										<tr>
+											<td>{$rows.keterangan|upper|default:''}</td>
+											<td class="text-center">{$rows.total|number_format:0:",":"."|default:''}</td>
+										</tr>
+									{/if}
+								{/foreach}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="box box-info">
+			<div class="box-header with-border">
+				<h3 class="box-title">Statistik Berdasarkan Range Umur Penduduk</h3>
+			</div>
+			<div class="box-body">
+				<div class="row">
+					<div class="col-lg-9">
+						<div id="chart_range_umur"></div>
+					</div>
+					<div class="col-lg-3">
+						<table class="table table-bordered table-striped">
+							<tbody>
+								{foreach from=$data.range_umur item=rows key=x}
+									{if $x eq '0'}
+										<tr>
+											<td width="60%">{$rows.keterangan|upper|default:''}</td>
+											<td width="40%" class="text-center">{$rows.total|number_format:0:",":"."|default:''}</td>
+										</tr>
+									{else}
+										<tr>
+											<td>{$rows.keterangan|upper|default:''}</td>
+											<td class="text-center">{$rows.total|number_format:0:",":"."|default:''}</td>
+										</tr>
+									{/if}
+								{/foreach}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div-->
+<script>
+var chartJenisKelamin =  [{
+        name: 'JENIS KELAMIN',
+        colorByPoint: true,
+        data: 
+        [
+			{foreach from=$data.jenis_kelamin item=rows}
+				{
+					name: '{$rows.keterangan}',
+					y: {$rows.total},
+					color: '{$rows.color}',
+				},
+			{/foreach}
+		]
+    }];
+	
+	genPieChart("chart_jenis_kelamin", "jenis_kelamin", "", chartJenisKelamin);
+	
+var chartAgama =  [{
+        name: 'AGAMA',
+        colorByPoint: true,
+        data: 
+        [
+			{foreach from=$data.agama item=rows}
+				{
+					name: '{$rows.keterangan}',
+					y: {$rows.total},
+					color: '{$rows.color}',
+				},
+			{/foreach}
+		]
+    }];
+	
+	genPieChart("chart_agama", "agama", "", chartAgama);
+	
+var chartStatusData =  [{
+        name: 'STATUS DATA',
+        colorByPoint: true,
+        data: 
+        [
+			{foreach from=$data.status_data item=rows}
+				{
+					name: '{$rows.keterangan}',
+					y: {$rows.total},
+					color: '{$rows.color}',
+				},
+			{/foreach}
+		]
+    }];
+	
+	genPieChart("chart_status_data", "status_data", "", chartStatusData);
+	
+var chartStatusKawin =  [{
+        name: 'STATUS KAWIN',
+        colorByPoint: true,
+        data: 
+        [
+			{foreach from=$data.status_kawin item=rows}
+				{
+					name: '{$rows.keterangan}',
+					y: {$rows.total},
+					color: '{$rows.color}',
+				},
+			{/foreach}
+		]
+    }];
+	
+	genPieChart("chart_status_kawin", "status_kawin", "", chartStatusKawin);
+	
+var chartXXPendidikan = [
+		{foreach from=$data.pendidikan item=rows}
+			'{$rows.keterangan}',
+		{/foreach}
+	];
+	var chartPendidikan = [
+		{
+			name : 'GRAFIK PENDIDIKAN',
+			color : '#FFAA00',
+			data : [
+				{foreach from=$data.pendidikan item=rows}
+					{$rows.total},
+				{/foreach}
+			]
+		}
+	];
+	genColumnChart("chart_pendidikan", "pendidikan", chartXXPendidikan, chartPendidikan);
+	
+var chartXXUmur = [
+		{foreach from=$data.range_umur item=rows}
+			'{$rows.keterangan}',
+		{/foreach}
+	];
+	var chartUmur = [
+		{
+			name : 'GRAFIK RANGE UMUR',
+			color : '#D30102',
+			data : [
+				{foreach from=$data.range_umur item=rows}
+					{$rows.total},
+				{/foreach}
+			]
+		}
+	];
+	genColumnChart("chart_range_umur", "range_umur", chartXXUmur, chartUmur);
+</script>

@@ -1,0 +1,97 @@
+<fieldset><legend>Vendor</legend>
+<table class="table">
+	<tr>
+		<td>
+			<table class="table">
+				
+				{include file="template/input_form.html" type='text' label="Nama Vendor *" id="kode_project" name="kode_project" style_type="width:80%" class="validasi kode_project_na" value="{$vendor.nama_vendor|default:''}" readonly="readonly"}
+				{include file="template/input_form.html" type='text' label="Alamat *" id="tgl" name="tgl" style_type="width:80%" class="" value="{$vendor.alamat|default:''}" readonly="readonly"}
+			</table>
+		</td>
+		<td>
+			<table class="table">
+				<input type="hidden" name="t_po" id="t_po_{$acak}" class="t_po_na" value="{$data.h.grand_total_ppn|default:0}">
+				{include file="template/input_form.html" type='text' label="PIC *" id="pic" name="pic" style_type="width:80%" class="" value="{$vendor.pic|default:''}" readonly="readonly"}
+				{include file="template/input_form.html" type='text' label="Tlp. *" id="no_tlp" name="no_tlp" style_type="width:80%" class="" value="{$vendor.no_tlp|default:''}" readonly="readonly"}
+			</table>
+		</td>
+	</tr>
+</table>
+</fieldset>
+<fieldset><legend>List Item Barang</legend>
+<div id="grid_nya_dt_project_{$acak}" style="margin-left:8px;">
+	<div id='grid_dt_project_{$acak}'></div>
+	<div id='tb_dt_project_{$acak}' style="padding:5px;height:{$tinggi_toolbar|default:'35px'};">
+		<!--div style="float:{$align|default:'left'}; width:100%;">
+			<label style='width:100px;'>Pencarian </label>: &nbsp;&nbsp;
+			<input type="text" name="key_{$acak}" id="key_{$acak}" style="width:50%;height:22px;">
+			&nbsp;&nbsp;&nbsp;
+		</div-->
+	</div>
+	
+</div>
+</fieldset>
+<br>
+<center>
+{include file="template/button_save.html" id_na="cancel_{$mod}"  btn_goyz="true" text="Kembali Ke List"}
+</center>
+<script>
+$('#grid_nya_dt_project_{$acak}').css('height',(getClientHeight()-150));
+$('#cancel_{$mod}_{$acak}').click(function(){
+	$('#grid_nya_cl_vendor').show();
+	$('#detil_nya_cl_vendor').html('').hide();
+	grid_nya.resizable();
+	grid_nya.datagrid('reload');
+});
+var dt=$("#grid_dt_project_{$acak}").datagrid({
+		rownumbers:true,
+		iconCls:'database',
+        fit:true,
+        striped:true,
+        pagination:true,
+        remoteSort: false,
+		showFooter:false,
+		singleSelect:true,
+        url: host+'modul/getdata/cl_katalog',		
+		nowrap: false,
+		pageSize:15,
+		pageList:[15,25,50,75,100,200],
+		queryParams:{
+			vendor:{$vendor.id|default:0}
+		},
+		//toolbar: '#tb_dt_project_{$acak}',
+		columns:[[
+			{ field:'nama_barang',title:'Item Barang',width:600, halign:'left',align:'left' },
+			{ field:'satuan',title:'Satuan',width:100, halign:'left',align:'left' },
+			{ field:'harga_satuan',title:'Harga',width:120, halign:'right',align:'right',
+				formatter: function(value,row,index){
+					return NumberFormat(value);
+				}
+			},
+			{ field:'status',title:'Status',width:100, halign:'left',align:'left',
+				formatter: function(value,row,index){
+					if(value=='A')return 'Aktif';
+					else return 'Tidak Aktif';
+				}
+			},
+			{ field:'id',title:'<a href="javascript:void(0);" onclick="get_form_katalog(\'add\',{$vendor.id|default:0},0)" class="btn btn-sm btn-primary" style="margin-top:-5px;">+</a>',width:150, halign:'center',align:'center',
+				formatter: function(value,row,index){
+					return '<a href="javascript:void(0);" onclick="get_form_katalog(\'edit\',{$vendor.id|default:0},'+row.id+')" class="btn btn-sm btn-warning" >Edit</a> | <a href="javascript:void(0);" onclick="get_form_katalog(\'delete\',{$vendor.id|default:0},'+row.id+')" class="btn btn-sm btn-danger">Hapus</a>'
+				}
+			}
+        ]],
+		onLoadSuccess: function(data){
+			//$('#grid_dt_project_{$acak}').resizable();
+		}
+	});
+	$("#key_{$acak}").keypress(function(e) {
+		if(e.which == 13) {
+			dt.datagrid('reload',{ key:$(this).val(),vendor:{$vendor.id|default:0} });
+		}
+	});
+	function pilih_project(kode,nm){
+		$('.kd_na').val(kode);
+		$('.nm_na').val(nm);
+		closeWindow();
+	}
+</script>

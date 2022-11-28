@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    
+<!-- Mirrored from coderthemes.com/uplon_1.5/horizontal/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 05 Jun 2017 05:53:27 GMT -->
+<head>
+        <meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc.">
+        <meta name="author" content="Coderthemes">
+
+        <!-- App Favicon -->
+        <link rel="shortcut icon" href="{$host}__assets/img/logo-scisi.png">
+        <title></title>
+        {$main_css}
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">	
+		<script>
+			var host = "{$host}";
+			var setting = "{$isi_setting|default:''}";
+			var nama_lengkap = "{$auth.nama_lengkap|default:''}";
+			var group_user = "{$auth.cl_user_group_id|default:''}";
+			var nama_apps = "SILURAH ONLINE";
+			var peta;
+		</script>
+		
+		{$main_js}
+		
+        <!--script src="{$host}__assets/js/fungsi_android.js"></script-->		
+    </head>
+
+    <body>
+		{include file = "android/{$temp|default:''}"}
+        <div id="modal_nya" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog " role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="judul_modal"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="isi_modal">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+	</body>
+</html>
+

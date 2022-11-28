@@ -1,0 +1,103 @@
+<div class="row">
+	<div class="col-12">
+          <div class="card-box">
+			<form id="form_{$acak}" method="post"  url ="{$host}home/cruddata/{$mod}" enctype="multipart/form-data">
+			<input type="hidden" name="id" value="{$data.id|default:''}">
+			<input type="hidden" name="sts_crud" value="{$sts|default:'add'}">
+              <h4 class="header-title m-t-0 m-b-30">Form Input User</h4>
+			  {if $sts|default:'add' eq 'add'}
+              {include file="template/input_form.html" type='text' label="User ID" id="nama_user" name="nama_user" style_type="width:100%" class="validasi" value="{$data.nama_user|default:''}"}
+              {include file="template/input_form.html" type='pwd' label="Password" id="password" name="password" style_type="width:100%" class="validasi" value="{$data.password|default:''}"}
+			  {else}
+			  <div class="form-group row">
+				  <label class="col-sm-2">USER ID</label>
+				  <div class="col-sm-10">
+					  {$data.nama_user}
+				  </div>
+              </div>
+			  {/if}
+			  <div class="form-group row">
+				  <label class="col-sm-2">Group</label>
+				  <div class="col-sm-10">
+					  <select name="pcm_cl_user_group_id" id="pcm_cl_user_group_id_{$acak}" class="form-control" style="width:100%">
+						{foreach from=$group item=i}
+							<option value="{$i.id}">{$i.user_group}</option>
+						{/foreach}
+					  </select>
+				  </div>
+              </div>
+			  <div class="form-group row">
+				  <label class="col-sm-2">Unit</label>
+				  <div class="col-sm-10">
+					  <select name="pcm_cost_center_id" id="pcm_cost_center_id_{$acak}" class="form-control" style="width:100%">
+						{foreach from=$cc item=i}
+							<option value="{$i.id}">{$i.description}</option>
+						{/foreach}
+					  </select>
+				  </div>
+              </div>
+			  {include file="template/input_form.html" type='text' label="Nama Lengkap" id="nama_lengkap" name="nama_lengkap" style_type="width:100%" class="validasi" value="{$data.nama_lengkap|default:''}"}
+			  {include file="template/input_form.html" type='text' label="Email" id="email" name="email" style_type="width:100%" class="validasi" value="{$data.email|default:''}"}
+			  {include file="template/input_form.html" type='text' label="Tlp." id="tlp" name="tlp" style_type="width:100%" class="validasi" value="{$data.tlp|default:''}"}
+			  <div class="form-group row">
+				  <label class="col-sm-2">Jenis Kelamin</label>
+				  <div class="col-sm-10">
+					  <div class="radio">
+						  <input type="radio" name="jenis_kelamin" id="radio1" value="L" {if $data.jenis_kelamin|default:'' eq 'L'}checked{else}{if $sts|default:'add' eq 'add'}checked{/if}{/if}>
+						  <label for="radio1">Laki - laki</label> &nbsp;
+						  <input type="radio" name="jenis_kelamin" id="radio2" value="W" {if $data.jenis_kelamin|default:'' eq 'W'}checked{/if}>
+						  <label for="radio2">Wanita</label>
+					  </div>
+				  </div>
+              </div>
+			  <div class="form-group row">
+				  <label class="col-sm-2">Status</label>
+				  <div class="col-sm-10">
+					  <div class="">
+						  <input type="checkbox" name="flag" id="radio1" value="1" {if $data.flag|default:'' eq 1}checked{else}{if $sts|default:'add' eq 'add'}checked{/if}{/if}>
+						  <label for="radio1">Aktif</label>
+					  </div>
+				  </div>
+              </div>
+			</form>
+			<center>
+			<button class="btn btn-primary btn-sm waves-effect waves-light w-xs" id="simpan_{$acak}">Simpan</button>
+			<button class="btn btn-primary  btn-sm waves-effect waves-light w-xs" id="kembali_{$acak}" onclick="$('#grid_nya_{$mod}').show();$('#detil_nya_{$mod}').hide();">Kembali Ke List</button>
+			</center>
+			 
+          </div>
+       </div>
+</div>
+
+<script>
+	
+	$('.angka').numberbox({
+		precision:2,
+		groupSeparator:',',
+		decimalSeparator:'.'
+	});
+	$('.tgl').datepicker({
+		 format: 'yyyy-mm-dd',
+		 autoclose: true
+	});
+	$('#simpan_{$acak}').click(function(){
+		$(".validasi").validatebox({ required:true }); 
+		if ($('#form_{$acak}').form('validate')){
+			submit_form('form_{$acak}',function(r){
+				if(r==1){
+					winLoadingClose();
+					$.messager.alert('PCM-APP',"Verifikasi Data Tersimpan",'info');
+					grid_nya.datagrid('reload');
+					$('#kembali_{$acak}').trigger('click');
+				}else if(r==2){
+					winLoadingClose();
+					$.messager.alert('PCM-APP',"User ID Sudah Tersedia",'error');
+				}else{
+					winLoadingClose();
+					$.messager.alert('PCM-APP',"Data Gagal Tersimpan",'error');
+					console.log(r);
+				}
+			});
+		}
+	});
+</script>

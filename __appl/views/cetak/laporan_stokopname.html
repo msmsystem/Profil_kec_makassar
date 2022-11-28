@@ -1,0 +1,62 @@
+<style>
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+}
+.fileUpload input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+</style>
+<table class="table">
+	<tr>
+		<td colspan="2">
+			<div id="list_so" class="list_so" style="text-align:center;;vertical-align:middle;overflow:auto;"> 
+				
+				<table class="table table-bordered table-hovered">
+					<thead style="background:#3C8DBC;color:#fff;">
+						<tr>
+							<th style="text-align:left;;vertical-align:middle;width:20%;" rowspan="2">SKU</th>
+							<th style="text-align:center;;vertical-align:middle;" colspan="{count($size)}">Qty</th>
+						</tr>
+						<tr>
+							{foreach from=$size item=i}
+							<th style="text-align:center;;vertical-align:middle;">{$i.ukuran|default:''}</th>
+							{/foreach}
+						</tr>
+					</thead>
+					
+					<tbody style="background:#D4E8F4;" class="bd_so">
+						{foreach from=$data.d item=a key=x}
+						<tr class="tr_em" id="tm_1" idx={$x}>
+							<td style="text-align:left;;vertical-align:middle;">
+								
+								{$x|default:''}
+							</td>
+							{foreach from=$size item=i key=z}
+							<td style="text-align:left;;vertical-align:top;">
+								SIS : {$a.{$i.id}.qty_stok|default:0} <br>
+								S.O : {$a.{$i.id}.qty_so|default:0} <br>
+								<span style="{if $a.{$i.id}.selisih|default:0 < 0}color:red;{/if}{if $a.{$i.id}.selisih|default:0 > 0}color:navy;{/if}font-weight:bold;">Sel : {$a.{$i.id}.selisih|default:0}</span>
+							</td>
+							{/foreach}	
+						</tr>
+						{/foreach}
+					</tbody>
+				</table>
+				
+			</div>
+
+		</td>
+	</tr>
+	
+</table>
+
+
